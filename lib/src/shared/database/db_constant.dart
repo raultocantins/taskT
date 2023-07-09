@@ -1,0 +1,11 @@
+const String dbName = 'tasks.db';
+const String table = 'tasks';
+const int kVersion1 = 1;
+const String columnId = '_id';
+const String columnTitle = 'title';
+const String columnDate = 'date';
+const String columnDescription = 'description';
+const String columnFinished = 'finished';
+const String columnTag = 'tag';
+const String columnPriority = 'priority';
+const String columnUpdated = 'updated';
