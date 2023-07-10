@@ -14,6 +14,8 @@ extension DateFormated on DateTime {
 
   String formatDayName() {
     initializeDateFormatting();
-    return DateFormat("EEEE", "pt_BR").format(this);
+    return toBeginningOfSentenceCase(
+            DateFormat("EEEE", "pt_BR").format(this)) ??
+        '';
   }
 }

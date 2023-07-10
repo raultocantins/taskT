@@ -4,6 +4,7 @@ const int kVersion1 = 1;
 const String columnId = '_id';
 const String columnTitle = 'title';
 const String columnDate = 'date';
+const String columnHours = 'hours';
 const String columnDescription = 'description';
 const String columnFinished = 'finished';
 const String columnTag = 'tag';

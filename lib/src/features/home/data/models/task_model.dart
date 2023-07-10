@@ -10,6 +10,7 @@ part 'task_model.g.dart';
 class TaskModel {
   final int? id;
   final DateTime date;
+  final DateTime hours;
   final String description;
   final bool finished;
   final Priority priority;
@@ -19,6 +20,7 @@ class TaskModel {
   TaskModel(
       {this.id,
       required this.date,
+      required this.hours,
       required this.description,
       required this.finished,
       required this.priority,
@@ -30,6 +32,7 @@ class TaskModel {
 
   Map<String, dynamic> toMap() => {
         'date': date.formatDateToDatabase(),
+        'hours': hours.toString(),
         'description': description,
         'finished': finished ? 1 : 0,
         'priority': priority.fromEnumToString(),
@@ -40,6 +43,7 @@ class TaskModel {
     return TaskModel(
       id: task['_id'],
       date: DateTime.parse(task['date']),
+      hours: DateTime.parse(task['hours']),
       description: task['description'],
       finished: task['finished'] == 1 ? true : false,
       priority: PriorityExtensions.fromStringToEnum(task['priority']),
@@ -52,6 +56,7 @@ class TaskModel {
     return TaskEntity(
       id: model.id,
       date: model.date,
+      hours: model.hours,
       description: model.description,
       finished: model.finished,
       priority: model.priority,
@@ -64,6 +69,7 @@ class TaskModel {
     return TaskModel(
         id: entity.id,
         date: entity.date,
+        hours: entity.hours,
         description: entity.description,
         finished: entity.finished,
         priority: entity.priority,

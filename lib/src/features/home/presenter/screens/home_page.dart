@@ -119,6 +119,8 @@ class _HomeScreenState extends State<HomeScreen>
                                       task: _stateController!.tasks[i],
                                       delete: (task) =>
                                           _stateController?.deleteTask(task),
+                                      update: (task) =>
+                                          _stateController?.updateTask(task),
                                     );
                                   },
                                 ),

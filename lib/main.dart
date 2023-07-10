@@ -33,18 +33,19 @@ class MyApp extends StatelessWidget {
       title: 'Task-T',
       theme: ThemeData(primarySwatch: Colors.blue, primaryColor: Colors.blue),
       home: FutureBuilder(
-          future: GetIt.I.get<DataBaseCustom>().ready,
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              return const HomeScreen();
-            } else {
-              return Scaffold(
-                body: Center(
-                  child: Lottie.asset('assets/animations/splash.json'),
-                ),
-              );
-            }
-          }),
+        future: GetIt.I.get<DataBaseCustom>().ready,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return const HomeScreen();
+          } else {
+            return Scaffold(
+              body: Center(
+                child: Lottie.asset('assets/animations/splash.json'),
+              ),
+            );
+          }
+        },
+      ),
     );
   }
 }

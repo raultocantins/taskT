@@ -9,6 +9,7 @@ part of 'task_model.dart';
 TaskModel _$TaskModelFromJson(Map json) => TaskModel(
       id: json['id'] as int?,
       date: DateTime.parse(json['date'] as String),
+      hours: DateTime.parse(json['hours'] as String),
       description: json['description'] as String,
       finished: json['finished'] as bool,
       priority: $enumDecode(_$PriorityEnumMap, json['priority']),
@@ -19,6 +20,7 @@ TaskModel _$TaskModelFromJson(Map json) => TaskModel(
 Map<String, dynamic> _$TaskModelToJson(TaskModel instance) => <String, dynamic>{
       'id': instance.id,
       'date': instance.date.toIso8601String(),
+      'hours': instance.hours.toIso8601String(),
       'description': instance.description,
       'finished': instance.finished,
       'priority': _$PriorityEnumMap[instance.priority]!,

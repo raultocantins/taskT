@@ -7,6 +7,7 @@ class TaskEntity {
   String description;
   Priority priority;
   DateTime date;
+  DateTime hours;
   bool finished;
   Tag tag;
   TaskEntity(
@@ -16,5 +17,6 @@ class TaskEntity {
       required this.priority,
       required this.finished,
       required this.tag,
-      required this.date});
+      required this.date,
+      required this.hours});
 }

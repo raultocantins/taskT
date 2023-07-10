@@ -2,12 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:taskt/src/features/home/domain/entities/task_entity.dart';
 import 'package:intl/intl.dart';
 import 'package:taskt/src/features/home/presenter/utils/enums/priority_enum.dart';
+import 'package:taskt/src/features/home/presenter/widgets/new_task_bottomsheet.dart';
 
 class CardCustomWidget extends StatefulWidget {
   final TaskEntity task;
   final Function(TaskEntity task) delete;
+  final Function(TaskEntity task) update;
 
-  const CardCustomWidget({required this.task, required this.delete, super.key});
+  const CardCustomWidget(
+      {required this.task,
+      required this.delete,
+      required this.update,
+      super.key});
 
   @override
   State<CardCustomWidget> createState() => _CardCustomWidgetState();
@@ -88,7 +94,7 @@ class _CardCustomWidgetState extends State<CardCustomWidget> {
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 5),
                           child: Text(
-                            getTimeDate(widget.task.date),
+                            getTimeDate(widget.task.hours),
                             style: const TextStyle(
                                 color: Colors.grey, fontSize: 13),
                           ),
@@ -139,7 +145,28 @@ class _CardCustomWidgetState extends State<CardCustomWidget> {
                           ? Row(
                               children: [
                                 IconButton(
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    showModalBottomSheet(
+                                      isScrollControlled: true,
+                                      barrierColor: Colors.transparent,
+                                      backgroundColor:
+                                          Theme.of(context).colorScheme.primary,
+                                      isDismissible: true,
+                                      enableDrag: true,
+                                      shape: const RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.only(
+                                            topLeft: Radius.circular(50),
+                                            topRight: Radius.circular(50)),
+                                      ),
+                                      context: context,
+                                      builder: (context) {
+                                        return NewTaskBottomSheet(
+                                          edit: true,
+                                          task: widget.task,
+                                        );
+                                      },
+                                    );
+                                  },
                                   icon: const Icon(Icons.edit),
                                 ),
                                 IconButton(
@@ -163,7 +190,19 @@ class _CardCustomWidgetState extends State<CardCustomWidget> {
                                           side: const BorderSide(
                                               width: 1, color: Colors.black),
                                           value: widget.task.finished,
-                                          onChanged: (value) {},
+                                          onChanged: (value) {
+                                            widget.update(TaskEntity(
+                                                id: widget.task.id,
+                                                title: widget.task.title,
+                                                description:
+                                                    widget.task.description,
+                                                priority: widget.task.priority,
+                                                finished: value ??
+                                                    widget.task.finished,
+                                                tag: widget.task.tag,
+                                                date: widget.task.date,
+                                                hours: widget.task.hours));
+                                          },
                                         ),
                                       );
                                     },

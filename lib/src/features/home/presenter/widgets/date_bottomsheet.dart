@@ -66,7 +66,7 @@ class _DateBottomSheetState extends State<DateBottomSheet> {
           },
           focusedDay: date,
           currentDay: date,
-          firstDay: DateTime.now(),
+          firstDay: DateTime.now().subtract(const Duration(days: 6000)),
           lastDay: DateTime.now().add(const Duration(days: 6000)),
         ),
       ),

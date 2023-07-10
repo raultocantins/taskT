@@ -3,6 +3,7 @@ import 'package:taskt/src/features/home/domain/entities/task_entity.dart';
 import 'package:taskt/src/features/home/domain/usecases/delete_task_usecase.dart';
 import 'package:taskt/src/features/home/domain/usecases/get_tasks_usecase.dart';
 import 'package:taskt/src/features/home/domain/usecases/save_task_usecase.dart';
+import 'package:taskt/src/features/home/domain/usecases/update_task_usecase.dart';
 import 'package:taskt/src/features/home/presenter/utils/enums/tags_enum.dart';
 import 'package:taskt/src/shared/utils/extensions/date_extension.dart';
 
@@ -13,10 +14,11 @@ class StateController = _StateControllerBase with _$StateController;
 
 abstract class _StateControllerBase with Store {
   final SaveTaskUsecase _saveTaskUsecase;
+  final UpdateTaskUsecase _updateTaskUsecase;
   final GetTasksUsecase _getTasksUsecase;
   final DeleteTaskUsecase _deleteTaskUsecase;
-  _StateControllerBase(
-      this._saveTaskUsecase, this._getTasksUsecase, this._deleteTaskUsecase);
+  _StateControllerBase(this._saveTaskUsecase, this._getTasksUsecase,
+      this._deleteTaskUsecase, this._updateTaskUsecase);
 
   @observable
   DateTime _dateSelected = DateTime.now().toLocal();
@@ -81,6 +83,28 @@ abstract class _StateControllerBase with Store {
         if (verifyTask(task)) {
           List<TaskEntity> updatedList = tasks;
           updatedList.removeWhere((element) => element.id == task.id);
+          changeTasks([...updatedList]);
+        }
+      },
+    );
+  }
+
+  void updateTask(TaskEntity task) async {
+    var result = await _updateTaskUsecase(task);
+    result.fold(
+      (l) => null,
+      (updatedTask) {
+        List<TaskEntity> updatedList = tasks;
+        if (verifyTask(task)) {
+          for (int i = 0; i < updatedList.length; i++) {
+            if (updatedList[i].id == updatedTask.id) {
+              updatedList[i] = updatedTask;
+              break;
+            }
+          }
+          changeTasks([...updatedList]);
+        } else {
+          updatedList.removeWhere((e) => e.id == updatedTask.id);
           changeTasks([...updatedList]);
         }
       },

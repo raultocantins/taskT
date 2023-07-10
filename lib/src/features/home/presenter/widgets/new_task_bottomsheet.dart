@@ -9,7 +9,9 @@ import 'package:taskt/src/features/home/presenter/widgets/tags_custom_widget.dar
 import 'package:taskt/src/features/home/presenter/utils/enums/tags_enum.dart';
 
 class NewTaskBottomSheet extends StatefulWidget {
-  const NewTaskBottomSheet({super.key});
+  final bool? edit;
+  final TaskEntity? task;
+  const NewTaskBottomSheet({this.edit = false, this.task, super.key});
 
   @override
   State<NewTaskBottomSheet> createState() => _NewTaskBottomSheetState();
@@ -17,18 +19,47 @@ class NewTaskBottomSheet extends StatefulWidget {
 
 class _NewTaskBottomSheetState extends State<NewTaskBottomSheet> {
   StateController? _stateController;
-  final TextEditingController _titleController =
-      TextEditingController(text: '');
-  final TextEditingController _descriptionController =
-      TextEditingController(text: '');
-  Priority _priority = Priority.none;
-  Tag _tag = Tag.all;
-  DateTime _dateSelected = DateTime.now().toLocal();
+  TextEditingController? _titleController;
+  TextEditingController? _descriptionController;
+  Priority? _priority;
+  Tag? _tag;
+  DateTime? _dateSelected;
+  double _padding = 0.0;
+  final FocusNode _focusNodeDescription = FocusNode();
 
   @override
   void initState() {
     _stateController = GetIt.I.get<StateController>();
+    setup();
+    _focusNodeDescription.addListener(() {
+      if (_focusNodeDescription.hasFocus) {
+        setState(() {
+          _padding = MediaQuery.of(context).viewInsets.bottom;
+        });
+      } else {
+        setState(() {
+          _padding = 0;
+        });
+      }
+    });
     super.initState();
+  }
+
+  setup() {
+    if (widget.edit ?? false) {
+      _titleController = TextEditingController(text: widget.task?.title);
+      _descriptionController =
+          TextEditingController(text: widget.task?.description);
+      _priority = widget.task?.priority;
+      _tag = widget.task?.tag;
+      _dateSelected = widget.task?.date;
+    } else {
+      _titleController = TextEditingController(text: '');
+      _descriptionController = TextEditingController(text: '');
+      _priority = Priority.none;
+      _tag = Tag.all;
+      _dateSelected = DateTime.now();
+    }
   }
 
   String formatDate(DateTime date) {
@@ -68,6 +99,7 @@ class _NewTaskBottomSheetState extends State<NewTaskBottomSheet> {
                 height: 50,
                 width: double.infinity,
                 child: TextField(
+                  autofocus: false,
                   controller: _titleController,
                   style: const TextStyle(color: Colors.white, fontSize: 24),
                   decoration: InputDecoration(
@@ -231,79 +263,90 @@ class _NewTaskBottomSheetState extends State<NewTaskBottomSheet> {
                 height: 4,
                 color: Colors.white,
               ),
+              widget.edit ?? false
+                  ? Container()
+                  : Column(
+                      children: [
+                        const SizedBox(
+                          height: 14,
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            showModalBottomSheet(
+                                isScrollControlled: true,
+                                barrierColor: Colors.transparent,
+                                backgroundColor: Colors.blue,
+                                isDismissible: true,
+                                enableDrag: true,
+                                useSafeArea: true,
+                                shape: const RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(50),
+                                      topRight: Radius.circular(50)),
+                                ),
+                                context: context,
+                                builder: (context) => DateBottomSheet(
+                                      callback: (newDate) {
+                                        setState(() {
+                                          _dateSelected = newDate;
+                                        });
+                                      },
+                                    ));
+                          },
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              const IconButton(
+                                onPressed: null,
+                                icon: Icon(
+                                  Icons.calendar_month,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              Expanded(
+                                child: Text(
+                                  formatDate(_dateSelected ?? DateTime.now()),
+                                  style: const TextStyle(
+                                      color: Colors.white, fontSize: 24),
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 14,
+                        ),
+                        const Divider(
+                          height: 4,
+                          color: Colors.white,
+                        ),
+                      ],
+                    ),
               const SizedBox(
                 height: 14,
               ),
-              GestureDetector(
-                onTap: () {
-                  showModalBottomSheet(
-                      isScrollControlled: true,
-                      barrierColor: Colors.transparent,
-                      backgroundColor: Colors.blue,
-                      isDismissible: true,
-                      enableDrag: true,
-                      useSafeArea: true,
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(50),
-                            topRight: Radius.circular(50)),
-                      ),
-                      context: context,
-                      builder: (context) => DateBottomSheet(
-                            callback: (newDate) {
-                              setState(() {
-                                _dateSelected = newDate;
-                              });
-                            },
-                          ));
-                },
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    const IconButton(
-                      onPressed: null,
-                      icon: Icon(
-                        Icons.calendar_month,
-                        color: Colors.white,
+              Padding(
+                padding: EdgeInsets.only(bottom: _padding),
+                child: SizedBox(
+                  height: 100,
+                  width: double.infinity,
+                  child: TextField(
+                    autofocus: false,
+                    controller: _descriptionController,
+                    keyboardType: TextInputType.multiline,
+                    maxLines: 4,
+                    style: const TextStyle(color: Colors.white, fontSize: 24),
+                    decoration: InputDecoration(
+                      counterStyle: const TextStyle(color: Colors.white),
+                      border: InputBorder.none,
+                      alignLabelWithHint: true,
+                      hintText: 'Add your description',
+                      hintStyle: TextStyle(
+                        color: Colors.white.withOpacity(0.3),
+                        fontSize: 24,
                       ),
                     ),
-                    Expanded(
-                      child: Text(
-                        formatDate(_dateSelected),
-                        style:
-                            const TextStyle(color: Colors.white, fontSize: 24),
-                      ),
-                    )
-                  ],
-                ),
-              ),
-              const SizedBox(
-                height: 14,
-              ),
-              const Divider(
-                height: 4,
-                color: Colors.white,
-              ),
-              const SizedBox(
-                height: 14,
-              ),
-              SizedBox(
-                height: 80,
-                width: double.infinity,
-                child: TextField(
-                  controller: _descriptionController,
-                  keyboardType: TextInputType.multiline,
-                  maxLines: 3,
-                  style: const TextStyle(color: Colors.white, fontSize: 24),
-                  decoration: InputDecoration(
-                    counterStyle: const TextStyle(color: Colors.white),
-                    border: InputBorder.none,
-                    alignLabelWithHint: true,
-                    hintText: 'Add your description',
-                    hintStyle: TextStyle(
-                      color: Colors.white.withOpacity(0.3),
-                      fontSize: 24,
-                    ),
+                    focusNode: _focusNodeDescription,
                   ),
                 ),
               ),
@@ -331,17 +374,31 @@ class _NewTaskBottomSheetState extends State<NewTaskBottomSheet> {
                         backgroundColor:
                             MaterialStateProperty.all(Colors.white)),
                     onPressed: () {
-                      _stateController?.createTask(
-                        TaskEntity(
-                          id: 44,
-                          title: _titleController.text,
-                          description: _descriptionController.text,
-                          priority: _priority,
-                          tag: _tag,
-                          finished: false,
-                          date: _dateSelected,
-                        ),
-                      );
+                      if (widget.edit ?? false) {
+                        _stateController?.updateTask(
+                          TaskEntity(
+                              id: widget.task!.id,
+                              title: _titleController!.text,
+                              description: _descriptionController!.text,
+                              priority: _priority!,
+                              tag: _tag!,
+                              finished: false,
+                              date: _dateSelected!,
+                              hours: _dateSelected!),
+                        );
+                      } else {
+                        _stateController?.createTask(
+                          TaskEntity(
+                              title: _titleController!.text,
+                              description: _descriptionController!.text,
+                              priority: _priority!,
+                              tag: _tag!,
+                              finished: false,
+                              date: _dateSelected!,
+                              hours: _dateSelected!),
+                        );
+                      }
+
                       Navigator.of(context).pop();
                     },
                     child: const Text(

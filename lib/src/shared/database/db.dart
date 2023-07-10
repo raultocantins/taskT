@@ -39,7 +39,7 @@ class DataBaseCustom {
   Future _createDb(Database db) async {
     await db.execute('DROP TABLE If EXISTS $table');
     await db.execute(
-      'CREATE TABLE $table($columnId INTEGER PRIMARY KEY, $columnTitle TEXT, $columnDate TEXT, $columnDescription TEXT, $columnFinished INTEGER,  $columnTag TEXT,$columnPriority TEXT, $columnUpdated INTEGER)',
+      'CREATE TABLE $table($columnId INTEGER PRIMARY KEY, $columnTitle TEXT, $columnDate TEXT, $columnHours TEXT, $columnDescription TEXT, $columnFinished INTEGER,  $columnTag TEXT,$columnPriority TEXT, $columnUpdated INTEGER)',
     );
     await db.execute(
       'CREATE INDEX TasksUpdated ON $table ($columnUpdated)',
@@ -51,12 +51,19 @@ class DataBaseCustom {
     return TaskModel(
       id: newId,
       date: taskEntity.date,
+      hours: taskEntity.hours,
       description: taskEntity.description,
       finished: taskEntity.finished,
       priority: taskEntity.priority,
       tag: taskEntity.tag,
       title: taskEntity.title,
     );
+  }
+
+  Future<TaskModel> updateTask(TaskEntity taskEntity) async {
+    await db!.update(table, TaskModel.toModel(taskEntity).toMap(),
+        where: '$columnId = ?', whereArgs: <Object?>[taskEntity.id]);
+    return TaskModel.toModel(taskEntity);
   }
 
   Future<void> deleteTask(int? id) async {
@@ -69,6 +76,7 @@ class DataBaseCustom {
       table,
       columns: [
         columnDate,
+        columnHours,
         columnTag,
         columnDescription,
         columnFinished,
@@ -78,7 +86,7 @@ class DataBaseCustom {
         columnTitle,
         columnUpdated
       ],
-      orderBy: '$columnUpdated ASC',
+      orderBy: '$columnUpdated DESC',
       where: '$columnDate = ? AND $columnTag = ?',
       whereArgs: <Object?>[date.formatDateToDatabase(), tag.fromEnumToString()],
     );
@@ -103,7 +111,7 @@ class DataBaseCustom {
   Future<Database?> get ready async => db ??= await lock.synchronized(
         () async {
           await Future.delayed(
-            const Duration(seconds: 3),
+            const Duration(milliseconds: 2500),
           );
           if (db == null) {
             await open();

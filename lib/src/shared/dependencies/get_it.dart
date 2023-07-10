@@ -1,4 +1,7 @@
 import 'package:get_it/get_it.dart';
+import 'package:taskt/src/features/home/data/repositories/update_task_repository.impl.dart';
+import 'package:taskt/src/features/home/domain/usecases/update_task_usecase.dart';
+import 'package:taskt/src/features/home/external/update_task_datasource.impl.dart';
 import 'package:tekartik_app_flutter_sqflite/sqflite.dart';
 import 'package:taskt/src/features/home/data/repositories/delete_task_repository.impl.dart';
 import 'package:taskt/src/features/home/data/repositories/get_tasks_repository.impl.dart';
@@ -27,6 +30,7 @@ class GetItSetup {
         getIt(),
         getIt(),
         getIt(),
+        getIt(),
       ),
     );
   }
@@ -50,6 +54,14 @@ class GetItSetup {
       () => DeleteTaskUsecaseImpl(
         DeleteTaskRepositoryImpl(
           DeleteTaskDatasourceImpl(),
+        ),
+      ),
+    );
+
+    getIt.registerLazySingleton<UpdateTaskUsecase>(
+      () => UpdateTaskUsecaseImpl(
+        UpdateTaskRepositoryImpl(
+          UpdateTaskDatasourceImpl(),
         ),
       ),
     );
