@@ -39,7 +39,9 @@ class _TagsCustomState extends State<TagsCustom> {
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 5),
             child: GestureDetector(
-              onTap: () => _stateController?.changeTag(TagsCustom.tags[index]),
+              onTap: (_stateController?.isLoading ?? false)
+                  ? () {}
+                  : () => _stateController?.changeTag(TagsCustom.tags[index]),
               child: Observer(
                 builder: (context) {
                   return Chip(

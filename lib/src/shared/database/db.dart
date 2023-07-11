@@ -70,26 +70,69 @@ class DataBaseCustom {
     await db!.delete(table, where: '$columnId = ?', whereArgs: <Object?>[id]);
   }
 
-  Future<List<TaskModel>> getTasks(
-      {required DateTime date, required Tag tag}) async {
-    var list = await db!.query(
-      table,
-      columns: [
-        columnDate,
-        columnHours,
-        columnTag,
-        columnDescription,
-        columnFinished,
-        columnId,
-        columnPriority,
-        columnTag,
-        columnTitle,
-        columnUpdated
-      ],
-      orderBy: '$columnUpdated DESC',
-      where: '$columnDate = ? AND $columnTag = ?',
-      whereArgs: <Object?>[date.formatDateToDatabase(), tag.fromEnumToString()],
-    );
+  Future<List<TaskModel>> getTasks({DateTime? date, Tag? tag}) async {
+    List<Map<String, Object?>> list;
+    if (tag == null && date == null) {
+      list = await db!.query(
+        table,
+        columns: [
+          columnDate,
+          columnHours,
+          columnTag,
+          columnDescription,
+          columnFinished,
+          columnId,
+          columnPriority,
+          columnTag,
+          columnTitle,
+          columnUpdated
+        ],
+        orderBy: '$columnUpdated DESC',
+      );
+    } else {
+      if (date == null) {
+        list = await db!.query(
+          table,
+          columns: [
+            columnDate,
+            columnHours,
+            columnTag,
+            columnDescription,
+            columnFinished,
+            columnId,
+            columnPriority,
+            columnTag,
+            columnTitle,
+            columnUpdated
+          ],
+          orderBy: '$columnUpdated DESC',
+          where: '$columnTag = ?',
+          whereArgs: <Object?>[tag?.fromEnumToString()],
+        );
+      } else {
+        list = await db!.query(
+          table,
+          columns: [
+            columnDate,
+            columnHours,
+            columnTag,
+            columnDescription,
+            columnFinished,
+            columnId,
+            columnPriority,
+            columnTag,
+            columnTitle,
+            columnUpdated
+          ],
+          orderBy: '$columnUpdated DESC',
+          where: '$columnDate = ? AND $columnTag = ?',
+          whereArgs: <Object?>[
+            date.formatDateToDatabase(),
+            tag?.fromEnumToString()
+          ],
+        );
+      }
+    }
 
     return list
         .map(

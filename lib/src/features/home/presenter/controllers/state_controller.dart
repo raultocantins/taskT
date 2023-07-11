@@ -21,7 +21,10 @@ abstract class _StateControllerBase with Store {
       this._deleteTaskUsecase, this._updateTaskUsecase);
 
   @observable
-  DateTime _dateSelected = DateTime.now().toLocal();
+  DateTime? _dateSelected;
+
+  @observable
+  bool? isLoading = false;
 
   @observable
   Tag tag = Tag.all;
@@ -29,15 +32,16 @@ abstract class _StateControllerBase with Store {
   @observable
   List<TaskEntity> _tasks = [];
 
-  String get dateFormated => _dateSelected.formatDate();
-  String get dayFormated => _dateSelected.formatDayName();
+  String get dateFormated => _dateSelected != null
+      ? _dateSelected?.formatDate() ?? ''
+      : 'Showing all tasks';
   List<TaskEntity> get tasks {
     _tasks.sort((a, b) => b.date.compareTo(a.date));
     return _tasks;
   }
 
   @action
-  changeDate(DateTime value) {
+  changeDate(DateTime? value) {
     _dateSelected = value;
     getTask();
   }
@@ -45,6 +49,7 @@ abstract class _StateControllerBase with Store {
   @action
   changeTag(Tag value) {
     tag = value;
+    changeDate(null);
     getTask();
   }
 
@@ -53,67 +58,74 @@ abstract class _StateControllerBase with Store {
     _tasks = value;
   }
 
+  @action
+  changeIsLoading(bool value) {
+    isLoading = false;
+  }
+
   void getTask() async {
-    var result = await _getTasksUsecase(date: _dateSelected, tag: tag);
+    changeIsLoading(true);
+    var result = await _getTasksUsecase(
+        date: _dateSelected, tag: tag != Tag.all ? tag : null);
     result.fold(
       (l) => null,
       (r) {
         changeTasks(r);
       },
     );
+    changeIsLoading(false);
   }
 
   void createTask(TaskEntity task) async {
+    changeIsLoading(true);
+    changeDate(null);
     var result = await _saveTaskUsecase(task);
     result.fold(
       (l) => null,
       (r) {
-        if (verifyTask(task)) {
+        if (task.tag == tag) {
           changeTasks([...tasks, task]);
         }
       },
     );
+    changeIsLoading(false);
   }
 
   void deleteTask(TaskEntity task) async {
+    changeIsLoading(true);
     var result = await _deleteTaskUsecase(task);
     result.fold(
       (l) => null,
       (_) {
-        if (verifyTask(task)) {
-          List<TaskEntity> updatedList = tasks;
-          updatedList.removeWhere((element) => element.id == task.id);
-          changeTasks([...updatedList]);
-        }
+        List<TaskEntity> updatedList = tasks;
+        updatedList.removeWhere((element) => element.id == task.id);
+        changeTasks([...updatedList]);
       },
     );
+    changeIsLoading(false);
   }
 
   void updateTask(TaskEntity task) async {
+    changeIsLoading(true);
     var result = await _updateTaskUsecase(task);
     result.fold(
       (l) => null,
       (updatedTask) {
         List<TaskEntity> updatedList = tasks;
-        if (verifyTask(task)) {
-          for (int i = 0; i < updatedList.length; i++) {
-            if (updatedList[i].id == updatedTask.id) {
-              updatedList[i] = updatedTask;
-              break;
-            }
+
+        for (int i = 0; i < updatedList.length; i++) {
+          if (updatedList[i].id == updatedTask.id) {
+            updatedList[i] = updatedTask;
+            break;
           }
-          changeTasks([...updatedList]);
-        } else {
-          updatedList.removeWhere((e) => e.id == updatedTask.id);
-          changeTasks([...updatedList]);
         }
+        changeTasks([...updatedList]);
       },
     );
+    changeIsLoading(false);
   }
 
-  bool verifyTask(TaskEntity task) {
-    return (task.date.day == _dateSelected.day && task.tag == tag)
-        ? true
-        : false;
+  dispose() {
+    isLoading = false;
   }
 }

@@ -53,9 +53,9 @@ class _HomeScreenState extends State<HomeScreen>
               children: [
                 Row(
                   children: [
-                    Text(
-                      _stateController?.dayFormated ?? '',
-                      style: const TextStyle(fontSize: 40),
+                    const Text(
+                      'My tasks',
+                      style: TextStyle(fontSize: 40),
                     ),
                     const Expanded(child: SizedBox()),
                     IconButton(

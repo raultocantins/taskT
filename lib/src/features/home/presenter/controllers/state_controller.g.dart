@@ -13,15 +13,31 @@ mixin _$StateController on _StateControllerBase, Store {
       Atom(name: '_StateControllerBase._dateSelected', context: context);
 
   @override
-  DateTime get _dateSelected {
+  DateTime? get _dateSelected {
     _$_dateSelectedAtom.reportRead();
     return super._dateSelected;
   }
 
   @override
-  set _dateSelected(DateTime value) {
+  set _dateSelected(DateTime? value) {
     _$_dateSelectedAtom.reportWrite(value, super._dateSelected, () {
       super._dateSelected = value;
+    });
+  }
+
+  late final _$isLoadingAtom =
+      Atom(name: '_StateControllerBase.isLoading', context: context);
+
+  @override
+  bool? get isLoading {
+    _$isLoadingAtom.reportRead();
+    return super.isLoading;
+  }
+
+  @override
+  set isLoading(bool? value) {
+    _$isLoadingAtom.reportWrite(value, super.isLoading, () {
+      super.isLoading = value;
     });
   }
 
@@ -61,7 +77,7 @@ mixin _$StateController on _StateControllerBase, Store {
       ActionController(name: '_StateControllerBase', context: context);
 
   @override
-  dynamic changeDate(DateTime value) {
+  dynamic changeDate(DateTime? value) {
     final _$actionInfo = _$_StateControllerBaseActionController.startAction(
         name: '_StateControllerBase.changeDate');
     try {
@@ -94,8 +110,20 @@ mixin _$StateController on _StateControllerBase, Store {
   }
 
   @override
+  dynamic changeIsLoading(bool value) {
+    final _$actionInfo = _$_StateControllerBaseActionController.startAction(
+        name: '_StateControllerBase.changeIsLoading');
+    try {
+      return super.changeIsLoading(value);
+    } finally {
+      _$_StateControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
+isLoading: ${isLoading},
 tag: ${tag}
     ''';
   }

@@ -6,8 +6,7 @@ import 'package:taskt/src/shared/database/db.dart';
 
 class GetTasksDatasourceImpl implements GetTasksDatasource {
   @override
-  Future<List<TaskModel>> call(
-      {required DateTime date, required Tag tag}) async {
+  Future<List<TaskModel>> call({DateTime? date, Tag? tag}) async {
     try {
       List<TaskModel> tasks =
           await GetIt.I.get<DataBaseCustom>().getTasks(date: date, tag: tag);
