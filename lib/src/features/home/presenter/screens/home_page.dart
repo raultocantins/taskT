@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 import 'package:lottie/lottie.dart';
+import 'package:taskt/src/features/home/domain/entities/task_entity.dart';
 import 'package:taskt/src/features/home/presenter/controllers/state_controller.dart';
 import 'package:taskt/src/features/home/presenter/widgets/date_bottomsheet.dart';
 import 'package:taskt/src/features/home/presenter/widgets/tags_custom_widget.dart';
+import 'package:taskt/src/shared/utils/extensions/date_extension.dart';
 import '../widgets/card_custom_widget.dart';
 import '../widgets/new_task_bottomsheet.dart';
 
@@ -19,9 +21,6 @@ class _HomeScreenState extends State<HomeScreen>
     with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
   late Animation<double> opacityAnimation;
-  int i = 0;
-  DraggableScrollableController dragController =
-      DraggableScrollableController();
   StateController? _stateController;
 
   @override
@@ -36,7 +35,6 @@ class _HomeScreenState extends State<HomeScreen>
         curve: Curves.easeInOutExpo);
   }
 
-  bool open = false;
   @override
   Widget build(BuildContext context) {
     return Observer(
@@ -106,21 +104,62 @@ class _HomeScreenState extends State<HomeScreen>
                       builder: (context) {
                         return Padding(
                           padding: const EdgeInsets.only(bottom: 50),
-                          child: (_stateController?.tasks.isEmpty ?? false)
+                          child: _stateController?.groupByDay.isEmpty ?? false
                               ? Center(
                                   child: Lottie.asset(
                                       'assets/animations/empty.json'),
                                 )
                               : ListView.builder(
                                   itemCount:
-                                      _stateController?.tasks.length ?? 0,
-                                  itemBuilder: (context, i) {
-                                    return CardCustomWidget(
-                                      task: _stateController!.tasks[i],
-                                      delete: (task) =>
-                                          _stateController?.deleteTask(task),
-                                      update: (task) =>
-                                          _stateController?.updateTask(task),
+                                      _stateController?.groupByDay.length ?? 0,
+                                  itemBuilder:
+                                      (BuildContext context, int index) {
+                                    DateTime? day = _stateController
+                                        ?.groupByDay.keys
+                                        .elementAt(index);
+                                    List<TaskEntity>? items = _stateController
+                                        ?.groupByDay.values
+                                        .elementAt(index);
+
+                                    return Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 8, vertical: 3),
+                                          child: SizedBox(
+                                            width: double.infinity,
+                                            height: 20,
+                                            child: Align(
+                                              alignment: Alignment.centerLeft,
+                                              child: Text(
+                                                day!.formatDateDefault(),
+                                                style: const TextStyle(
+                                                  color: Colors.grey,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        ListView.builder(
+                                          shrinkWrap: true,
+                                          physics:
+                                              const NeverScrollableScrollPhysics(),
+                                          itemCount: items?.length ?? 0,
+                                          itemBuilder:
+                                              (BuildContext context, int i) {
+                                            TaskEntity item = items![i];
+                                            return CardCustomWidget(
+                                              task: item,
+                                              delete: (task) => _stateController
+                                                  ?.deleteTask(task),
+                                              update: (task) => _stateController
+                                                  ?.updateTask(task),
+                                            );
+                                          },
+                                        ),
+                                      ],
                                     );
                                   },
                                 ),
@@ -141,14 +180,14 @@ class _HomeScreenState extends State<HomeScreen>
                 backgroundColor: Theme.of(context).colorScheme.primary,
                 isDismissible: true,
                 enableDrag: true,
-                shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(50),
-                      topRight: Radius.circular(50)),
-                ),
+                useSafeArea: false,
                 context: context,
                 builder: (context) {
-                  return const NewTaskBottomSheet();
+                  return Padding(
+                    padding: EdgeInsets.only(
+                        bottom: MediaQuery.of(context).viewInsets.bottom),
+                    child: const NewTaskBottomSheet(),
+                  );
                 },
               );
             },

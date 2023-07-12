@@ -6,7 +6,7 @@ import 'package:taskt/src/features/home/domain/usecases/save_task_usecase.dart';
 import 'package:taskt/src/features/home/domain/usecases/update_task_usecase.dart';
 import 'package:taskt/src/features/home/presenter/utils/enums/tags_enum.dart';
 import 'package:taskt/src/shared/utils/extensions/date_extension.dart';
-
+import 'package:collection/collection.dart';
 part 'state_controller.g.dart';
 
 // ignore: library_private_types_in_public_api
@@ -35,9 +35,18 @@ abstract class _StateControllerBase with Store {
   String get dateFormated => _dateSelected != null
       ? _dateSelected?.formatDate() ?? ''
       : 'Showing all tasks';
-  List<TaskEntity> get tasks {
+
+  Map<DateTime, List<TaskEntity>> get groupByDay {
     _tasks.sort((a, b) => b.date.compareTo(a.date));
-    return _tasks;
+    Map<DateTime, List<TaskEntity>> itemsByDay = groupBy(
+      _tasks,
+      (TaskEntity item) =>
+          DateTime(item.date.year, item.date.month, item.date.day),
+    );
+    itemsByDay.forEach((day, items) {
+      items.sort((a, b) => b.date.compareTo(a.date));
+    });
+    return itemsByDay;
   }
 
   @action
@@ -65,8 +74,7 @@ abstract class _StateControllerBase with Store {
 
   void getTask() async {
     changeIsLoading(true);
-    var result = await _getTasksUsecase(
-        date: _dateSelected, tag: tag != Tag.all ? tag : null);
+    var result = await _getTasksUsecase(date: _dateSelected, tag: tag);
     result.fold(
       (l) => null,
       (r) {
@@ -78,13 +86,19 @@ abstract class _StateControllerBase with Store {
 
   void createTask(TaskEntity task) async {
     changeIsLoading(true);
-    changeDate(null);
     var result = await _saveTaskUsecase(task);
     result.fold(
       (l) => null,
       (r) {
-        if (task.tag == tag) {
-          changeTasks([...tasks, task]);
+        if (tag == Tag.all && _dateSelected == null) {
+          changeTasks([..._tasks, task]);
+        } else if (_dateSelected == null && task.tag == tag) {
+          changeTasks([..._tasks, task]);
+        }
+        if (_dateSelected != null &&
+            r.date.day == _dateSelected?.day &&
+            r.tag == tag) {
+          changeTasks([..._tasks, task]);
         }
       },
     );
@@ -97,7 +111,7 @@ abstract class _StateControllerBase with Store {
     result.fold(
       (l) => null,
       (_) {
-        List<TaskEntity> updatedList = tasks;
+        List<TaskEntity> updatedList = _tasks;
         updatedList.removeWhere((element) => element.id == task.id);
         changeTasks([...updatedList]);
       },
@@ -111,15 +125,19 @@ abstract class _StateControllerBase with Store {
     result.fold(
       (l) => null,
       (updatedTask) {
-        List<TaskEntity> updatedList = tasks;
-
-        for (int i = 0; i < updatedList.length; i++) {
-          if (updatedList[i].id == updatedTask.id) {
-            updatedList[i] = updatedTask;
-            break;
+        List<TaskEntity> updatedList = _tasks;
+        if (updatedTask.tag == tag) {
+          for (int i = 0; i < updatedList.length; i++) {
+            if (updatedList[i].id == updatedTask.id) {
+              updatedList[i] = updatedTask;
+              break;
+            }
           }
+          changeTasks([...updatedList]);
+        } else {
+          updatedList.removeWhere((element) => element.id == task.id);
+          changeTasks([...updatedList]);
         }
-        changeTasks([...updatedList]);
       },
     );
     changeIsLoading(false);

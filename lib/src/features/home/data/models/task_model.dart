@@ -3,7 +3,6 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:taskt/src/features/home/domain/entities/task_entity.dart';
 import 'package:taskt/src/features/home/presenter/utils/enums/priority_enum.dart';
 import 'package:taskt/src/features/home/presenter/utils/enums/tags_enum.dart';
-import 'package:taskt/src/shared/utils/extensions/date_extension.dart';
 part 'task_model.g.dart';
 
 @JsonSerializable(explicitToJson: true, anyMap: true)
@@ -31,8 +30,8 @@ class TaskModel {
   Map<String, dynamic> toJson() => _$TaskModelToJson(this);
 
   Map<String, dynamic> toMap() => {
-        'date': date.formatDateToDatabase(),
-        'hours': hours.toString(),
+        'date': date.toIso8601String(),
+        'hours': date.toIso8601String(),
         'description': description,
         'finished': finished ? 1 : 0,
         'priority': priority.fromEnumToString(),

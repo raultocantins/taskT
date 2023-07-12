@@ -1,8 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:lottie/lottie.dart';
-
 import 'package:taskt/src/features/home/presenter/screens/home_page.dart';
 import 'package:taskt/src/shared/database/db.dart';
 import 'package:taskt/src/shared/dependencies/get_it.dart';
@@ -40,7 +38,11 @@ class MyApp extends StatelessWidget {
           } else {
             return Scaffold(
               body: Center(
-                child: Lottie.asset('assets/animations/splash.json'),
+                child: Image.asset(
+                  'assets/images/t.png',
+                  height: 100,
+                  width: 100,
+                ),
               ),
             );
           }

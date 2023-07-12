@@ -4,7 +4,6 @@ import 'package:synchronized/synchronized.dart';
 import 'package:taskt/src/features/home/data/models/task_model.dart';
 import 'package:taskt/src/features/home/domain/entities/task_entity.dart';
 import 'package:taskt/src/features/home/presenter/utils/enums/tags_enum.dart';
-import 'package:taskt/src/shared/utils/extensions/date_extension.dart';
 import './db_constant.dart';
 
 class DataBaseCustom {
@@ -72,7 +71,7 @@ class DataBaseCustom {
 
   Future<List<TaskModel>> getTasks({DateTime? date, Tag? tag}) async {
     List<Map<String, Object?>> list;
-    if (tag == null && date == null) {
+    if (tag == Tag.all && date == null) {
       list = await db!.query(
         table,
         columns: [
@@ -125,9 +124,12 @@ class DataBaseCustom {
             columnUpdated
           ],
           orderBy: '$columnUpdated DESC',
-          where: '$columnDate = ? AND $columnTag = ?',
+          where: '$columnDate BETWEEN ? AND ? AND $columnTag = ?',
           whereArgs: <Object?>[
-            date.formatDateToDatabase(),
+            DateTime(date.year, date.month, date.day, 0, 0, 0)
+                .toIso8601String(),
+            DateTime(date.year, date.month, date.day, 23, 59, 59)
+                .toIso8601String(),
             tag?.fromEnumToString()
           ],
         );
@@ -154,7 +156,7 @@ class DataBaseCustom {
   Future<Database?> get ready async => db ??= await lock.synchronized(
         () async {
           await Future.delayed(
-            const Duration(milliseconds: 2500),
+            const Duration(milliseconds: 1500),
           );
           if (db == null) {
             await open();

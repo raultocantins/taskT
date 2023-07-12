@@ -3,7 +3,10 @@ import 'package:table_calendar/table_calendar.dart';
 
 class DateBottomSheet extends StatefulWidget {
   final Function(DateTime) callback;
-  const DateBottomSheet({super.key, required this.callback});
+  const DateBottomSheet({
+    required this.callback,
+    super.key,
+  });
 
   @override
   State<DateBottomSheet> createState() => _DateBottomSheetState();
@@ -61,7 +64,9 @@ class _DateBottomSheetState extends State<DateBottomSheet> {
             weekNumberTextStyle: TextStyle(color: Colors.white),
           ),
           onDaySelected: (selectedDay, focusedDay) {
-            widget.callback(selectedDay);
+            DateTime now = DateTime.now();
+            widget.callback(DateTime(selectedDay.year, selectedDay.month,
+                selectedDay.day, now.hour, now.minute));
             Navigator.of(context).pop();
           },
           focusedDay: date,
