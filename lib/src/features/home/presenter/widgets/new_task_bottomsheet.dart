@@ -274,73 +274,71 @@ class _NewTaskBottomSheetState extends State<NewTaskBottomSheet> {
                   height: 4,
                   color: Colors.white,
                 ),
-                widget.edit ?? false
-                    ? Container()
-                    : Column(
-                        children: [
-                          const SizedBox(
-                            height: 14,
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              picker.DatePicker.showDateTimePicker(context,
-                                  showTitleActions: true,
-                                  onChanged: (date) {}, onConfirm: (date) {
-                                setState(
-                                  () {
-                                    _dateSelected = date;
-                                  },
-                                );
-                              },
-                                  currentTime: _dateSelected,
-                                  locale: picker.LocaleType.pt);
+                Column(
+                  children: [
+                    const SizedBox(
+                      height: 14,
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        picker.DatePicker.showDateTimePicker(context,
+                            showTitleActions: true,
+                            onChanged: (date) {}, onConfirm: (date) {
+                          setState(
+                            () {
+                              _dateSelected = date;
                             },
-                            child: SizedBox(
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  const IconButton(
-                                    onPressed: null,
-                                    icon: Icon(
-                                      Icons.calendar_month,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                  Text(
-                                    (_dateSelected ?? DateTime.now())
-                                        .formatDateDefault(),
-                                    style: const TextStyle(
-                                        color: Colors.white, fontSize: 24),
-                                  ),
-                                  const Expanded(
-                                    child: SizedBox(),
-                                  ),
-                                  const IconButton(
-                                    onPressed: null,
-                                    icon: Icon(
-                                      Icons.access_time_filled_outlined,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                  Text(
-                                    (_dateSelected ?? DateTime.now())
-                                        .formatDateToHours(),
-                                    style: const TextStyle(
-                                        color: Colors.white, fontSize: 24),
-                                  ),
-                                ],
+                          );
+                        },
+                            currentTime: _dateSelected,
+                            locale: picker.LocaleType.pt);
+                      },
+                      child: SizedBox(
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            const IconButton(
+                              onPressed: null,
+                              icon: Icon(
+                                Icons.calendar_month,
+                                color: Colors.white,
                               ),
                             ),
-                          ),
-                          const SizedBox(
-                            height: 14,
-                          ),
-                          const Divider(
-                            height: 4,
-                            color: Colors.white,
-                          ),
-                        ],
+                            Text(
+                              (_dateSelected ?? DateTime.now())
+                                  .formatDateDefault(),
+                              style: const TextStyle(
+                                  color: Colors.white, fontSize: 24),
+                            ),
+                            const Expanded(
+                              child: SizedBox(),
+                            ),
+                            const IconButton(
+                              onPressed: null,
+                              icon: Icon(
+                                Icons.access_time_filled_outlined,
+                                color: Colors.white,
+                              ),
+                            ),
+                            Text(
+                              (_dateSelected ?? DateTime.now())
+                                  .formatDateToHours(),
+                              style: const TextStyle(
+                                  color: Colors.white, fontSize: 24),
+                            ),
+                          ],
+                        ),
                       ),
+                    ),
+                    const SizedBox(
+                      height: 14,
+                    ),
+                    const Divider(
+                      height: 4,
+                      color: Colors.white,
+                    ),
+                  ],
+                ),
                 const SizedBox(
                   height: 14,
                 ),

@@ -126,7 +126,15 @@ abstract class _StateControllerBase with Store {
       (l) => null,
       (updatedTask) {
         List<TaskEntity> updatedList = _tasks;
-        if (updatedTask.tag == tag) {
+        if (tag == Tag.all) {
+          for (int i = 0; i < updatedList.length; i++) {
+            if (updatedList[i].id == updatedTask.id) {
+              updatedList[i] = updatedTask;
+              break;
+            }
+          }
+          changeTasks([...updatedList]);
+        } else if (updatedTask.tag == tag) {
           for (int i = 0; i < updatedList.length; i++) {
             if (updatedList[i].id == updatedTask.id) {
               updatedList[i] = updatedTask;

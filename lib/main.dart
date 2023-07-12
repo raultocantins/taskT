@@ -29,6 +29,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Task-T',
+      darkTheme: ThemeData.light(),
       theme: ThemeData(primarySwatch: Colors.blue, primaryColor: Colors.blue),
       home: FutureBuilder(
         future: GetIt.I.get<DataBaseCustom>().ready,

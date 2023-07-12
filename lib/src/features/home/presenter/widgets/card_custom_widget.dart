@@ -86,7 +86,11 @@ class _CardCustomWidgetState extends State<CardCustomWidget> {
                             ? Container()
                             : Text(
                                 shortTitle(widget.task.title),
-                                style: const TextStyle(fontSize: 18),
+                                style: TextStyle(
+                                    fontSize: 18,
+                                    decoration: widget.task.finished
+                                        ? TextDecoration.lineThrough
+                                        : TextDecoration.none),
                               ),
                         const Expanded(
                           child: SizedBox(),
@@ -118,7 +122,11 @@ class _CardCustomWidgetState extends State<CardCustomWidget> {
                                     children: [
                                       Text(
                                         widget.task.title,
-                                        style: const TextStyle(fontSize: 18),
+                                        style: TextStyle(
+                                            fontSize: 18,
+                                            decoration: widget.task.finished
+                                                ? TextDecoration.lineThrough
+                                                : TextDecoration.none),
                                       ),
                                       const SizedBox(
                                         height: 10,
@@ -130,7 +138,11 @@ class _CardCustomWidgetState extends State<CardCustomWidget> {
                               expanded
                                   ? widget.task.description
                                   : shortText(widget.task.description), //
-                              style: const TextStyle(fontSize: 13),
+                              style: TextStyle(
+                                  fontSize: 13,
+                                  decoration: widget.task.finished
+                                      ? TextDecoration.lineThrough
+                                      : TextDecoration.none),
                             ),
                           ],
                         ),
@@ -144,51 +156,17 @@ class _CardCustomWidgetState extends State<CardCustomWidget> {
                       child: expanded
                           ? Row(
                               children: [
-                                IconButton(
-                                  onPressed: () {
-                                    showModalBottomSheet(
-                                      isScrollControlled: true,
-                                      barrierColor: Colors.transparent,
-                                      backgroundColor:
-                                          Theme.of(context).colorScheme.primary,
-                                      isDismissible: true,
-                                      enableDrag: true,
-                                      shape: const RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.only(
-                                            topLeft: Radius.circular(50),
-                                            topRight: Radius.circular(50)),
-                                      ),
-                                      context: context,
-                                      builder: (context) {
-                                        return NewTaskBottomSheet(
-                                          edit: true,
-                                          task: widget.task,
-                                        );
-                                      },
-                                    );
-                                  },
-                                  icon: const Icon(Icons.edit),
-                                ),
-                                IconButton(
-                                  onPressed: () {
-                                    widget.delete(widget.task);
-                                  },
-                                  icon: const Icon(Icons.delete),
-                                ),
-                                const Expanded(
-                                  child: SizedBox(),
-                                ),
                                 SizedBox(
                                   child: StatefulBuilder(
                                     builder: (BuildContext context,
                                         StateSetter setState) {
                                       return Transform.scale(
-                                        scale: 2.0,
+                                        scale: 1.5,
                                         child: Checkbox(
                                           activeColor: Colors.green,
                                           shape: const OvalBorder(),
                                           side: const BorderSide(
-                                              width: 1, color: Colors.black),
+                                              width: 0.5, color: Colors.black),
                                           value: widget.task.finished,
                                           onChanged: (value) {
                                             widget.update(TaskEntity(
@@ -207,6 +185,42 @@ class _CardCustomWidgetState extends State<CardCustomWidget> {
                                       );
                                     },
                                   ),
+                                ),
+                                IconButton(
+                                  onPressed: () {
+                                    showModalBottomSheet(
+                                      isScrollControlled: true,
+                                      barrierColor: Colors.transparent,
+                                      backgroundColor:
+                                          Theme.of(context).colorScheme.primary,
+                                      isDismissible: true,
+                                      enableDrag: true,
+                                      useSafeArea: false,
+                                      context: context,
+                                      builder: (context) {
+                                        return Padding(
+                                          padding: EdgeInsets.only(
+                                              bottom: MediaQuery.of(context)
+                                                  .viewInsets
+                                                  .bottom),
+                                          child: NewTaskBottomSheet(
+                                            edit: true,
+                                            task: widget.task,
+                                          ),
+                                        );
+                                      },
+                                    );
+                                  },
+                                  icon: const Icon(Icons.edit),
+                                ),
+                                IconButton(
+                                  onPressed: () {
+                                    widget.delete(widget.task);
+                                  },
+                                  icon: const Icon(Icons.delete),
+                                ),
+                                const Expanded(
+                                  child: SizedBox(),
                                 ),
                               ],
                             )
