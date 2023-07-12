@@ -31,7 +31,9 @@ class _HomeScreenState extends State<HomeScreen>
     _stateController = GetIt.I.get<StateController>();
     _stateController?.getTask();
     _animationController = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 500));
+      vsync: this,
+      duration: const Duration(milliseconds: 500),
+    );
     opacityAnimation = CurvedAnimation(
         parent: Tween<double>(begin: 1, end: 0).animate(_animationController),
         curve: Curves.easeInOutExpo);

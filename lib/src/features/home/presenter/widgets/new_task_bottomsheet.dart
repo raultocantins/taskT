@@ -136,7 +136,10 @@ class _NewTaskBottomSheetState extends State<NewTaskBottomSheet> {
                           child: Chip(
                             backgroundColor: _tag == TagsCustom.tags[index]
                                 ? Colors.white
-                                : Colors.blue.withOpacity(0.8),
+                                : Theme.of(context)
+                                    .colorScheme
+                                    .primary
+                                    .withOpacity(0.8),
                             elevation: 0.5,
                             labelPadding: const EdgeInsets.symmetric(
                                 horizontal: 20, vertical: 4),
@@ -144,7 +147,7 @@ class _NewTaskBottomSheetState extends State<NewTaskBottomSheet> {
                               TagsCustom.tags[index].label(),
                               style: TextStyle(
                                   color: _tag == TagsCustom.tags[index]
-                                      ? Colors.blue
+                                      ? Theme.of(context).colorScheme.primary
                                       : Colors.white),
                             ),
                           ),

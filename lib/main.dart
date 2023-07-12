@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Task-T',
+      title: 'TaskT',
       darkTheme: ThemeData.light(),
       theme: ThemeData(primarySwatch: Colors.blue, primaryColor: Colors.blue),
       home: FutureBuilder(

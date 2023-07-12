@@ -68,7 +68,7 @@ class GetItSetup {
   }
 
   static void database() async {
-    var packageName = 'com.task.todo.initial';
+    var packageName = 'com.taskt.todo';
     var databaseFactory = getDatabaseFactory(packageName: packageName);
     getIt.registerLazySingleton<DataBaseCustom>(
       () => DataBaseCustom(databaseFactory),

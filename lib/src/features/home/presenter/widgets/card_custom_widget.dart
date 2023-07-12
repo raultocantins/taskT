@@ -21,15 +21,11 @@ class CardCustomWidget extends StatefulWidget {
 
 class _CardCustomWidgetState extends State<CardCustomWidget> {
   String shortTitle(String text) {
-    return text.length > 25
-        ? '${widget.task.description.substring(0, 25)}...'
-        : text;
+    return text.length > 25 ? '${text.substring(0, 25)}...' : text;
   }
 
   String shortText(String text) {
-    return text.length > 95
-        ? '${widget.task.description.substring(0, 95)}...'
-        : text;
+    return text.length > 95 ? '${text.substring(0, 95)}...' : text;
   }
 
   String getTimeDate(DateTime? date) {

@@ -47,7 +47,7 @@ class _TagsCustomState extends State<TagsCustom> {
                   return Chip(
                     backgroundColor:
                         _stateController?.tag == TagsCustom.tags[index]
-                            ? Colors.blue
+                            ? Theme.of(context).colorScheme.primary
                             : Colors.white,
                     elevation: 0.5,
                     labelPadding:

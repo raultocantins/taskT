@@ -12,11 +12,6 @@ extension DateFormated on DateTime {
     return DateFormat('dd/MM/yyyy', 'pt_BR').format(this);
   }
 
-  String formatDateToDatabase() {
-    initializeDateFormatting();
-    return DateFormat('yyyy-MM-dd', 'pt_BR').format(this);
-  }
-
   String formatDateToHours() {
     initializeDateFormatting();
     return DateFormat('k:mm', 'pt_BR').format(this);

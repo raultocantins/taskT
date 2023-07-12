@@ -150,8 +150,4 @@ abstract class _StateControllerBase with Store {
     );
     changeIsLoading(false);
   }
-
-  dispose() {
-    isLoading = false;
-  }
 }
