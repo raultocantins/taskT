@@ -109,30 +109,56 @@ class DataBaseCustom {
           whereArgs: <Object?>[tag?.fromEnumToString()],
         );
       } else {
-        list = await db!.query(
-          table,
-          columns: [
-            columnDate,
-            columnHours,
-            columnTag,
-            columnDescription,
-            columnFinished,
-            columnId,
-            columnPriority,
-            columnTag,
-            columnTitle,
-            columnUpdated
-          ],
-          orderBy: '$columnUpdated DESC',
-          where: '$columnDate BETWEEN ? AND ? AND $columnTag = ?',
-          whereArgs: <Object?>[
-            DateTime(date.year, date.month, date.day, 0, 0, 0)
-                .toIso8601String(),
-            DateTime(date.year, date.month, date.day, 23, 59, 59)
-                .toIso8601String(),
-            tag?.fromEnumToString()
-          ],
-        );
+        if (tag == Tag.all) {
+          list = await db!.query(
+            table,
+            columns: [
+              columnDate,
+              columnHours,
+              columnTag,
+              columnDescription,
+              columnFinished,
+              columnId,
+              columnPriority,
+              columnTag,
+              columnTitle,
+              columnUpdated
+            ],
+            orderBy: '$columnUpdated DESC',
+            where: '$columnDate BETWEEN ? AND ?',
+            whereArgs: <Object?>[
+              DateTime(date.year, date.month, date.day, 0, 0, 0)
+                  .toIso8601String(),
+              DateTime(date.year, date.month, date.day, 23, 59, 59)
+                  .toIso8601String(),
+            ],
+          );
+        } else {
+          list = await db!.query(
+            table,
+            columns: [
+              columnDate,
+              columnHours,
+              columnTag,
+              columnDescription,
+              columnFinished,
+              columnId,
+              columnPriority,
+              columnTag,
+              columnTitle,
+              columnUpdated
+            ],
+            orderBy: '$columnUpdated DESC',
+            where: '$columnDate BETWEEN ? AND ? AND $columnTag = ?',
+            whereArgs: <Object?>[
+              DateTime(date.year, date.month, date.day, 0, 0, 0)
+                  .toIso8601String(),
+              DateTime(date.year, date.month, date.day, 23, 59, 59)
+                  .toIso8601String(),
+              tag?.fromEnumToString()
+            ],
+          );
+        }
       }
     }
 
