@@ -25,7 +25,7 @@ class _CardCustomWidgetState extends State<CardCustomWidget> {
   }
 
   String shortText(String text) {
-    return text.length > 95 ? '${text.substring(0, 95)}...' : text;
+    return text.length > 80 ? '${text.substring(0, 80)}...' : text;
   }
 
   String getTimeDate(DateTime? date) {
@@ -182,33 +182,37 @@ class _CardCustomWidgetState extends State<CardCustomWidget> {
                                     },
                                   ),
                                 ),
-                                IconButton(
-                                  onPressed: () {
-                                    showModalBottomSheet(
-                                      isScrollControlled: true,
-                                      barrierColor: Colors.transparent,
-                                      backgroundColor:
-                                          Theme.of(context).colorScheme.primary,
-                                      isDismissible: true,
-                                      enableDrag: true,
-                                      useSafeArea: false,
-                                      context: context,
-                                      builder: (context) {
-                                        return Padding(
-                                          padding: EdgeInsets.only(
-                                              bottom: MediaQuery.of(context)
-                                                  .viewInsets
-                                                  .bottom),
-                                          child: NewTaskBottomSheet(
-                                            edit: true,
-                                            task: widget.task,
-                                          ),
-                                        );
-                                      },
-                                    );
-                                  },
-                                  icon: const Icon(Icons.edit),
-                                ),
+                                widget.task.finished
+                                    ? Container()
+                                    : IconButton(
+                                        onPressed: () {
+                                          showModalBottomSheet(
+                                            isScrollControlled: true,
+                                            barrierColor: Colors.transparent,
+                                            backgroundColor: Theme.of(context)
+                                                .colorScheme
+                                                .primary,
+                                            isDismissible: true,
+                                            enableDrag: true,
+                                            useSafeArea: false,
+                                            context: context,
+                                            builder: (context) {
+                                              return Padding(
+                                                padding: EdgeInsets.only(
+                                                    bottom:
+                                                        MediaQuery.of(context)
+                                                            .viewInsets
+                                                            .bottom),
+                                                child: NewTaskBottomSheet(
+                                                  edit: true,
+                                                  task: widget.task,
+                                                ),
+                                              );
+                                            },
+                                          );
+                                        },
+                                        icon: const Icon(Icons.edit),
+                                      ),
                                 IconButton(
                                   onPressed: () {
                                     widget.delete(widget.task);

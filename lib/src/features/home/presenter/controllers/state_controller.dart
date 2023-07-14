@@ -30,6 +30,9 @@ abstract class _StateControllerBase with Store {
   Tag tag = Tag.all;
 
   @observable
+  bool done = false;
+
+  @observable
   List<TaskEntity> _tasks = [];
 
   String get dateFormated => _dateSelected != null
@@ -63,18 +66,26 @@ abstract class _StateControllerBase with Store {
   }
 
   @action
+  changeDone(bool value) {
+    done = value;
+    changeTasks([]);
+    getTask();
+  }
+
+  @action
   changeTasks(List<TaskEntity> value) {
     _tasks = value;
   }
 
   @action
   changeIsLoading(bool value) {
-    isLoading = false;
+    isLoading = value;
   }
 
   void getTask() async {
     changeIsLoading(true);
-    var result = await _getTasksUsecase(date: _dateSelected, tag: tag);
+    var result =
+        await _getTasksUsecase(date: _dateSelected, tag: tag, done: done);
     result.fold(
       (l) => null,
       (r) {
@@ -126,25 +137,30 @@ abstract class _StateControllerBase with Store {
       (l) => null,
       (updatedTask) {
         List<TaskEntity> updatedList = _tasks;
-        if (tag == Tag.all) {
-          for (int i = 0; i < updatedList.length; i++) {
-            if (updatedList[i].id == updatedTask.id) {
-              updatedList[i] = updatedTask;
-              break;
-            }
-          }
-          changeTasks([...updatedList]);
-        } else if (updatedTask.tag == tag) {
-          for (int i = 0; i < updatedList.length; i++) {
-            if (updatedList[i].id == updatedTask.id) {
-              updatedList[i] = updatedTask;
-              break;
-            }
-          }
-          changeTasks([...updatedList]);
-        } else {
+        if (done && !updatedTask.finished || !done && updatedTask.finished) {
           updatedList.removeWhere((element) => element.id == task.id);
           changeTasks([...updatedList]);
+        } else {
+          if (tag == Tag.all) {
+            for (int i = 0; i < updatedList.length; i++) {
+              if (updatedList[i].id == updatedTask.id) {
+                updatedList[i] = updatedTask;
+                break;
+              }
+            }
+            changeTasks([...updatedList]);
+          } else if (updatedTask.tag == tag) {
+            for (int i = 0; i < updatedList.length; i++) {
+              if (updatedList[i].id == updatedTask.id) {
+                updatedList[i] = updatedTask;
+                break;
+              }
+            }
+            changeTasks([...updatedList]);
+          } else {
+            updatedList.removeWhere((element) => element.id == task.id);
+            changeTasks([...updatedList]);
+          }
         }
       },
     );

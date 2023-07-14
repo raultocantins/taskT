@@ -57,6 +57,22 @@ mixin _$StateController on _StateControllerBase, Store {
     });
   }
 
+  late final _$doneAtom =
+      Atom(name: '_StateControllerBase.done', context: context);
+
+  @override
+  bool get done {
+    _$doneAtom.reportRead();
+    return super.done;
+  }
+
+  @override
+  set done(bool value) {
+    _$doneAtom.reportWrite(value, super.done, () {
+      super.done = value;
+    });
+  }
+
   late final _$_tasksAtom =
       Atom(name: '_StateControllerBase._tasks', context: context);
 
@@ -99,6 +115,17 @@ mixin _$StateController on _StateControllerBase, Store {
   }
 
   @override
+  dynamic changeDone(bool value) {
+    final _$actionInfo = _$_StateControllerBaseActionController.startAction(
+        name: '_StateControllerBase.changeDone');
+    try {
+      return super.changeDone(value);
+    } finally {
+      _$_StateControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   dynamic changeTasks(List<TaskEntity> value) {
     final _$actionInfo = _$_StateControllerBaseActionController.startAction(
         name: '_StateControllerBase.changeTasks');
@@ -124,7 +151,8 @@ mixin _$StateController on _StateControllerBase, Store {
   String toString() {
     return '''
 isLoading: ${isLoading},
-tag: ${tag}
+tag: ${tag},
+done: ${done}
     ''';
   }
 }

@@ -14,6 +14,6 @@ extension DateFormated on DateTime {
 
   String formatDateToHours() {
     initializeDateFormatting();
-    return DateFormat('k:mm', 'pt_BR').format(this);
+    return DateFormat('HH:mm', 'pt_BR').format(this);
   }
 }

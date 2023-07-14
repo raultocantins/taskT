@@ -10,9 +10,10 @@ class GetTasksRepositoryImpl implements GetTasksRepository {
   const GetTasksRepositoryImpl(this._getTasksDatasource);
   @override
   Future<Either<Exception, List<TaskEntity>>> call(
-      {DateTime? date, Tag? tag}) async {
+      {DateTime? date, Tag? tag, bool? done}) async {
     try {
-      List<TaskModel> result = await _getTasksDatasource(date: date, tag: tag);
+      List<TaskModel> result =
+          await _getTasksDatasource(date: date, tag: tag, done: done);
       return Right(result.map((e) => TaskModel.toEntity(e)).toList());
     } catch (error) {
       return Left(error as Exception);

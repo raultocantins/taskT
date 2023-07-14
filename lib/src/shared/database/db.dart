@@ -69,7 +69,8 @@ class DataBaseCustom {
     await db!.delete(table, where: '$columnId = ?', whereArgs: <Object?>[id]);
   }
 
-  Future<List<TaskModel>> getTasks({DateTime? date, Tag? tag}) async {
+  Future<List<TaskModel>> getTasks(
+      {DateTime? date, Tag? tag, bool? done}) async {
     List<Map<String, Object?>> list;
     if (tag == Tag.all && date == null) {
       list = await db!.query(
@@ -87,6 +88,8 @@ class DataBaseCustom {
           columnUpdated
         ],
         orderBy: '$columnUpdated DESC',
+        where: '$columnFinished = ?',
+        whereArgs: <Object?>[(done ?? false) ? 1 : 0],
       );
     } else {
       if (date == null) {
@@ -105,8 +108,11 @@ class DataBaseCustom {
             columnUpdated
           ],
           orderBy: '$columnUpdated DESC',
-          where: '$columnTag = ?',
-          whereArgs: <Object?>[tag?.fromEnumToString()],
+          where: '$columnTag = ? AND $columnFinished = ?',
+          whereArgs: <Object?>[
+            tag?.fromEnumToString(),
+            (done ?? false) ? 1 : 0
+          ],
         );
       } else {
         if (tag == Tag.all) {
@@ -125,12 +131,13 @@ class DataBaseCustom {
               columnUpdated
             ],
             orderBy: '$columnUpdated DESC',
-            where: '$columnDate BETWEEN ? AND ?',
+            where: '$columnDate BETWEEN ? AND ? AND $columnFinished = ?',
             whereArgs: <Object?>[
               DateTime(date.year, date.month, date.day, 0, 0, 0)
                   .toIso8601String(),
               DateTime(date.year, date.month, date.day, 23, 59, 59)
                   .toIso8601String(),
+              (done ?? false) ? 1 : 0
             ],
           );
         } else {
@@ -149,13 +156,15 @@ class DataBaseCustom {
               columnUpdated
             ],
             orderBy: '$columnUpdated DESC',
-            where: '$columnDate BETWEEN ? AND ? AND $columnTag = ?',
+            where:
+                '$columnDate BETWEEN ? AND ? AND $columnTag = ? AND $columnFinished = ?',
             whereArgs: <Object?>[
               DateTime(date.year, date.month, date.day, 0, 0, 0)
                   .toIso8601String(),
               DateTime(date.year, date.month, date.day, 23, 59, 59)
                   .toIso8601String(),
-              tag?.fromEnumToString()
+              tag?.fromEnumToString(),
+              (done ?? false) ? 1 : 0
             ],
           );
         }
