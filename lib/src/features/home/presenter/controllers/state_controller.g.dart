@@ -93,7 +93,7 @@ mixin _$StateController on _StateControllerBase, Store {
       ActionController(name: '_StateControllerBase', context: context);
 
   @override
-  dynamic changeDate(DateTime? value) {
+  void changeDate(DateTime? value) {
     final _$actionInfo = _$_StateControllerBaseActionController.startAction(
         name: '_StateControllerBase.changeDate');
     try {
@@ -104,7 +104,7 @@ mixin _$StateController on _StateControllerBase, Store {
   }
 
   @override
-  dynamic changeTag(Tag value) {
+  void changeTag(Tag value) {
     final _$actionInfo = _$_StateControllerBaseActionController.startAction(
         name: '_StateControllerBase.changeTag');
     try {
@@ -115,7 +115,7 @@ mixin _$StateController on _StateControllerBase, Store {
   }
 
   @override
-  dynamic changeDone(bool value) {
+  void changeDone(bool value) {
     final _$actionInfo = _$_StateControllerBaseActionController.startAction(
         name: '_StateControllerBase.changeDone');
     try {
@@ -126,7 +126,7 @@ mixin _$StateController on _StateControllerBase, Store {
   }
 
   @override
-  dynamic changeTasks(List<TaskEntity> value) {
+  void changeTasks(List<TaskEntity> value) {
     final _$actionInfo = _$_StateControllerBaseActionController.startAction(
         name: '_StateControllerBase.changeTasks');
     try {
@@ -137,7 +137,7 @@ mixin _$StateController on _StateControllerBase, Store {
   }
 
   @override
-  dynamic changeIsLoading(bool value) {
+  void changeIsLoading(bool value) {
     final _$actionInfo = _$_StateControllerBaseActionController.startAction(
         name: '_StateControllerBase.changeIsLoading');
     try {

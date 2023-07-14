@@ -50,7 +50,6 @@ class _CardCustomWidgetState extends State<CardCustomWidget> {
               ? Colors.green.withOpacity(0.1)
               : widget.task.priority.getColor().withOpacity(0.1),
           elevation: 0,
-          borderOnForeground: true,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
           ),
@@ -65,7 +64,6 @@ class _CardCustomWidgetState extends State<CardCustomWidget> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Container(
                           height: 10,
@@ -161,8 +159,7 @@ class _CardCustomWidgetState extends State<CardCustomWidget> {
                                         child: Checkbox(
                                           activeColor: Colors.green,
                                           shape: const OvalBorder(),
-                                          side: const BorderSide(
-                                              width: 0.5, color: Colors.black),
+                                          side: const BorderSide(width: 0.5),
                                           value: widget.task.finished,
                                           onChanged: (value) {
                                             widget.update(TaskEntity(

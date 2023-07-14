@@ -53,36 +53,36 @@ abstract class _StateControllerBase with Store {
   }
 
   @action
-  changeDate(DateTime? value) {
+  void changeDate(DateTime? value) {
     _dateSelected = value;
     getTask();
   }
 
   @action
-  changeTag(Tag value) {
+  void changeTag(Tag value) {
     tag = value;
     changeDate(null);
     getTask();
   }
 
   @action
-  changeDone(bool value) {
+  void changeDone(bool value) {
     done = value;
     changeTasks([]);
     getTask();
   }
 
   @action
-  changeTasks(List<TaskEntity> value) {
+  void changeTasks(List<TaskEntity> value) {
     _tasks = value;
   }
 
   @action
-  changeIsLoading(bool value) {
+  void changeIsLoading(bool value) {
     isLoading = value;
   }
 
-  void getTask() async {
+  Future<void> getTask() async {
     changeIsLoading(true);
     var result =
         await _getTasksUsecase(date: _dateSelected, tag: tag, done: done);
@@ -95,7 +95,7 @@ abstract class _StateControllerBase with Store {
     changeIsLoading(false);
   }
 
-  void createTask(TaskEntity task) async {
+  Future<void> createTask(TaskEntity task) async {
     changeIsLoading(true);
     var result = await _saveTaskUsecase(task);
     result.fold(
@@ -116,7 +116,7 @@ abstract class _StateControllerBase with Store {
     changeIsLoading(false);
   }
 
-  void deleteTask(TaskEntity task) async {
+  Future<void> deleteTask(TaskEntity task) async {
     changeIsLoading(true);
     var result = await _deleteTaskUsecase(task);
     result.fold(
@@ -130,7 +130,7 @@ abstract class _StateControllerBase with Store {
     changeIsLoading(false);
   }
 
-  void updateTask(TaskEntity task) async {
+  Future<void> updateTask(TaskEntity task) async {
     changeIsLoading(true);
     var result = await _updateTaskUsecase(task);
     result.fold(

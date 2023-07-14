@@ -1,4 +1,6 @@
 // ignore: depend_on_referenced_packages
+// ignore_for_file: lines_longer_than_80_chars
+
 import 'package:tekartik_app_flutter_sqflite/sqflite.dart';
 import 'package:synchronized/synchronized.dart';
 import 'package:taskt/src/features/home/data/models/task_model.dart';
@@ -133,8 +135,7 @@ class DataBaseCustom {
             orderBy: '$columnUpdated DESC',
             where: '$columnDate BETWEEN ? AND ? AND $columnFinished = ?',
             whereArgs: <Object?>[
-              DateTime(date.year, date.month, date.day, 0, 0, 0)
-                  .toIso8601String(),
+              DateTime(date.year, date.month, date.day).toIso8601String(),
               DateTime(date.year, date.month, date.day, 23, 59, 59)
                   .toIso8601String(),
               (done ?? false) ? 1 : 0
@@ -159,8 +160,7 @@ class DataBaseCustom {
             where:
                 '$columnDate BETWEEN ? AND ? AND $columnTag = ? AND $columnFinished = ?',
             whereArgs: <Object?>[
-              DateTime(date.year, date.month, date.day, 0, 0, 0)
-                  .toIso8601String(),
+              DateTime(date.year, date.month, date.day).toIso8601String(),
               DateTime(date.year, date.month, date.day, 23, 59, 59)
                   .toIso8601String(),
               tag?.fromEnumToString(),

@@ -1,4 +1,4 @@
-// ignore_for_file: unrelated_type_equality_checks
+// ignore_for_file: unrelated_type_equality_checks, lines_longer_than_80_chars
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
@@ -23,7 +23,7 @@ class _HomeScreenState extends State<HomeScreen>
   late AnimationController _animationController;
   late Animation<double> opacityAnimation;
   StateController? _stateController;
-  final PageController _pageController = PageController(initialPage: 0);
+  final PageController _pageController = PageController();
 
   @override
   void initState() {
@@ -160,7 +160,6 @@ class _HomeScreenState extends State<HomeScreen>
                   Expanded(
                     child: PageView(
                         controller: _pageController,
-                        scrollDirection: Axis.horizontal,
                         physics: const NeverScrollableScrollPhysics(),
                         children: [
                           SizedBox(

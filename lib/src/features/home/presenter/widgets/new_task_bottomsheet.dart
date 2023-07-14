@@ -35,7 +35,7 @@ class _NewTaskBottomSheetState extends State<NewTaskBottomSheet> {
     super.initState();
   }
 
-  setup() {
+  void setup() {
     if (widget.edit ?? false) {
       _titleController = TextEditingController(text: widget.task?.title);
       _descriptionController =
@@ -79,8 +79,6 @@ class _NewTaskBottomSheetState extends State<NewTaskBottomSheet> {
           child: Padding(
             padding: const EdgeInsets.all(24.0),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisSize: MainAxisSize.max,
               children: [
                 const SizedBox(
                   height: 48,
@@ -101,7 +99,6 @@ class _NewTaskBottomSheetState extends State<NewTaskBottomSheet> {
                       cursorColor: Colors.white,
                     ),
                     child: TextField(
-                      autofocus: false,
                       controller: _titleController,
                       focusNode: focusNodeTitle,
                       style: const TextStyle(color: Colors.white, fontSize: 24),
@@ -181,8 +178,7 @@ class _NewTaskBottomSheetState extends State<NewTaskBottomSheet> {
                             children: [
                               Checkbox(
                                 shape: const OvalBorder(),
-                                side: const BorderSide(
-                                    width: 1, color: Colors.white),
+                                side: const BorderSide(color: Colors.white),
                                 value: _priority == Priority.high,
                                 onChanged: (bool? value) {
                                   if (value ?? false) {
@@ -203,8 +199,7 @@ class _NewTaskBottomSheetState extends State<NewTaskBottomSheet> {
                             children: [
                               Checkbox(
                                 shape: const OvalBorder(),
-                                side: const BorderSide(
-                                    width: 1, color: Colors.white),
+                                side: const BorderSide(color: Colors.white),
                                 value: _priority == Priority.medium,
                                 onChanged: (bool? value) {
                                   if (value ?? false) {
@@ -225,8 +220,7 @@ class _NewTaskBottomSheetState extends State<NewTaskBottomSheet> {
                             children: [
                               Checkbox(
                                 shape: const OvalBorder(),
-                                side: const BorderSide(
-                                    width: 1, color: Colors.white),
+                                side: const BorderSide(color: Colors.white),
                                 value: _priority == Priority.low,
                                 onChanged: (bool? value) {
                                   if (value ?? false) {
@@ -247,8 +241,7 @@ class _NewTaskBottomSheetState extends State<NewTaskBottomSheet> {
                             children: [
                               Checkbox(
                                 shape: const OvalBorder(),
-                                side: const BorderSide(
-                                    width: 1, color: Colors.white),
+                                side: const BorderSide(color: Colors.white),
                                 value: _priority == Priority.none,
                                 onChanged: (bool? value) {
                                   if (value ?? false) {
@@ -285,7 +278,6 @@ class _NewTaskBottomSheetState extends State<NewTaskBottomSheet> {
                     GestureDetector(
                       onTap: () {
                         picker.DatePicker.showDateTimePicker(context,
-                            showTitleActions: true,
                             onChanged: (date) {}, onConfirm: (date) {
                           setState(
                             () {
@@ -298,7 +290,6 @@ class _NewTaskBottomSheetState extends State<NewTaskBottomSheet> {
                       },
                       child: SizedBox(
                         child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             const IconButton(
                               onPressed: null,
@@ -353,7 +344,6 @@ class _NewTaskBottomSheetState extends State<NewTaskBottomSheet> {
                       cursorColor: Colors.white,
                     ),
                     child: TextField(
-                      autofocus: false,
                       controller: _descriptionController,
                       keyboardType: TextInputType.multiline,
                       maxLines: 4,

@@ -67,7 +67,7 @@ class GetItSetup {
     );
   }
 
-  static void database() async {
+  static Future<void> database() async {
     var packageName = 'com.taskt.todo';
     var databaseFactory = getDatabaseFactory(packageName: packageName);
     getIt.registerLazySingleton<DataBaseCustom>(
