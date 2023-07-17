@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:taskt/src/features/home/domain/entities/task_entity.dart';
+import 'package:task_planner/src/features/home/domain/entities/task_entity.dart';
 import 'package:intl/intl.dart';
-import 'package:taskt/src/features/home/presenter/utils/enums/priority_enum.dart';
-import 'package:taskt/src/features/home/presenter/widgets/new_task_bottomsheet.dart';
+import 'package:task_planner/src/features/home/presenter/utils/enums/priority_enum.dart';
+import 'package:task_planner/src/features/home/presenter/widgets/new_task_bottomsheet.dart';
 
 class CardCustomWidget extends StatefulWidget {
   final TaskEntity task;

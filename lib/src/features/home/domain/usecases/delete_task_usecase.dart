@@ -1,6 +1,6 @@
 import 'package:dartz/dartz.dart';
-import 'package:taskt/src/features/home/domain/entities/task_entity.dart';
-import 'package:taskt/src/features/home/domain/repositories/delete_task_repository.dart';
+import 'package:task_planner/src/features/home/domain/entities/task_entity.dart';
+import 'package:task_planner/src/features/home/domain/repositories/delete_task_repository.dart';
 
 abstract class DeleteTaskUsecase {
   Future<Either<Exception, void>> call(TaskEntity task);

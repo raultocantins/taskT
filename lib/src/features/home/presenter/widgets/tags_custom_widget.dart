@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
-import 'package:taskt/src/features/home/presenter/controllers/state_controller.dart';
-import 'package:taskt/src/features/home/presenter/utils/enums/tags_enum.dart';
+import 'package:task_planner/src/features/home/presenter/controllers/state_controller.dart';
+import 'package:task_planner/src/features/home/presenter/utils/enums/tags_enum.dart';
 
 class TagsCustom extends StatefulWidget {
   static final List<Tag> tags = [

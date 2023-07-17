@@ -1,13 +1,13 @@
 import 'package:get_it/get_it.dart';
 import 'package:mobx/mobx.dart';
-import 'package:taskt/src/features/home/domain/entities/task_entity.dart';
-import 'package:taskt/src/features/home/domain/usecases/delete_task_usecase.dart';
-import 'package:taskt/src/features/home/domain/usecases/get_tasks_usecase.dart';
-import 'package:taskt/src/features/home/domain/usecases/save_task_usecase.dart';
-import 'package:taskt/src/features/home/domain/usecases/update_task_usecase.dart';
-import 'package:taskt/src/features/home/presenter/utils/enums/tags_enum.dart';
-import 'package:taskt/src/shared/services/notification/push_notification.dart';
-import 'package:taskt/src/shared/utils/extensions/date_extension.dart';
+import 'package:task_planner/src/features/home/domain/entities/task_entity.dart';
+import 'package:task_planner/src/features/home/domain/usecases/delete_task_usecase.dart';
+import 'package:task_planner/src/features/home/domain/usecases/get_tasks_usecase.dart';
+import 'package:task_planner/src/features/home/domain/usecases/save_task_usecase.dart';
+import 'package:task_planner/src/features/home/domain/usecases/update_task_usecase.dart';
+import 'package:task_planner/src/features/home/presenter/utils/enums/tags_enum.dart';
+import 'package:task_planner/src/shared/services/notification/push_notification.dart';
+import 'package:task_planner/src/shared/utils/extensions/date_extension.dart';
 import 'package:collection/collection.dart';
 part 'state_controller.g.dart';
 

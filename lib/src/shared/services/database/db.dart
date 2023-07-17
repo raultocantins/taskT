@@ -3,9 +3,9 @@
 
 import 'package:tekartik_app_flutter_sqflite/sqflite.dart';
 import 'package:synchronized/synchronized.dart';
-import 'package:taskt/src/features/home/data/models/task_model.dart';
-import 'package:taskt/src/features/home/domain/entities/task_entity.dart';
-import 'package:taskt/src/features/home/presenter/utils/enums/tags_enum.dart';
+import 'package:task_planner/src/features/home/data/models/task_model.dart';
+import 'package:task_planner/src/features/home/domain/entities/task_entity.dart';
+import 'package:task_planner/src/features/home/presenter/utils/enums/tags_enum.dart';
 import './db_constant.dart';
 
 class DataBaseCustom {

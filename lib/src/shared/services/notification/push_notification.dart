@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:taskt/main.dart';
-import 'package:taskt/src/features/home/domain/entities/task_entity.dart';
+import 'package:task_planner/main.dart';
+import 'package:task_planner/src/features/home/domain/entities/task_entity.dart';
 import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
@@ -95,7 +95,7 @@ class PushNotification {
       android: AndroidNotificationDetails(
         'task',
         'scheduled',
-        groupKey: 'com.taskt.notifications',
+        groupKey: 'com.task_planner.notifications',
         channelDescription: 'channel to task notifications',
         importance: Importance.max,
         priority: Priority.max,

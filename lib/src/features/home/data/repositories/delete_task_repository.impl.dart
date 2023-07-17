@@ -1,7 +1,7 @@
-import 'package:taskt/src/features/home/data/datasources/delete_task_datasource.dart';
-import 'package:taskt/src/features/home/domain/entities/task_entity.dart';
+import 'package:task_planner/src/features/home/data/datasources/delete_task_datasource.dart';
+import 'package:task_planner/src/features/home/domain/entities/task_entity.dart';
 import 'package:dartz/dartz.dart';
-import 'package:taskt/src/features/home/domain/repositories/delete_task_repository.dart';
+import 'package:task_planner/src/features/home/domain/repositories/delete_task_repository.dart';
 
 class DeleteTaskRepositoryImpl implements DeleteTaskRepository {
   final DeleteTaskDatasource _deleteTaskDatasource;

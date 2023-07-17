@@ -1,11 +1,11 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:taskt/src/features/home/presenter/screens/home_page.dart';
-import 'package:taskt/src/shared/services/database/db.dart';
-import 'package:taskt/src/shared/dependencies/get_it.dart';
+import 'package:task_planner/src/features/home/presenter/screens/home_page.dart';
+import 'package:task_planner/src/shared/services/database/db.dart';
+import 'package:task_planner/src/shared/dependencies/get_it.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
-import 'package:taskt/src/shared/lifecycle/app_life_cycle.dart';
+import 'package:task_planner/src/shared/lifecycle/app_life_cycle.dart';
 
 late DataBaseCustom dataBaseCustom;
 void main() async {
@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       navigatorKey: NavigatorKey.navigatorKey,
       debugShowCheckedModeBanner: false,
-      title: 'TaskT',
+      title: 'Task planner',
       darkTheme: ThemeData.light(),
       theme: ThemeData(primarySwatch: Colors.blue, primaryColor: Colors.blue),
       home: FutureBuilder(

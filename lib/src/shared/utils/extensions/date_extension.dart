@@ -9,7 +9,18 @@ extension DateFormated on DateTime {
 
   String formatDateDefault() {
     initializeDateFormatting();
-    return DateFormat('dd/MM/yyyy', 'pt_BR').format(this);
+
+    if (day == DateTime.now().toLocal().day) {
+      return 'Hoje';
+    } else if (day ==
+        DateTime.now().toLocal().add(const Duration(days: 1)).day) {
+      return 'Amanhã';
+    } else if (day ==
+        DateTime.now().toLocal().subtract((const Duration(days: 1))).day) {
+      return 'Ontem';
+    } else {
+      return DateFormat('dd/MM/yyyy', 'pt_BR').format(this);
+    }
   }
 
   String formatDateToHours() {

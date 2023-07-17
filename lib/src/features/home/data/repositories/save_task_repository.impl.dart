@@ -1,8 +1,8 @@
-import 'package:taskt/src/features/home/data/datasources/save_task_datasource.dart';
-import 'package:taskt/src/features/home/data/models/task_model.dart';
-import 'package:taskt/src/features/home/domain/entities/task_entity.dart';
+import 'package:task_planner/src/features/home/data/datasources/save_task_datasource.dart';
+import 'package:task_planner/src/features/home/data/models/task_model.dart';
+import 'package:task_planner/src/features/home/domain/entities/task_entity.dart';
 import 'package:dartz/dartz.dart';
-import 'package:taskt/src/features/home/domain/repositories/save_task_repository.dart';
+import 'package:task_planner/src/features/home/domain/repositories/save_task_repository.dart';
 
 class SaveTaskRepositoryImpl implements SaveTaskRepository {
   final SaveTaskDatasource _saveTaskDatasource;

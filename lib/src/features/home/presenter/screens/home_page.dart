@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 import 'package:lottie/lottie.dart';
-import 'package:taskt/src/features/home/domain/entities/task_entity.dart';
-import 'package:taskt/src/features/home/presenter/controllers/state_controller.dart';
-import 'package:taskt/src/features/home/presenter/widgets/date_bottomsheet.dart';
-import 'package:taskt/src/features/home/presenter/widgets/tags_custom_widget.dart';
-import 'package:taskt/src/shared/utils/extensions/date_extension.dart';
+import 'package:task_planner/src/features/home/domain/entities/task_entity.dart';
+import 'package:task_planner/src/features/home/presenter/controllers/state_controller.dart';
+import 'package:task_planner/src/features/home/presenter/widgets/date_bottomsheet.dart';
+import 'package:task_planner/src/features/home/presenter/widgets/tags_custom_widget.dart';
+import 'package:task_planner/src/shared/utils/extensions/date_extension.dart';
 import '../widgets/card_custom_widget.dart';
 import '../widgets/new_task_bottomsheet.dart';
 

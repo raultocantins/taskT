@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:taskt/src/features/home/domain/entities/task_entity.dart';
-import 'package:taskt/src/features/home/presenter/controllers/state_controller.dart';
-import 'package:taskt/src/features/home/presenter/utils/enums/priority_enum.dart';
-import 'package:taskt/src/features/home/presenter/utils/enums/recurrence_enum.dart';
-import 'package:taskt/src/features/home/presenter/widgets/tags_custom_widget.dart';
-import 'package:taskt/src/features/home/presenter/utils/enums/tags_enum.dart';
-import 'package:taskt/src/shared/utils/extensions/date_extension.dart';
+import 'package:task_planner/src/features/home/domain/entities/task_entity.dart';
+import 'package:task_planner/src/features/home/presenter/controllers/state_controller.dart';
+import 'package:task_planner/src/features/home/presenter/utils/enums/priority_enum.dart';
+import 'package:task_planner/src/features/home/presenter/utils/enums/recurrence_enum.dart';
+import 'package:task_planner/src/features/home/presenter/widgets/tags_custom_widget.dart';
+import 'package:task_planner/src/features/home/presenter/utils/enums/tags_enum.dart';
+import 'package:task_planner/src/shared/utils/extensions/date_extension.dart';
 import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart'
     as picker;
 
@@ -474,23 +474,13 @@ class _NewTaskBottomSheetState extends State<NewTaskBottomSheet> {
                           backgroundColor:
                               MaterialStateProperty.all(Colors.white)),
                       onPressed: () {
-                        if (widget.edit ?? false) {
-                          _stateController?.updateTask(
-                            TaskEntity(
-                              id: widget.task!.id,
-                              title: _titleController!.text,
-                              description: _descriptionController!.text,
-                              priority: _priority!,
-                              tag: _tag!,
-                              recurrence: _recurrence!,
-                              finished: false,
-                              date: _dateSelected!,
-                              hours: _dateSelected!,
-                            ),
-                          );
+                        if (_titleController?.text.isEmpty ?? false) {
+                          focusNodeTitle.requestFocus();
                         } else {
-                          _stateController?.createTask(
-                            TaskEntity(
+                          if (widget.edit ?? false) {
+                            _stateController?.updateTask(
+                              TaskEntity(
+                                id: widget.task!.id,
                                 title: _titleController!.text,
                                 description: _descriptionController!.text,
                                 priority: _priority!,
@@ -498,11 +488,25 @@ class _NewTaskBottomSheetState extends State<NewTaskBottomSheet> {
                                 recurrence: _recurrence!,
                                 finished: false,
                                 date: _dateSelected!,
-                                hours: _dateSelected!),
-                          );
-                        }
+                                hours: _dateSelected!,
+                              ),
+                            );
+                          } else {
+                            _stateController?.createTask(
+                              TaskEntity(
+                                  title: _titleController!.text,
+                                  description: _descriptionController!.text,
+                                  priority: _priority!,
+                                  tag: _tag!,
+                                  recurrence: _recurrence!,
+                                  finished: false,
+                                  date: _dateSelected!,
+                                  hours: _dateSelected!),
+                            );
+                          }
 
-                        Navigator.of(context).pop();
+                          Navigator.of(context).pop();
+                        }
                       },
                       child: const Text(
                         'Save',
