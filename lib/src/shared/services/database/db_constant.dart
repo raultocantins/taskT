@@ -8,5 +8,6 @@ const String columnHours = 'hours';
 const String columnDescription = 'description';
 const String columnFinished = 'finished';
 const String columnTag = 'tag';
+const String columnRecurrence = 'recurrence';
 const String columnPriority = 'priority';
 const String columnUpdated = 'updated';

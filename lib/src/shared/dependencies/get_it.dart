@@ -1,7 +1,9 @@
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get_it/get_it.dart';
 import 'package:taskt/src/features/home/data/repositories/update_task_repository.impl.dart';
 import 'package:taskt/src/features/home/domain/usecases/update_task_usecase.dart';
 import 'package:taskt/src/features/home/external/update_task_datasource.impl.dart';
+import 'package:taskt/src/shared/services/notification/push_notification.dart';
 import 'package:tekartik_app_flutter_sqflite/sqflite.dart';
 import 'package:taskt/src/features/home/data/repositories/delete_task_repository.impl.dart';
 import 'package:taskt/src/features/home/data/repositories/get_tasks_repository.impl.dart';
@@ -13,13 +15,14 @@ import 'package:taskt/src/features/home/external/delete_task_datasource.impl.dar
 import 'package:taskt/src/features/home/external/get_tasks_datasource.impl.dart';
 import 'package:taskt/src/features/home/external/save_task_datasource.impl.dart';
 import 'package:taskt/src/features/home/presenter/controllers/state_controller.dart';
-import 'package:taskt/src/shared/database/db.dart';
+import 'package:taskt/src/shared/services/database/db.dart';
 
 class GetItSetup {
   static GetIt getIt = GetIt.instance;
 
   static void init() {
     database();
+    pushNotification();
     initServices();
     initControllers();
   }
@@ -73,5 +76,14 @@ class GetItSetup {
     getIt.registerLazySingleton<DataBaseCustom>(
       () => DataBaseCustom(databaseFactory),
     );
+  }
+
+  static Future<void> pushNotification() async {
+    getIt.registerLazySingleton<PushNotification>(
+      () => PushNotification(
+        flutterLocalNotificationsPlugin: FlutterLocalNotificationsPlugin(),
+      ),
+    );
+    GetIt.I.get<PushNotification>().init();
   }
 }

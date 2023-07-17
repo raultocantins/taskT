@@ -2,7 +2,7 @@ import 'package:get_it/get_it.dart';
 import 'package:taskt/src/features/home/data/datasources/update_task_datasource.dart';
 import 'package:taskt/src/features/home/data/models/task_model.dart';
 import 'package:taskt/src/features/home/domain/entities/task_entity.dart';
-import 'package:taskt/src/shared/database/db.dart';
+import 'package:taskt/src/shared/services/database/db.dart';
 
 class UpdateTaskDatasourceImpl implements UpdateTaskDatasource {
   @override

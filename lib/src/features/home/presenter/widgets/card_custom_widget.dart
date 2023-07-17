@@ -171,6 +171,8 @@ class _CardCustomWidgetState extends State<CardCustomWidget> {
                                                 finished: value ??
                                                     widget.task.finished,
                                                 tag: widget.task.tag,
+                                                recurrence:
+                                                    widget.task.recurrence,
                                                 date: widget.task.date,
                                                 hours: widget.task.hours));
                                           },

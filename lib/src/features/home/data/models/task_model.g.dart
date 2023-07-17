@@ -14,6 +14,7 @@ TaskModel _$TaskModelFromJson(Map json) => TaskModel(
       finished: json['finished'] as bool,
       priority: $enumDecode(_$PriorityEnumMap, json['priority']),
       tag: $enumDecode(_$TagEnumMap, json['tag']),
+      recurrence: $enumDecode(_$RecurrenceEnumMap, json['recurrence']),
       title: json['title'] as String,
     );
 
@@ -25,6 +26,7 @@ Map<String, dynamic> _$TaskModelToJson(TaskModel instance) => <String, dynamic>{
       'finished': instance.finished,
       'priority': _$PriorityEnumMap[instance.priority]!,
       'tag': _$TagEnumMap[instance.tag]!,
+      'recurrence': _$RecurrenceEnumMap[instance.recurrence]!,
       'title': instance.title,
     };
 
@@ -41,4 +43,11 @@ const _$TagEnumMap = {
   Tag.personal: 'personal',
   Tag.wishlist: 'wishlist',
   Tag.birthday: 'birthday',
+};
+
+const _$RecurrenceEnumMap = {
+  Recurrence.daily: 'daily',
+  Recurrence.weekly: 'weekly',
+  Recurrence.monthly: 'monthly',
+  Recurrence.none: 'none',
 };

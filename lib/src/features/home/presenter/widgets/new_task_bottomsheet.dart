@@ -3,6 +3,7 @@ import 'package:get_it/get_it.dart';
 import 'package:taskt/src/features/home/domain/entities/task_entity.dart';
 import 'package:taskt/src/features/home/presenter/controllers/state_controller.dart';
 import 'package:taskt/src/features/home/presenter/utils/enums/priority_enum.dart';
+import 'package:taskt/src/features/home/presenter/utils/enums/recurrence_enum.dart';
 import 'package:taskt/src/features/home/presenter/widgets/tags_custom_widget.dart';
 import 'package:taskt/src/features/home/presenter/utils/enums/tags_enum.dart';
 import 'package:taskt/src/shared/utils/extensions/date_extension.dart';
@@ -24,6 +25,7 @@ class _NewTaskBottomSheetState extends State<NewTaskBottomSheet> {
   TextEditingController? _descriptionController;
   Priority? _priority;
   Tag? _tag;
+  Recurrence? _recurrence;
   DateTime? _dateSelected;
   FocusNode focusNodeTitle = FocusNode();
   FocusNode focusNodeDescription = FocusNode();
@@ -42,12 +44,14 @@ class _NewTaskBottomSheetState extends State<NewTaskBottomSheet> {
           TextEditingController(text: widget.task?.description);
       _priority = widget.task?.priority;
       _tag = widget.task?.tag;
+      _recurrence = widget.task?.recurrence;
       _dateSelected = widget.task?.date;
     } else {
       _titleController = TextEditingController(text: '');
       _descriptionController = TextEditingController(text: '');
       _priority = Priority.none;
       _tag = Tag.all;
+      _recurrence = Recurrence.none;
       _dateSelected = DateTime.now();
     }
   }
@@ -61,6 +65,12 @@ class _NewTaskBottomSheetState extends State<NewTaskBottomSheet> {
   void updateTag(Tag tag) {
     setState(() {
       _tag = tag;
+    });
+  }
+
+  void updateRecurrence(Recurrence recurrence) {
+    setState(() {
+      _recurrence = recurrence;
     });
   }
 
@@ -163,105 +173,101 @@ class _NewTaskBottomSheetState extends State<NewTaskBottomSheet> {
                 const SizedBox(
                   height: 14,
                 ),
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Text('Priority',
-                          style: TextStyle(color: Colors.white, fontSize: 15)),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            children: [
-                              Checkbox(
-                                shape: const OvalBorder(),
-                                side: const BorderSide(color: Colors.white),
-                                value: _priority == Priority.high,
-                                onChanged: (bool? value) {
-                                  if (value ?? false) {
-                                    updatePriority(Priority.high);
-                                  } else {
-                                    updatePriority(Priority.none);
-                                  }
-                                },
-                              ),
-                              const Text(
-                                'High !!!',
-                                style: TextStyle(
-                                    color: Colors.white, fontSize: 12),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              Checkbox(
-                                shape: const OvalBorder(),
-                                side: const BorderSide(color: Colors.white),
-                                value: _priority == Priority.medium,
-                                onChanged: (bool? value) {
-                                  if (value ?? false) {
-                                    updatePriority(Priority.medium);
-                                  } else {
-                                    updatePriority(Priority.none);
-                                  }
-                                },
-                              ),
-                              const Text(
-                                'Medium !!',
-                                style: TextStyle(
-                                    color: Colors.white, fontSize: 12),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              Checkbox(
-                                shape: const OvalBorder(),
-                                side: const BorderSide(color: Colors.white),
-                                value: _priority == Priority.low,
-                                onChanged: (bool? value) {
-                                  if (value ?? false) {
-                                    updatePriority(Priority.low);
-                                  } else {
-                                    updatePriority(Priority.none);
-                                  }
-                                },
-                              ),
-                              const Text(
-                                'Low !',
-                                style: TextStyle(
-                                    color: Colors.white, fontSize: 12),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              Checkbox(
-                                shape: const OvalBorder(),
-                                side: const BorderSide(color: Colors.white),
-                                value: _priority == Priority.none,
-                                onChanged: (bool? value) {
-                                  if (value ?? false) {
-                                    updatePriority(Priority.none);
-                                  } else {
-                                    updatePriority(Priority.none);
-                                  }
-                                },
-                              ),
-                              const Text(
-                                'None',
-                                style: TextStyle(
-                                    color: Colors.white, fontSize: 12),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text('Priority',
+                        style: TextStyle(color: Colors.white, fontSize: 15)),
+                    Row(
+                      children: [
+                        Row(
+                          children: [
+                            Checkbox(
+                              shape: const OvalBorder(),
+                              side: const BorderSide(color: Colors.white),
+                              value: _priority == Priority.high,
+                              onChanged: (bool? value) {
+                                if (value ?? false) {
+                                  updatePriority(Priority.high);
+                                } else {
+                                  updatePriority(Priority.none);
+                                }
+                              },
+                            ),
+                            const Text(
+                              'High',
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 12),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Checkbox(
+                              shape: const OvalBorder(),
+                              side: const BorderSide(color: Colors.white),
+                              value: _priority == Priority.medium,
+                              onChanged: (bool? value) {
+                                if (value ?? false) {
+                                  updatePriority(Priority.medium);
+                                } else {
+                                  updatePriority(Priority.none);
+                                }
+                              },
+                            ),
+                            const Text(
+                              'Medium',
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 12),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Checkbox(
+                              shape: const OvalBorder(),
+                              side: const BorderSide(color: Colors.white),
+                              value: _priority == Priority.low,
+                              onChanged: (bool? value) {
+                                if (value ?? false) {
+                                  updatePriority(Priority.low);
+                                } else {
+                                  updatePriority(Priority.none);
+                                }
+                              },
+                            ),
+                            const Text(
+                              'Low',
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 12),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Checkbox(
+                              shape: const OvalBorder(),
+                              side: const BorderSide(color: Colors.white),
+                              value: _priority == Priority.none,
+                              onChanged: (bool? value) {
+                                if (value ?? false) {
+                                  updatePriority(Priority.none);
+                                } else {
+                                  updatePriority(Priority.none);
+                                }
+                              },
+                            ),
+                            const Text(
+                              'None',
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 12),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
                 const SizedBox(
                   height: 14,
@@ -333,6 +339,87 @@ class _NewTaskBottomSheetState extends State<NewTaskBottomSheet> {
                     ),
                   ],
                 ),
+                // const SizedBox(
+                //   height: 14,
+                // ),
+                // Column(
+                //   crossAxisAlignment: CrossAxisAlignment.start,
+                //   mainAxisAlignment: MainAxisAlignment.center,
+                //   children: [
+                //     const Text('Recurrence',
+                //         style: TextStyle(color: Colors.white, fontSize: 15)),
+                //     Row(
+                //       children: [
+                //         Row(
+                //           children: [
+                //             Checkbox(
+                //               shape: const OvalBorder(),
+                //               side: const BorderSide(color: Colors.white),
+                //               value: _recurrence == Recurrence.daily,
+                //               onChanged: (bool? value) {
+                //                 if (value ?? false) {
+                //                   updateRecurrence(Recurrence.daily);
+                //                 } else {
+                //                   updateRecurrence(Recurrence.none);
+                //                 }
+                //               },
+                //             ),
+                //             const Text(
+                //               'Daily',
+                //               style:
+                //                   TextStyle(color: Colors.white,
+                //fontSize: 12),
+                //             ),
+                //           ],
+                //         ),
+                //         Row(
+                //           children: [
+                //             Checkbox(
+                //               shape: const OvalBorder(),
+                //               side: const BorderSide(color: Colors.white),
+                //               value: _recurrence == Recurrence.weekly,
+                //               onChanged: (bool? value) {
+                //                 if (value ?? false) {
+                //                   updateRecurrence(Recurrence.weekly);
+                //                 } else {
+                //                   updateRecurrence(Recurrence.none);
+                //                 }
+                //               },
+                //             ),
+                //             const Text(
+                //               'Weekly',
+                //               style:
+                //                   TextStyle(color: Colors.white,
+                //fontSize: 12),
+                //             ),
+                //           ],
+                //         ),
+                //         Row(
+                //           children: [
+                //             Checkbox(
+                //               shape: const OvalBorder(),
+                //               side: const BorderSide(color: Colors.white),
+                //               value: _recurrence == Recurrence.monthly,
+                //               onChanged: (bool? value) {
+                //                 if (value ?? false) {
+                //                   updateRecurrence(Recurrence.monthly);
+                //                 } else {
+                //                   updateRecurrence(Recurrence.none);
+                //                 }
+                //               },
+                //             ),
+                //             const Text(
+                //               'Monthly',
+                //               style:
+                //                   TextStyle(color: Colors.white,
+                // fontSize: 12),
+                //             ),
+                //           ],
+                //         ),
+                //       ],
+                //     ),
+                //   ],
+                // ),
                 const SizedBox(
                   height: 14,
                 ),
@@ -390,14 +477,16 @@ class _NewTaskBottomSheetState extends State<NewTaskBottomSheet> {
                         if (widget.edit ?? false) {
                           _stateController?.updateTask(
                             TaskEntity(
-                                id: widget.task!.id,
-                                title: _titleController!.text,
-                                description: _descriptionController!.text,
-                                priority: _priority!,
-                                tag: _tag!,
-                                finished: false,
-                                date: _dateSelected!,
-                                hours: _dateSelected!),
+                              id: widget.task!.id,
+                              title: _titleController!.text,
+                              description: _descriptionController!.text,
+                              priority: _priority!,
+                              tag: _tag!,
+                              recurrence: _recurrence!,
+                              finished: false,
+                              date: _dateSelected!,
+                              hours: _dateSelected!,
+                            ),
                           );
                         } else {
                           _stateController?.createTask(
@@ -406,6 +495,7 @@ class _NewTaskBottomSheetState extends State<NewTaskBottomSheet> {
                                 description: _descriptionController!.text,
                                 priority: _priority!,
                                 tag: _tag!,
+                                recurrence: _recurrence!,
                                 finished: false,
                                 date: _dateSelected!,
                                 hours: _dateSelected!),

@@ -40,7 +40,7 @@ class DataBaseCustom {
   Future _createDb(Database db) async {
     await db.execute('DROP TABLE If EXISTS $table');
     await db.execute(
-      'CREATE TABLE $table($columnId INTEGER PRIMARY KEY, $columnTitle TEXT, $columnDate TEXT, $columnHours TEXT, $columnDescription TEXT, $columnFinished INTEGER,  $columnTag TEXT,$columnPriority TEXT, $columnUpdated INTEGER)',
+      'CREATE TABLE $table($columnId INTEGER PRIMARY KEY, $columnTitle TEXT, $columnDate TEXT, $columnHours TEXT, $columnDescription TEXT, $columnFinished INTEGER,  $columnTag TEXT, $columnRecurrence TEXT, $columnPriority TEXT, $columnUpdated INTEGER)',
     );
     await db.execute(
       'CREATE INDEX TasksUpdated ON $table ($columnUpdated)',
@@ -57,18 +57,27 @@ class DataBaseCustom {
       finished: taskEntity.finished,
       priority: taskEntity.priority,
       tag: taskEntity.tag,
+      recurrence: taskEntity.recurrence,
       title: taskEntity.title,
     );
   }
 
   Future<TaskModel> updateTask(TaskEntity taskEntity) async {
-    await db!.update(table, TaskModel.toModel(taskEntity).toMap(),
-        where: '$columnId = ?', whereArgs: <Object?>[taskEntity.id]);
+    await db!.update(
+      table,
+      TaskModel.toModel(taskEntity).toMap(),
+      where: '$columnId = ?',
+      whereArgs: <Object?>[taskEntity.id],
+    );
     return TaskModel.toModel(taskEntity);
   }
 
   Future<void> deleteTask(int? id) async {
-    await db!.delete(table, where: '$columnId = ?', whereArgs: <Object?>[id]);
+    await db!.delete(
+      table,
+      where: '$columnId = ?',
+      whereArgs: <Object?>[id],
+    );
   }
 
   Future<List<TaskModel>> getTasks(
@@ -81,6 +90,7 @@ class DataBaseCustom {
           columnDate,
           columnHours,
           columnTag,
+          columnRecurrence,
           columnDescription,
           columnFinished,
           columnId,
@@ -101,6 +111,7 @@ class DataBaseCustom {
             columnDate,
             columnHours,
             columnTag,
+            columnRecurrence,
             columnDescription,
             columnFinished,
             columnId,
@@ -124,6 +135,7 @@ class DataBaseCustom {
               columnDate,
               columnHours,
               columnTag,
+              columnRecurrence,
               columnDescription,
               columnFinished,
               columnId,
@@ -148,6 +160,7 @@ class DataBaseCustom {
               columnDate,
               columnHours,
               columnTag,
+              columnRecurrence,
               columnDescription,
               columnFinished,
               columnId,

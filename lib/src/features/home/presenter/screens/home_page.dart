@@ -27,7 +27,6 @@ class _HomeScreenState extends State<HomeScreen>
 
   @override
   void initState() {
-    super.initState();
     _stateController = GetIt.I.get<StateController>();
     _stateController?.getTask();
     _animationController = AnimationController(
@@ -47,6 +46,7 @@ class _HomeScreenState extends State<HomeScreen>
         }
       },
     );
+    super.initState();
   }
 
   @override
