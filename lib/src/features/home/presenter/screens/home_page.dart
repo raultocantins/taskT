@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 import 'package:lottie/lottie.dart';
+import 'package:task_planner/generated/l10n.dart';
 import 'package:task_planner/src/features/home/domain/entities/task_entity.dart';
 import 'package:task_planner/src/features/home/presenter/controllers/state_controller.dart';
 import 'package:task_planner/src/features/home/presenter/widgets/date_bottomsheet.dart';
@@ -68,9 +69,9 @@ class _HomeScreenState extends State<HomeScreen>
                 children: [
                   Row(
                     children: [
-                      const Text(
-                        'My tasks',
-                        style: TextStyle(fontSize: 40),
+                      Text(
+                        S.of(context).title,
+                        style: const TextStyle(fontSize: 40),
                       ),
                       const Expanded(child: SizedBox()),
                       IconButton(
@@ -104,7 +105,7 @@ class _HomeScreenState extends State<HomeScreen>
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 10),
                     child: Text(
-                      _stateController?.dateFormated ?? '',
+                      _stateController?.dateFormated(context) ?? '',
                       style: const TextStyle(
                         fontSize: 14,
                         color: Colors.grey,
@@ -125,7 +126,7 @@ class _HomeScreenState extends State<HomeScreen>
                         child: Row(
                           children: [
                             Text(
-                              'Undone',
+                              S.of(context).undone,
                               style: TextStyle(
                                   fontSize: 16,
                                   color: (_stateController?.done ?? false)
@@ -147,176 +148,178 @@ class _HomeScreenState extends State<HomeScreen>
                           _pageController.jumpToPage(1);
                         },
                         child: Text(
-                          'Done',
+                          S.of(context).done,
                           style: TextStyle(
-                              fontSize: 16,
-                              color: (_stateController?.done ?? false)
-                                  ? Colors.black
-                                  : Colors.grey),
+                            fontSize: 16,
+                            color: (_stateController?.done ?? false)
+                                ? Colors.black
+                                : Colors.grey,
+                          ),
                         ),
                       ),
                     ],
                   ),
                   Expanded(
                     child: PageView(
-                        controller: _pageController,
-                        physics: const NeverScrollableScrollPhysics(),
-                        children: [
-                          SizedBox(
-                            child: Observer(
-                              builder: (context) {
-                                return _stateController?.groupByDay.isEmpty ??
-                                        false
-                                    ? (_stateController?.isLoading ?? false)
-                                        ? Container()
-                                        : Center(
-                                            child: Lottie.asset(
-                                                'assets/animations/empty.json'),
-                                          )
-                                    : ListView.builder(
-                                        itemCount: _stateController
-                                                ?.groupByDay.length ??
-                                            0,
-                                        itemBuilder:
-                                            (BuildContext context, int index) {
-                                          DateTime? day = _stateController
-                                              ?.groupByDay.keys
-                                              .elementAt(index);
-                                          List<TaskEntity>? items =
-                                              _stateController
-                                                  ?.groupByDay.values
-                                                  .elementAt(index);
+                      controller: _pageController,
+                      physics: const NeverScrollableScrollPhysics(),
+                      children: [
+                        SizedBox(
+                          child: Observer(
+                            builder: (context) {
+                              return _stateController?.groupByDay.isEmpty ??
+                                      false
+                                  ? (_stateController?.isLoading ?? false)
+                                      ? Container()
+                                      : Center(
+                                          child: Lottie.asset(
+                                              'assets/animations/empty.json'),
+                                        )
+                                  : ListView.builder(
+                                      itemCount:
+                                          _stateController?.groupByDay.length ??
+                                              0,
+                                      itemBuilder:
+                                          (BuildContext context, int index) {
+                                        DateTime? day = _stateController
+                                            ?.groupByDay.keys
+                                            .elementAt(index);
+                                        List<TaskEntity>? items =
+                                            _stateController?.groupByDay.values
+                                                .elementAt(index);
 
-                                          return Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Padding(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 8,
-                                                        vertical: 3),
-                                                child: SizedBox(
-                                                  width: double.infinity,
-                                                  height: 20,
-                                                  child: Align(
-                                                    alignment:
-                                                        Alignment.centerLeft,
-                                                    child: Text(
-                                                      day!.formatDateDefault(),
-                                                      style: const TextStyle(
-                                                        color: Colors.grey,
-                                                      ),
+                                        return Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 8,
+                                                      vertical: 3),
+                                              child: SizedBox(
+                                                width: double.infinity,
+                                                height: 20,
+                                                child: Align(
+                                                  alignment:
+                                                      Alignment.centerLeft,
+                                                  child: Text(
+                                                    day!.formatDateDefault(
+                                                        context),
+                                                    style: const TextStyle(
+                                                      color: Colors.grey,
                                                     ),
                                                   ),
                                                 ),
                                               ),
-                                              ListView.builder(
-                                                shrinkWrap: true,
-                                                physics:
-                                                    const NeverScrollableScrollPhysics(),
-                                                itemCount: items?.length ?? 0,
-                                                itemBuilder:
-                                                    (BuildContext context,
-                                                        int i) {
-                                                  TaskEntity item = items![i];
+                                            ),
+                                            ListView.builder(
+                                              shrinkWrap: true,
+                                              physics:
+                                                  const NeverScrollableScrollPhysics(),
+                                              itemCount: items?.length ?? 0,
+                                              itemBuilder:
+                                                  (BuildContext context,
+                                                      int i) {
+                                                TaskEntity item = items![i];
 
-                                                  return CardCustomWidget(
-                                                    task: item,
-                                                    delete: (task) =>
-                                                        _stateController
-                                                            ?.deleteTask(task),
-                                                    update: (task) =>
-                                                        _stateController
-                                                            ?.updateTask(task),
-                                                  );
-                                                },
-                                              ),
-                                            ],
-                                          );
-                                        },
-                                      );
-                              },
-                            ),
+                                                return CardCustomWidget(
+                                                  task: item,
+                                                  delete: (task) =>
+                                                      _stateController
+                                                          ?.deleteTask(task),
+                                                  update: (task) =>
+                                                      _stateController
+                                                          ?.updateTask(task),
+                                                );
+                                              },
+                                            ),
+                                          ],
+                                        );
+                                      },
+                                    );
+                            },
                           ),
-                          SizedBox(
-                            child: Observer(
-                              builder: (context) {
-                                return _stateController?.groupByDay.isEmpty ??
-                                        false
-                                    ? (_stateController?.isLoading ?? false)
-                                        ? Container()
-                                        : Center(
-                                            child: Lottie.asset(
-                                                'assets/animations/empty.json'),
-                                          )
-                                    : ListView.builder(
-                                        itemCount: _stateController
-                                                ?.groupByDay.length ??
-                                            0,
-                                        itemBuilder:
-                                            (BuildContext context, int index) {
-                                          DateTime? day = _stateController
-                                              ?.groupByDay.keys
-                                              .elementAt(index);
-                                          List<TaskEntity>? items =
-                                              _stateController
-                                                  ?.groupByDay.values
-                                                  .elementAt(index);
+                        ),
+                        SizedBox(
+                          child: Observer(
+                            builder: (context) {
+                              return _stateController?.groupByDay.isEmpty ??
+                                      false
+                                  ? (_stateController?.isLoading ?? false)
+                                      ? Container()
+                                      : Center(
+                                          child: Lottie.asset(
+                                              'assets/animations/empty.json'),
+                                        )
+                                  : ListView.builder(
+                                      itemCount:
+                                          _stateController?.groupByDay.length ??
+                                              0,
+                                      itemBuilder:
+                                          (BuildContext context, int index) {
+                                        DateTime? day = _stateController
+                                            ?.groupByDay.keys
+                                            .elementAt(index);
+                                        List<TaskEntity>? items =
+                                            _stateController?.groupByDay.values
+                                                .elementAt(index);
 
-                                          return Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Padding(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 8,
-                                                        vertical: 3),
-                                                child: SizedBox(
-                                                  width: double.infinity,
-                                                  height: 20,
-                                                  child: Align(
-                                                    alignment:
-                                                        Alignment.centerLeft,
-                                                    child: Text(
-                                                      day!.formatDateDefault(),
-                                                      style: const TextStyle(
-                                                        color: Colors.grey,
-                                                      ),
+                                        return Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 8,
+                                                      vertical: 3),
+                                              child: SizedBox(
+                                                width: double.infinity,
+                                                height: 20,
+                                                child: Align(
+                                                  alignment:
+                                                      Alignment.centerLeft,
+                                                  child: Text(
+                                                    day!.formatDateDefault(
+                                                        context),
+                                                    style: const TextStyle(
+                                                      color: Colors.grey,
                                                     ),
                                                   ),
                                                 ),
                                               ),
-                                              ListView.builder(
-                                                shrinkWrap: true,
-                                                physics:
-                                                    const NeverScrollableScrollPhysics(),
-                                                itemCount: items?.length ?? 0,
-                                                itemBuilder:
-                                                    (BuildContext context,
-                                                        int i) {
-                                                  TaskEntity item = items![i];
+                                            ),
+                                            ListView.builder(
+                                              shrinkWrap: true,
+                                              physics:
+                                                  const NeverScrollableScrollPhysics(),
+                                              itemCount: items?.length ?? 0,
+                                              itemBuilder:
+                                                  (BuildContext context,
+                                                      int i) {
+                                                TaskEntity item = items![i];
 
-                                                  return CardCustomWidget(
-                                                    task: item,
-                                                    delete: (task) =>
-                                                        _stateController
-                                                            ?.deleteTask(task),
-                                                    update: (task) =>
-                                                        _stateController
-                                                            ?.updateTask(task),
-                                                  );
-                                                },
-                                              ),
-                                            ],
-                                          );
-                                        },
-                                      );
-                              },
-                            ),
+                                                return CardCustomWidget(
+                                                  task: item,
+                                                  delete: (task) =>
+                                                      _stateController
+                                                          ?.deleteTask(task),
+                                                  update: (task) =>
+                                                      _stateController
+                                                          ?.updateTask(task),
+                                                );
+                                              },
+                                            ),
+                                          ],
+                                        );
+                                      },
+                                    );
+                            },
                           ),
-                        ]),
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),

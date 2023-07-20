@@ -51,7 +51,7 @@ class _TagsCustomState extends State<TagsCustom> {
                     labelPadding:
                         const EdgeInsets.symmetric(horizontal: 20, vertical: 4),
                     label: Text(
-                      TagsCustom.tags[index].label(),
+                      TagsCustom.tags[index].label(context),
                       style: TextStyle(
                           color: _stateController?.tag == TagsCustom.tags[index]
                               ? Colors.white

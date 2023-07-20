@@ -1,5 +1,7 @@
+import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mobx/mobx.dart';
+import 'package:task_planner/generated/l10n.dart';
 import 'package:task_planner/src/features/home/domain/entities/task_entity.dart';
 import 'package:task_planner/src/features/home/domain/usecases/delete_task_usecase.dart';
 import 'package:task_planner/src/features/home/domain/usecases/get_tasks_usecase.dart';
@@ -37,9 +39,9 @@ abstract class _StateControllerBase with Store {
   @observable
   List<TaskEntity> _tasks = [];
 
-  String get dateFormated => _dateSelected != null
+  String dateFormated(BuildContext context) => _dateSelected != null
       ? _dateSelected?.formatDate() ?? ''
-      : 'Showing all tasks';
+      : S.of(context).alltasks;
 
   Map<DateTime, List<TaskEntity>> get groupByDay {
     _tasks.sort((a, b) => b.date.compareTo(a.date));

@@ -1,20 +1,23 @@
+import 'package:flutter/material.dart';
+import 'package:task_planner/generated/l10n.dart';
+
 enum Tag { all, work, personal, wishlist, birthday }
 
 extension TagsExtensions on Tag {
-  String label() {
+  String label(BuildContext context) {
     switch (this) {
       case Tag.all:
-        return 'All';
+        return S.of(context).all;
       case Tag.work:
-        return 'Work';
+        return S.of(context).work;
       case Tag.personal:
-        return 'Personal';
+        return S.of(context).personal;
       case Tag.wishlist:
-        return 'Wishlist';
+        return S.of(context).wishlist;
       case Tag.birthday:
-        return 'Birthday';
+        return S.of(context).birthday;
       default:
-        return 'All';
+        return S.of(context).all;
     }
   }
 

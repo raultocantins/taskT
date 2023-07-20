@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:task_planner/generated/l10n.dart';
 import 'package:task_planner/src/features/home/domain/entities/task_entity.dart';
 import 'package:task_planner/src/features/home/presenter/controllers/state_controller.dart';
 import 'package:task_planner/src/features/home/presenter/utils/enums/priority_enum.dart';
@@ -116,7 +117,7 @@ class _NewTaskBottomSheetState extends State<NewTaskBottomSheet> {
                         counterStyle: const TextStyle(color: Colors.white),
                         border: InputBorder.none,
                         alignLabelWithHint: true,
-                        hintText: 'What do you need to do?',
+                        hintText: S.of(context).whattodo,
                         hintStyle: TextStyle(
                           color: Colors.white.withOpacity(0.3),
                           fontSize: 24,
@@ -140,24 +141,26 @@ class _NewTaskBottomSheetState extends State<NewTaskBottomSheet> {
                         padding: const EdgeInsets.symmetric(horizontal: 5),
                         child: GestureDetector(
                           onTap: () => updateTag(TagsCustom.tags[index]),
-                          child: Chip(
-                            backgroundColor: _tag == TagsCustom.tags[index]
-                                ? Colors.white
-                                : Theme.of(context)
-                                    .colorScheme
-                                    .primary
-                                    .withOpacity(0.8),
-                            elevation: 0.5,
-                            labelPadding: const EdgeInsets.symmetric(
-                                horizontal: 20, vertical: 4),
-                            label: Text(
-                              TagsCustom.tags[index].label(),
-                              style: TextStyle(
-                                  color: _tag == TagsCustom.tags[index]
-                                      ? Theme.of(context).colorScheme.primary
-                                      : Colors.white),
-                            ),
-                          ),
+                          child: Builder(builder: (context) {
+                            return Chip(
+                              backgroundColor: _tag == TagsCustom.tags[index]
+                                  ? Colors.white
+                                  : Theme.of(context)
+                                      .colorScheme
+                                      .primary
+                                      .withOpacity(0.8),
+                              elevation: 0.5,
+                              labelPadding: const EdgeInsets.symmetric(
+                                  horizontal: 20, vertical: 4),
+                              label: Text(
+                                TagsCustom.tags[index].label(context),
+                                style: TextStyle(
+                                    color: _tag == TagsCustom.tags[index]
+                                        ? Theme.of(context).colorScheme.primary
+                                        : Colors.white),
+                              ),
+                            );
+                          }),
                         ),
                       );
                     },
@@ -177,8 +180,9 @@ class _NewTaskBottomSheetState extends State<NewTaskBottomSheet> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text('Priority',
-                        style: TextStyle(color: Colors.white, fontSize: 15)),
+                    Text(S.of(context).priority,
+                        style:
+                            const TextStyle(color: Colors.white, fontSize: 15)),
                     Row(
                       children: [
                         Row(
@@ -195,10 +199,10 @@ class _NewTaskBottomSheetState extends State<NewTaskBottomSheet> {
                                 }
                               },
                             ),
-                            const Text(
-                              'High',
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 12),
+                            Text(
+                              S.of(context).high,
+                              style: const TextStyle(
+                                  color: Colors.white, fontSize: 12),
                             ),
                           ],
                         ),
@@ -216,10 +220,10 @@ class _NewTaskBottomSheetState extends State<NewTaskBottomSheet> {
                                 }
                               },
                             ),
-                            const Text(
-                              'Medium',
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 12),
+                            Text(
+                              S.of(context).medium,
+                              style: const TextStyle(
+                                  color: Colors.white, fontSize: 12),
                             ),
                           ],
                         ),
@@ -237,10 +241,10 @@ class _NewTaskBottomSheetState extends State<NewTaskBottomSheet> {
                                 }
                               },
                             ),
-                            const Text(
-                              'Low',
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 12),
+                            Text(
+                              S.of(context).low,
+                              style: const TextStyle(
+                                  color: Colors.white, fontSize: 12),
                             ),
                           ],
                         ),
@@ -258,10 +262,10 @@ class _NewTaskBottomSheetState extends State<NewTaskBottomSheet> {
                                 }
                               },
                             ),
-                            const Text(
-                              'None',
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 12),
+                            Text(
+                              S.of(context).none,
+                              style: const TextStyle(
+                                  color: Colors.white, fontSize: 12),
                             ),
                           ],
                         ),
@@ -306,7 +310,7 @@ class _NewTaskBottomSheetState extends State<NewTaskBottomSheet> {
                             ),
                             Text(
                               (_dateSelected ?? DateTime.now())
-                                  .formatDateDefault(),
+                                  .formatDateDefault(context),
                               style: const TextStyle(
                                   color: Colors.white, fontSize: 24),
                             ),
@@ -439,7 +443,7 @@ class _NewTaskBottomSheetState extends State<NewTaskBottomSheet> {
                         counterStyle: const TextStyle(color: Colors.white),
                         border: InputBorder.none,
                         alignLabelWithHint: true,
-                        hintText: 'Add your description',
+                        hintText: S.of(context).description,
                         hintStyle: TextStyle(
                           color: Colors.white.withOpacity(0.3),
                           fontSize: 24,
@@ -456,21 +460,28 @@ class _NewTaskBottomSheetState extends State<NewTaskBottomSheet> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     TextButton(
-                        onPressed: () => Navigator.of(context).pop(),
-                        child: const Text('Recurring',
-                            style:
-                                TextStyle(color: Colors.white, fontSize: 14))),
+                      onPressed: () => Navigator.of(context).pop(),
+                      child: Text(
+                        S.of(context).back,
+                        style:
+                            const TextStyle(color: Colors.white, fontSize: 14),
+                      ),
+                    ),
                     const SizedBox(
                       width: 30,
                     ),
                     ElevatedButton(
                       style: ButtonStyle(
                           shape: MaterialStateProperty.all(
-                              const RoundedRectangleBorder(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(10)))),
-                          fixedSize:
-                              MaterialStateProperty.all(const Size(100, 60)),
+                            const RoundedRectangleBorder(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(10),
+                              ),
+                            ),
+                          ),
+                          fixedSize: MaterialStateProperty.all(
+                            const Size(100, 60),
+                          ),
                           backgroundColor:
                               MaterialStateProperty.all(Colors.white)),
                       onPressed: () {
@@ -508,9 +519,10 @@ class _NewTaskBottomSheetState extends State<NewTaskBottomSheet> {
                           Navigator.of(context).pop();
                         }
                       },
-                      child: const Text(
-                        'Save',
-                        style: TextStyle(color: Colors.black, fontSize: 14),
+                      child: Text(
+                        S.of(context).save,
+                        style:
+                            const TextStyle(color: Colors.black, fontSize: 14),
                       ),
                     )
                   ],

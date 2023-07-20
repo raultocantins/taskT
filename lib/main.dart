@@ -1,6 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get_it/get_it.dart';
+import 'package:task_planner/generated/l10n.dart';
 import 'package:task_planner/src/features/home/presenter/screens/home_page.dart';
 import 'package:task_planner/src/shared/services/database/db.dart';
 import 'package:task_planner/src/shared/dependencies/get_it.dart';
@@ -28,6 +30,13 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       navigatorKey: NavigatorKey.navigatorKey,
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+        S.delegate
+      ],
+      supportedLocales: S.delegate.supportedLocales,
       debugShowCheckedModeBanner: false,
       title: 'Task planner',
       darkTheme: ThemeData.light(),
