@@ -7,10 +7,10 @@ import 'package:task_planner/src/features/home/presenter/utils/enums/tags_enum.d
 class TagsCustom extends StatefulWidget {
   static final List<Tag> tags = [
     Tag.all,
-    Tag.birthday,
+    Tag.work,
     Tag.personal,
+    Tag.birthday,
     Tag.wishlist,
-    Tag.work
   ];
   const TagsCustom({super.key});
 

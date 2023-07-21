@@ -75,6 +75,12 @@ class _NewTaskBottomSheetState extends State<NewTaskBottomSheet> {
     });
   }
 
+  List<Tag> filterTags(List<Tag> originalList, Tag tagToRemove) {
+    List<Tag> updatedList = List.from(originalList);
+    updatedList.removeWhere((Tag item) => item == tagToRemove);
+    return updatedList;
+  }
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -103,7 +109,7 @@ class _NewTaskBottomSheetState extends State<NewTaskBottomSheet> {
                   height: 14,
                 ),
                 SizedBox(
-                  height: 50,
+                  height: 70,
                   width: double.infinity,
                   child: TextSelectionTheme(
                     data: const TextSelectionThemeData(
@@ -112,6 +118,7 @@ class _NewTaskBottomSheetState extends State<NewTaskBottomSheet> {
                     child: TextField(
                       controller: _titleController,
                       focusNode: focusNodeTitle,
+                      maxLength: 70,
                       style: const TextStyle(color: Colors.white, fontSize: 24),
                       decoration: InputDecoration(
                         counterStyle: const TextStyle(color: Colors.white),
@@ -135,32 +142,47 @@ class _NewTaskBottomSheetState extends State<NewTaskBottomSheet> {
                   color: Colors.transparent,
                   child: ListView.builder(
                     scrollDirection: Axis.horizontal,
-                    itemCount: TagsCustom.tags.length,
+                    itemCount: filterTags(TagsCustom.tags, Tag.all).length,
                     itemBuilder: (context, index) {
                       return Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 5),
                         child: GestureDetector(
-                          onTap: () => updateTag(TagsCustom.tags[index]),
-                          child: Builder(builder: (context) {
-                            return Chip(
-                              backgroundColor: _tag == TagsCustom.tags[index]
-                                  ? Colors.white
-                                  : Theme.of(context)
-                                      .colorScheme
-                                      .primary
-                                      .withOpacity(0.8),
-                              elevation: 0.5,
-                              labelPadding: const EdgeInsets.symmetric(
-                                  horizontal: 20, vertical: 4),
-                              label: Text(
-                                TagsCustom.tags[index].label(context),
-                                style: TextStyle(
-                                    color: _tag == TagsCustom.tags[index]
-                                        ? Theme.of(context).colorScheme.primary
-                                        : Colors.white),
-                              ),
-                            );
-                          }),
+                          onTap: () {
+                            _tag == filterTags(TagsCustom.tags, Tag.all)[index]
+                                ? updateTag(Tag.all)
+                                : updateTag(
+                                    filterTags(TagsCustom.tags, Tag.all)[index],
+                                  );
+                          },
+                          child: Builder(
+                            builder: (context) {
+                              return Chip(
+                                backgroundColor: _tag ==
+                                        filterTags(
+                                            TagsCustom.tags, Tag.all)[index]
+                                    ? Colors.white
+                                    : Theme.of(context)
+                                        .colorScheme
+                                        .primary
+                                        .withOpacity(0.8),
+                                elevation: 0.5,
+                                labelPadding: const EdgeInsets.symmetric(
+                                    horizontal: 20, vertical: 4),
+                                label: Text(
+                                  filterTags(TagsCustom.tags, Tag.all)[index]
+                                      .label(context),
+                                  style: TextStyle(
+                                      color: _tag ==
+                                              filterTags(TagsCustom.tags,
+                                                  Tag.all)[index]
+                                          ? Theme.of(context)
+                                              .colorScheme
+                                              .primary
+                                          : Colors.white),
+                                ),
+                              );
+                            },
+                          ),
                         ),
                       );
                     },
@@ -436,6 +458,7 @@ class _NewTaskBottomSheetState extends State<NewTaskBottomSheet> {
                     ),
                     child: TextField(
                       controller: _descriptionController,
+                      maxLength: 300,
                       keyboardType: TextInputType.multiline,
                       maxLines: 4,
                       style: const TextStyle(color: Colors.white, fontSize: 24),
