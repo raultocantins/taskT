@@ -259,6 +259,26 @@ class S {
       args: [],
     );
   }
+
+  /// `Tag`
+  String get tag {
+    return Intl.message(
+      'Tag',
+      name: 'tag',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Date`
+  String get date {
+    return Intl.message(
+      'Date',
+      name: 'date',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

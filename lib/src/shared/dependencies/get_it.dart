@@ -1,20 +1,20 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get_it/get_it.dart';
-import 'package:task_planner/src/features/home/data/repositories/update_task_repository.impl.dart';
-import 'package:task_planner/src/features/home/domain/usecases/update_task_usecase.dart';
-import 'package:task_planner/src/features/home/external/update_task_datasource.impl.dart';
+import 'package:task_planner/src/features/tasks/data/repositories/update_task_repository.impl.dart';
+import 'package:task_planner/src/features/tasks/domain/usecases/update_task_usecase.dart';
+import 'package:task_planner/src/features/tasks/external/update_task_datasource.impl.dart';
 import 'package:task_planner/src/shared/services/notification/push_notification.dart';
 import 'package:tekartik_app_flutter_sqflite/sqflite.dart';
-import 'package:task_planner/src/features/home/data/repositories/delete_task_repository.impl.dart';
-import 'package:task_planner/src/features/home/data/repositories/get_tasks_repository.impl.dart';
-import 'package:task_planner/src/features/home/data/repositories/save_task_repository.impl.dart';
-import 'package:task_planner/src/features/home/domain/usecases/delete_task_usecase.dart';
-import 'package:task_planner/src/features/home/domain/usecases/get_tasks_usecase.dart';
-import 'package:task_planner/src/features/home/domain/usecases/save_task_usecase.dart';
-import 'package:task_planner/src/features/home/external/delete_task_datasource.impl.dart';
-import 'package:task_planner/src/features/home/external/get_tasks_datasource.impl.dart';
-import 'package:task_planner/src/features/home/external/save_task_datasource.impl.dart';
-import 'package:task_planner/src/features/home/presenter/controllers/state_controller.dart';
+import 'package:task_planner/src/features/tasks/data/repositories/delete_task_repository.impl.dart';
+import 'package:task_planner/src/features/tasks/data/repositories/get_tasks_repository.impl.dart';
+import 'package:task_planner/src/features/tasks/data/repositories/save_task_repository.impl.dart';
+import 'package:task_planner/src/features/tasks/domain/usecases/delete_task_usecase.dart';
+import 'package:task_planner/src/features/tasks/domain/usecases/get_tasks_usecase.dart';
+import 'package:task_planner/src/features/tasks/domain/usecases/save_task_usecase.dart';
+import 'package:task_planner/src/features/tasks/external/delete_task_datasource.impl.dart';
+import 'package:task_planner/src/features/tasks/external/get_tasks_datasource.impl.dart';
+import 'package:task_planner/src/features/tasks/external/save_task_datasource.impl.dart';
+import 'package:task_planner/src/features/tasks/presenter/controllers/state_controller.dart';
 import 'package:task_planner/src/shared/services/database/db.dart';
 
 class GetItSetup {

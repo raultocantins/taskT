@@ -26,6 +26,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "alltasks": MessageLookupByLibrary.simpleMessage("Showing all tasks"),
         "back": MessageLookupByLibrary.simpleMessage("Back"),
         "birthday": MessageLookupByLibrary.simpleMessage("Birthday"),
+        "date": MessageLookupByLibrary.simpleMessage("Date"),
         "description":
             MessageLookupByLibrary.simpleMessage("Add your description"),
         "done": MessageLookupByLibrary.simpleMessage("Done"),
@@ -36,6 +37,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "personal": MessageLookupByLibrary.simpleMessage("Personal"),
         "priority": MessageLookupByLibrary.simpleMessage("Priority"),
         "save": MessageLookupByLibrary.simpleMessage("Save"),
+        "tag": MessageLookupByLibrary.simpleMessage("Tag"),
         "title": MessageLookupByLibrary.simpleMessage("My tasks"),
         "today": MessageLookupByLibrary.simpleMessage("Today"),
         "tomorrow": MessageLookupByLibrary.simpleMessage("Tomorrow"),

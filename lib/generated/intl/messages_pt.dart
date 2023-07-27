@@ -27,6 +27,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Mostrando todas as tarefas"),
         "back": MessageLookupByLibrary.simpleMessage("Voltar"),
         "birthday": MessageLookupByLibrary.simpleMessage("Aniversário"),
+        "date": MessageLookupByLibrary.simpleMessage("Data"),
         "description":
             MessageLookupByLibrary.simpleMessage("Adicione sua descrição"),
         "done": MessageLookupByLibrary.simpleMessage("Finalizadas"),
@@ -37,6 +38,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "personal": MessageLookupByLibrary.simpleMessage("Pessoal"),
         "priority": MessageLookupByLibrary.simpleMessage("Prioridade"),
         "save": MessageLookupByLibrary.simpleMessage("Salvar"),
+        "tag": MessageLookupByLibrary.simpleMessage("Tag"),
         "title": MessageLookupByLibrary.simpleMessage("Tarefas"),
         "today": MessageLookupByLibrary.simpleMessage("Hoje"),
         "tomorrow": MessageLookupByLibrary.simpleMessage("Amanhã"),

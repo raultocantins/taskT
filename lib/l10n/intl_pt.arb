@@ -20,5 +20,7 @@
     "back": "Voltar",
     "today": "Hoje",
     "tomorrow": "Amanhã",
-    "yesterday": "Ontem"
+    "yesterday": "Ontem",
+    "tag": "Tag",
+    "date": "Data"
 }

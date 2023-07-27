@@ -20,5 +20,7 @@
     "back": "Back",
     "today": "Today",
     "tomorrow": "Tomorrow",
-    "yesterday": "Yesterday"
+    "yesterday": "Yesterday",
+    "tag": "Tag",
+    "date": "Date"
 }

@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get_it/get_it.dart';
 import 'package:task_planner/generated/l10n.dart';
-import 'package:task_planner/src/features/home/presenter/screens/home_page.dart';
+import 'package:task_planner/src/features/home/presenter/screens/home_screen.dart';
+import 'package:task_planner/src/features/tasks/presenter/screens/tasks_screen.dart';
+import 'package:task_planner/src/features/tasks/presenter/screens/report_screen.dart';
 import 'package:task_planner/src/shared/services/database/db.dart';
 import 'package:task_planner/src/shared/dependencies/get_it.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
@@ -39,8 +41,10 @@ class MyApp extends StatelessWidget {
       supportedLocales: S.delegate.supportedLocales,
       debugShowCheckedModeBanner: false,
       title: 'Task planner',
-      darkTheme: ThemeData.light(),
-      theme: ThemeData(primarySwatch: Colors.blue, primaryColor: Colors.blue),
+      darkTheme: ThemeData(
+        brightness: Brightness.dark,
+      ),
+      themeMode: ThemeMode.dark,
       home: FutureBuilder(
         future: GetIt.I.get<DataBaseCustom>().ready,
         builder: (context, snapshot) {
@@ -59,6 +63,15 @@ class MyApp extends StatelessWidget {
           }
         },
       ),
+      onGenerateRoute: (settings) {
+        if (settings.name == '/report') {
+          return MaterialPageRoute(builder: (context) => const ReportPage());
+        }
+        return null;
+      },
+      routes: {
+        '/tasks': (context) => const TasksScreen(),
+      },
     );
   }
 }
