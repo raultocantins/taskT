@@ -1,5 +1,18 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get_it/get_it.dart';
+import 'package:task_planner/src/features/books/data/repositories/delete_book_repository.impl.dart';
+import 'package:task_planner/src/features/books/data/repositories/get_books_repository.impl.dart';
+import 'package:task_planner/src/features/books/data/repositories/save_book_repository.impl.dart';
+import 'package:task_planner/src/features/books/data/repositories/update_book_repository.impl.dart';
+import 'package:task_planner/src/features/books/domain/usecases/delete_book_usecase.dart';
+import 'package:task_planner/src/features/books/domain/usecases/get_books_usecase.dart';
+import 'package:task_planner/src/features/books/domain/usecases/save_book_usecase.dart';
+import 'package:task_planner/src/features/books/domain/usecases/update_book_usecase.dart';
+import 'package:task_planner/src/features/books/external/delete_book_datasource.impl.dart';
+import 'package:task_planner/src/features/books/external/get_books_datasource.impl.dart';
+import 'package:task_planner/src/features/books/external/save_book_datasource.impl.dart';
+import 'package:task_planner/src/features/books/external/update_book_datasource.impl.dart';
+import 'package:task_planner/src/features/books/presenter/controllers/books_controller.dart';
 import 'package:task_planner/src/features/tasks/data/repositories/update_task_repository.impl.dart';
 import 'package:task_planner/src/features/tasks/domain/usecases/update_task_usecase.dart';
 import 'package:task_planner/src/features/tasks/external/update_task_datasource.impl.dart';
@@ -14,7 +27,7 @@ import 'package:task_planner/src/features/tasks/domain/usecases/save_task_usecas
 import 'package:task_planner/src/features/tasks/external/delete_task_datasource.impl.dart';
 import 'package:task_planner/src/features/tasks/external/get_tasks_datasource.impl.dart';
 import 'package:task_planner/src/features/tasks/external/save_task_datasource.impl.dart';
-import 'package:task_planner/src/features/tasks/presenter/controllers/state_controller.dart';
+import 'package:task_planner/src/features/tasks/presenter/controllers/tasks_controller.dart';
 import 'package:task_planner/src/shared/services/database/db.dart';
 
 class GetItSetup {
@@ -28,8 +41,16 @@ class GetItSetup {
   }
 
   static void initControllers() {
-    getIt.registerLazySingleton<StateController>(
-      () => StateController(
+    getIt.registerLazySingleton<TasksController>(
+      () => TasksController(
+        getIt(),
+        getIt(),
+        getIt(),
+        getIt(),
+      ),
+    );
+    getIt.registerLazySingleton<BooksController>(
+      () => BooksController(
         getIt(),
         getIt(),
         getIt(),
@@ -65,6 +86,36 @@ class GetItSetup {
       () => UpdateTaskUsecaseImpl(
         UpdateTaskRepositoryImpl(
           UpdateTaskDatasourceImpl(),
+        ),
+      ),
+    );
+
+    getIt.registerLazySingleton<SaveBookUsecase>(
+      () => SaveBookUsecaseImpl(
+        SaveBookRepositoryImpl(
+          SaveBookDatasourceImpl(),
+        ),
+      ),
+    );
+    getIt.registerLazySingleton<GetBooksUsecase>(
+      () => GetBooksUsecaseImpl(
+        GetBooksRepositoryImpl(
+          GetBooksDatasourceImpl(),
+        ),
+      ),
+    );
+    getIt.registerLazySingleton<DeleteBookUsecase>(
+      () => DeleteBookUsecaseImpl(
+        DeleteBookRepositoryImpl(
+          DeleteBookDatasourceImpl(),
+        ),
+      ),
+    );
+
+    getIt.registerLazySingleton<UpdateBookUsecase>(
+      () => UpdateBookUsecaseImpl(
+        UpdateBookRepositoryImpl(
+          UpdateBookDatasourceImpl(),
         ),
       ),
     );

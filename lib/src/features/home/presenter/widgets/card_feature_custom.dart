@@ -1,7 +1,17 @@
 import 'package:flutter/material.dart';
 
 class CardFeature extends StatefulWidget {
-  const CardFeature({super.key});
+  final String title;
+  final String subtitle;
+  final IconData icon;
+  final String route;
+
+  const CardFeature(
+      {super.key,
+      required this.title,
+      required this.subtitle,
+      required this.icon,
+      required this.route});
 
   @override
   State<CardFeature> createState() => _CardFeatureState();
@@ -11,14 +21,14 @@ class _CardFeatureState extends State<CardFeature> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => Navigator.of(context).pushNamed('/tasks'),
+      onTap: () => Navigator.of(context).pushNamed(widget.route),
       child: Card(
         elevation: 1,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
         ),
-        child: const Padding(
-          padding: EdgeInsets.all(8.0),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -26,17 +36,17 @@ class _CardFeatureState extends State<CardFeature> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'My Tasks',
-                    style: TextStyle(
+                    widget.title,
+                    style: const TextStyle(
                       fontSize: 16,
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 5,
                   ),
                   Text(
-                    '5 tasks pending',
-                    style: TextStyle(fontSize: 14, color: Colors.grey),
+                    widget.subtitle,
+                    style: const TextStyle(fontSize: 14, color: Colors.grey),
                   ),
                 ],
               ),
@@ -44,7 +54,7 @@ class _CardFeatureState extends State<CardFeature> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   Icon(
-                    Icons.task,
+                    widget.icon,
                     size: 32,
                   ),
                 ],

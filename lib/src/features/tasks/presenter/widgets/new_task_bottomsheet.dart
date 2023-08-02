@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:task_planner/generated/l10n.dart';
 import 'package:task_planner/src/features/tasks/domain/entities/task_entity.dart';
-import 'package:task_planner/src/features/tasks/presenter/controllers/state_controller.dart';
+import 'package:task_planner/src/features/tasks/presenter/controllers/tasks_controller.dart';
 import 'package:task_planner/src/features/tasks/presenter/utils/enums/priority_enum.dart';
 import 'package:task_planner/src/features/tasks/presenter/utils/enums/recurrence_enum.dart';
 import 'package:task_planner/src/features/tasks/presenter/widgets/tags_custom_widget.dart';
@@ -21,7 +21,7 @@ class NewTaskBottomSheet extends StatefulWidget {
 }
 
 class _NewTaskBottomSheetState extends State<NewTaskBottomSheet> {
-  StateController? _stateController;
+  TasksController? _controller;
   TextEditingController? _titleController;
   TextEditingController? _descriptionController;
   Priority? _priority;
@@ -33,7 +33,7 @@ class _NewTaskBottomSheetState extends State<NewTaskBottomSheet> {
 
   @override
   void initState() {
-    _stateController = GetIt.I.get<StateController>();
+    _controller = GetIt.I.get<TasksController>();
     setup();
     super.initState();
   }
@@ -528,7 +528,7 @@ class _NewTaskBottomSheetState extends State<NewTaskBottomSheet> {
                           focusNodeTitle.requestFocus();
                         } else {
                           if (widget.edit ?? false) {
-                            _stateController?.updateTask(
+                            _controller?.updateTask(
                               TaskEntity(
                                 id: widget.task!.id,
                                 title: _titleController!.text,
@@ -542,7 +542,7 @@ class _NewTaskBottomSheetState extends State<NewTaskBottomSheet> {
                               ),
                             );
                           } else {
-                            _stateController?.createTask(
+                            _controller?.createTask(
                               TaskEntity(
                                   title: _titleController!.text,
                                   description: _descriptionController!.text,

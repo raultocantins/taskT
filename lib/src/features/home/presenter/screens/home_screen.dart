@@ -66,8 +66,16 @@ class _HomeScreenState extends State<HomeScreen> {
                       crossAxisSpacing: 10,
                       childAspectRatio: 1.5),
                   children: const [
-                    CardFeature(),
-                    CardFeature(),
+                    CardFeature(
+                        icon: Icons.task,
+                        title: 'My Tasks',
+                        subtitle: '5 tasks pending',
+                        route: '/tasks'),
+                    CardFeature(
+                        icon: Icons.book,
+                        title: 'My books',
+                        subtitle: '2 in progress',
+                        route: '/books'),
                   ],
                 ),
               )

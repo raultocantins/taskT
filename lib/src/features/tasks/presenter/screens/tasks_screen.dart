@@ -4,7 +4,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 import 'package:task_planner/generated/l10n.dart';
 import 'package:task_planner/src/features/tasks/domain/entities/task_entity.dart';
-import 'package:task_planner/src/features/tasks/presenter/controllers/state_controller.dart';
+import 'package:task_planner/src/features/tasks/presenter/controllers/tasks_controller.dart';
 import 'package:task_planner/src/features/tasks/presenter/widgets/date_bottomsheet.dart';
 import 'package:task_planner/src/features/tasks/presenter/widgets/tags_custom_widget.dart';
 import 'package:task_planner/src/shared/utils/extensions/date_extension.dart';
@@ -22,13 +22,13 @@ class _TasksScreenState extends State<TasksScreen>
     with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
   late Animation<double> opacityAnimation;
-  StateController? _stateController;
+  TasksController? _controller;
   final PageController _pageController = PageController();
 
   @override
   void initState() {
-    _stateController = GetIt.I.get<StateController>();
-    _stateController?.getTask();
+    _controller = GetIt.I.get<TasksController>();
+    _controller?.getTask();
     _animationController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 500),
@@ -40,9 +40,9 @@ class _TasksScreenState extends State<TasksScreen>
     _pageController.addListener(
       () {
         if (_pageController.page == 0) {
-          _stateController?.changeDone(false);
+          _controller?.changeDone(false);
         } else {
-          _stateController?.changeDone(true);
+          _controller?.changeDone(true);
         }
       },
     );
@@ -52,6 +52,7 @@ class _TasksScreenState extends State<TasksScreen>
   @override
   void dispose() {
     _pageController.dispose();
+    _controller?.dispose();
     super.dispose();
   }
 
@@ -92,7 +93,7 @@ class _TasksScreenState extends State<TasksScreen>
                             context: context,
                             builder: (context) => DateBottomSheet(
                               callback: (newDate) {
-                                _stateController?.changeDate(newDate);
+                                _controller?.changeDate(newDate);
                               },
                             ),
                           );
@@ -107,7 +108,7 @@ class _TasksScreenState extends State<TasksScreen>
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 10),
                     child: Text(
-                      _stateController?.dateFormated(context) ?? '',
+                      _controller?.dateFormated(context) ?? '',
                       style: const TextStyle(
                         fontSize: 14,
                         color: Colors.grey,
@@ -131,7 +132,7 @@ class _TasksScreenState extends State<TasksScreen>
                               S.of(context).undone,
                               style: TextStyle(
                                   fontSize: 16,
-                                  color: (_stateController?.done ?? false)
+                                  color: (_controller?.done ?? false)
                                       ? Colors.grey
                                       : Colors.white),
                             ),
@@ -153,7 +154,7 @@ class _TasksScreenState extends State<TasksScreen>
                           S.of(context).done,
                           style: TextStyle(
                             fontSize: 16,
-                            color: (_stateController?.done ?? false)
+                            color: (_controller?.done ?? false)
                                 ? Colors.white
                                 : Colors.grey,
                           ),
@@ -169,23 +170,21 @@ class _TasksScreenState extends State<TasksScreen>
                         SizedBox(
                           child: Observer(
                             builder: (context) {
-                              return _stateController?.groupByDay.isEmpty ??
-                                      false
-                                  ? (_stateController?.isLoading ?? false)
+                              return _controller?.groupByDay.isEmpty ?? false
+                                  ? (_controller?.isLoading ?? false)
                                       ? Container()
                                       : Container()
                                   : ListView.builder(
                                       itemCount:
-                                          _stateController?.groupByDay.length ??
-                                              0,
+                                          _controller?.groupByDay.length ?? 0,
                                       itemBuilder:
                                           (BuildContext context, int index) {
-                                        DateTime? day = _stateController
+                                        DateTime? day = _controller
                                             ?.groupByDay.keys
                                             .elementAt(index);
-                                        List<TaskEntity>? items =
-                                            _stateController?.groupByDay.values
-                                                .elementAt(index);
+                                        List<TaskEntity>? items = _controller
+                                            ?.groupByDay.values
+                                            .elementAt(index);
 
                                         return Column(
                                           crossAxisAlignment:
@@ -224,12 +223,10 @@ class _TasksScreenState extends State<TasksScreen>
 
                                                 return CardCustomWidget(
                                                   task: item,
-                                                  delete: (task) =>
-                                                      _stateController
-                                                          ?.deleteTask(task),
-                                                  update: (task) =>
-                                                      _stateController
-                                                          ?.updateTask(task),
+                                                  delete: (task) => _controller
+                                                      ?.deleteTask(task),
+                                                  update: (task) => _controller
+                                                      ?.updateTask(task),
                                                 );
                                               },
                                             ),
@@ -243,23 +240,21 @@ class _TasksScreenState extends State<TasksScreen>
                         SizedBox(
                           child: Observer(
                             builder: (context) {
-                              return _stateController?.groupByDay.isEmpty ??
-                                      false
-                                  ? (_stateController?.isLoading ?? false)
+                              return _controller?.groupByDay.isEmpty ?? false
+                                  ? (_controller?.isLoading ?? false)
                                       ? Container()
                                       : Container()
                                   : ListView.builder(
                                       itemCount:
-                                          _stateController?.groupByDay.length ??
-                                              0,
+                                          _controller?.groupByDay.length ?? 0,
                                       itemBuilder:
                                           (BuildContext context, int index) {
-                                        DateTime? day = _stateController
+                                        DateTime? day = _controller
                                             ?.groupByDay.keys
                                             .elementAt(index);
-                                        List<TaskEntity>? items =
-                                            _stateController?.groupByDay.values
-                                                .elementAt(index);
+                                        List<TaskEntity>? items = _controller
+                                            ?.groupByDay.values
+                                            .elementAt(index);
 
                                         return Column(
                                           crossAxisAlignment:
@@ -298,12 +293,10 @@ class _TasksScreenState extends State<TasksScreen>
 
                                                 return CardCustomWidget(
                                                   task: item,
-                                                  delete: (task) =>
-                                                      _stateController
-                                                          ?.deleteTask(task),
-                                                  update: (task) =>
-                                                      _stateController
-                                                          ?.updateTask(task),
+                                                  delete: (task) => _controller
+                                                      ?.deleteTask(task),
+                                                  update: (task) => _controller
+                                                      ?.updateTask(task),
                                                 );
                                               },
                                             ),

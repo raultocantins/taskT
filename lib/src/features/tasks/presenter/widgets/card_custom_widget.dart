@@ -154,9 +154,9 @@ class _CardCustomWidgetState extends State<CardCustomWidget> {
                                       return Transform.scale(
                                         scale: 1.5,
                                         child: Checkbox(
-                                          activeColor: Colors.green,
                                           shape: const OvalBorder(),
-                                          side: const BorderSide(width: 0.5),
+                                          side: const BorderSide(
+                                              color: Colors.white),
                                           value: widget.task.finished,
                                           onChanged: (value) {
                                             widget.update(TaskEntity(
@@ -185,9 +185,6 @@ class _CardCustomWidgetState extends State<CardCustomWidget> {
                                           showModalBottomSheet(
                                             isScrollControlled: true,
                                             barrierColor: Colors.transparent,
-                                            backgroundColor: Theme.of(context)
-                                                .colorScheme
-                                                .primary,
                                             isDismissible: true,
                                             enableDrag: true,
                                             useSafeArea: false,

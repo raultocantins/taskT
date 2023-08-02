@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'state_controller.dart';
+part of 'tasks_controller.dart';
 
 // **************************************************************************
 // StoreGenerator
@@ -8,9 +8,9 @@ part of 'state_controller.dart';
 
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
-mixin _$StateController on _StateControllerBase, Store {
+mixin _$TasksController on _TasksControllerBase, Store {
   late final _$_dateSelectedAtom =
-      Atom(name: '_StateControllerBase._dateSelected', context: context);
+      Atom(name: '_TasksControllerBase._dateSelected', context: context);
 
   @override
   DateTime? get _dateSelected {
@@ -26,7 +26,7 @@ mixin _$StateController on _StateControllerBase, Store {
   }
 
   late final _$isLoadingAtom =
-      Atom(name: '_StateControllerBase.isLoading', context: context);
+      Atom(name: '_TasksControllerBase.isLoading', context: context);
 
   @override
   bool? get isLoading {
@@ -42,7 +42,7 @@ mixin _$StateController on _StateControllerBase, Store {
   }
 
   late final _$tagAtom =
-      Atom(name: '_StateControllerBase.tag', context: context);
+      Atom(name: '_TasksControllerBase.tag', context: context);
 
   @override
   Tag get tag {
@@ -58,7 +58,7 @@ mixin _$StateController on _StateControllerBase, Store {
   }
 
   late final _$doneAtom =
-      Atom(name: '_StateControllerBase.done', context: context);
+      Atom(name: '_TasksControllerBase.done', context: context);
 
   @override
   bool get done {
@@ -74,7 +74,7 @@ mixin _$StateController on _StateControllerBase, Store {
   }
 
   late final _$_tasksAtom =
-      Atom(name: '_StateControllerBase._tasks', context: context);
+      Atom(name: '_TasksControllerBase._tasks', context: context);
 
   @override
   List<TaskEntity> get _tasks {
@@ -89,61 +89,61 @@ mixin _$StateController on _StateControllerBase, Store {
     });
   }
 
-  late final _$_StateControllerBaseActionController =
-      ActionController(name: '_StateControllerBase', context: context);
+  late final _$_TasksControllerBaseActionController =
+      ActionController(name: '_TasksControllerBase', context: context);
 
   @override
   void changeDate(DateTime? value) {
-    final _$actionInfo = _$_StateControllerBaseActionController.startAction(
-        name: '_StateControllerBase.changeDate');
+    final _$actionInfo = _$_TasksControllerBaseActionController.startAction(
+        name: '_TasksControllerBase.changeDate');
     try {
       return super.changeDate(value);
     } finally {
-      _$_StateControllerBaseActionController.endAction(_$actionInfo);
+      _$_TasksControllerBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
   void changeTag(Tag value) {
-    final _$actionInfo = _$_StateControllerBaseActionController.startAction(
-        name: '_StateControllerBase.changeTag');
+    final _$actionInfo = _$_TasksControllerBaseActionController.startAction(
+        name: '_TasksControllerBase.changeTag');
     try {
       return super.changeTag(value);
     } finally {
-      _$_StateControllerBaseActionController.endAction(_$actionInfo);
+      _$_TasksControllerBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
   void changeDone(bool value) {
-    final _$actionInfo = _$_StateControllerBaseActionController.startAction(
-        name: '_StateControllerBase.changeDone');
+    final _$actionInfo = _$_TasksControllerBaseActionController.startAction(
+        name: '_TasksControllerBase.changeDone');
     try {
       return super.changeDone(value);
     } finally {
-      _$_StateControllerBaseActionController.endAction(_$actionInfo);
+      _$_TasksControllerBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
   void changeTasks(List<TaskEntity> value) {
-    final _$actionInfo = _$_StateControllerBaseActionController.startAction(
-        name: '_StateControllerBase.changeTasks');
+    final _$actionInfo = _$_TasksControllerBaseActionController.startAction(
+        name: '_TasksControllerBase.changeTasks');
     try {
       return super.changeTasks(value);
     } finally {
-      _$_StateControllerBaseActionController.endAction(_$actionInfo);
+      _$_TasksControllerBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
   void changeIsLoading(bool value) {
-    final _$actionInfo = _$_StateControllerBaseActionController.startAction(
-        name: '_StateControllerBase.changeIsLoading');
+    final _$actionInfo = _$_TasksControllerBaseActionController.startAction(
+        name: '_TasksControllerBase.changeIsLoading');
     try {
       return super.changeIsLoading(value);
     } finally {
-      _$_StateControllerBaseActionController.endAction(_$actionInfo);
+      _$_TasksControllerBaseActionController.endAction(_$actionInfo);
     }
   }
 

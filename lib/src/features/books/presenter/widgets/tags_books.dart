@@ -1,29 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
-import 'package:task_planner/src/features/tasks/presenter/controllers/tasks_controller.dart';
-import 'package:task_planner/src/features/tasks/presenter/utils/enums/tags_enum.dart';
+import 'package:task_planner/src/features/books/presenter/controllers/books_controller.dart';
+import 'package:task_planner/src/features/books/presenter/utils/enums/tags_books_enum.dart';
 
-class TagsCustom extends StatefulWidget {
-  static final List<Tag> tags = [
-    Tag.all,
-    Tag.work,
-    Tag.personal,
-    Tag.birthday,
-    Tag.wishlist,
+class TagsBooks extends StatefulWidget {
+  static final List<TagBook> tags = [
+    TagBook.all,
+    TagBook.fantasy,
+    TagBook.action,
   ];
-  const TagsCustom({super.key});
+  const TagsBooks({super.key});
 
   @override
-  State<TagsCustom> createState() => _TagsCustomState();
+  State<TagsBooks> createState() => _TagsCustomState();
 }
 
-class _TagsCustomState extends State<TagsCustom> {
-  TasksController? _stateController;
+class _TagsCustomState extends State<TagsBooks> {
+  BooksController? _stateController;
 
   @override
   void initState() {
-    _stateController = GetIt.I.get<TasksController>();
+    _stateController = GetIt.I.get<BooksController>();
     super.initState();
   }
 
@@ -34,26 +32,26 @@ class _TagsCustomState extends State<TagsCustom> {
       width: double.infinity,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
-        itemCount: TagsCustom.tags.length,
+        itemCount: TagsBooks.tags.length,
         itemBuilder: (context, index) {
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 5),
             child: GestureDetector(
-              onTap: () => _stateController?.changeTag(TagsCustom.tags[index]),
+              onTap: () => _stateController?.changeTag(TagsBooks.tags[index]),
               child: Observer(
                 builder: (context) {
                   return Chip(
                     backgroundColor:
-                        _stateController?.tag == TagsCustom.tags[index]
+                        _stateController?.tag == TagsBooks.tags[index]
                             ? Colors.white
                             : null,
                     elevation: 0.5,
                     labelPadding:
                         const EdgeInsets.symmetric(horizontal: 20, vertical: 4),
                     label: Text(
-                      TagsCustom.tags[index].label(context),
+                      TagsBooks.tags[index].label(context),
                       style: TextStyle(
-                          color: _stateController?.tag == TagsCustom.tags[index]
+                          color: _stateController?.tag == TagsBooks.tags[index]
                               ? Colors.black
                               : null),
                     ),

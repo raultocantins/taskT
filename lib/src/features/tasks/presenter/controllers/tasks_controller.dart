@@ -11,17 +11,17 @@ import 'package:task_planner/src/features/tasks/presenter/utils/enums/tags_enum.
 import 'package:task_planner/src/shared/services/notification/push_notification.dart';
 import 'package:task_planner/src/shared/utils/extensions/date_extension.dart';
 import 'package:collection/collection.dart';
-part 'state_controller.g.dart';
+part 'tasks_controller.g.dart';
 
 // ignore: library_private_types_in_public_api
-class StateController = _StateControllerBase with _$StateController;
+class TasksController = _TasksControllerBase with _$TasksController;
 
-abstract class _StateControllerBase with Store {
+abstract class _TasksControllerBase with Store {
   final SaveTaskUsecase _saveTaskUsecase;
   final UpdateTaskUsecase _updateTaskUsecase;
   final GetTasksUsecase _getTasksUsecase;
   final DeleteTaskUsecase _deleteTaskUsecase;
-  _StateControllerBase(this._saveTaskUsecase, this._getTasksUsecase,
+  _TasksControllerBase(this._saveTaskUsecase, this._getTasksUsecase,
       this._deleteTaskUsecase, this._updateTaskUsecase);
 
   @observable
@@ -185,5 +185,13 @@ abstract class _StateControllerBase with Store {
 
   Future<void> cancelNotification(TaskEntity task) async {
     GetIt.I.get<PushNotification>().cancelScheduledNotification(task);
+  }
+
+  void dispose() {
+    _dateSelected = null;
+    isLoading = false;
+    tag = Tag.all;
+    done = false;
+    _tasks = [];
   }
 }
