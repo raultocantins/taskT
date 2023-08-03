@@ -13,13 +13,13 @@ mixin _$BooksController on _BooksControllerBase, Store {
       Atom(name: '_BooksControllerBase.isLoading', context: context);
 
   @override
-  bool? get isLoading {
+  bool get isLoading {
     _$isLoadingAtom.reportRead();
     return super.isLoading;
   }
 
   @override
-  set isLoading(bool? value) {
+  set isLoading(bool value) {
     _$isLoadingAtom.reportWrite(value, super.isLoading, () {
       super.isLoading = value;
     });
@@ -41,24 +41,35 @@ mixin _$BooksController on _BooksControllerBase, Store {
     });
   }
 
-  late final _$_booksAtom =
-      Atom(name: '_BooksControllerBase._books', context: context);
+  late final _$booksAtom =
+      Atom(name: '_BooksControllerBase.books', context: context);
 
   @override
-  List<BookEntity> get _books {
-    _$_booksAtom.reportRead();
-    return super._books;
+  List<BookEntity> get books {
+    _$booksAtom.reportRead();
+    return super.books;
   }
 
   @override
-  set _books(List<BookEntity> value) {
-    _$_booksAtom.reportWrite(value, super._books, () {
-      super._books = value;
+  set books(List<BookEntity> value) {
+    _$booksAtom.reportWrite(value, super.books, () {
+      super.books = value;
     });
   }
 
   late final _$_BooksControllerBaseActionController =
       ActionController(name: '_BooksControllerBase', context: context);
+
+  @override
+  void changeBooks(List<BookEntity> value) {
+    final _$actionInfo = _$_BooksControllerBaseActionController.startAction(
+        name: '_BooksControllerBase.changeBooks');
+    try {
+      return super.changeBooks(value);
+    } finally {
+      _$_BooksControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
 
   @override
   void changeTag(TagBook value) {
@@ -86,7 +97,8 @@ mixin _$BooksController on _BooksControllerBase, Store {
   String toString() {
     return '''
 isLoading: ${isLoading},
-tag: ${tag}
+tag: ${tag},
+books: ${books}
     ''';
   }
 }

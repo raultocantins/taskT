@@ -17,11 +17,11 @@ class TagsBooks extends StatefulWidget {
 }
 
 class _TagsCustomState extends State<TagsBooks> {
-  BooksController? _stateController;
+  BooksController? _controller;
 
   @override
   void initState() {
-    _stateController = GetIt.I.get<BooksController>();
+    _controller = GetIt.I.get<BooksController>();
     super.initState();
   }
 
@@ -37,21 +37,20 @@ class _TagsCustomState extends State<TagsBooks> {
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 5),
             child: GestureDetector(
-              onTap: () => _stateController?.changeTag(TagsBooks.tags[index]),
+              onTap: () => _controller?.changeTag(TagsBooks.tags[index]),
               child: Observer(
                 builder: (context) {
                   return Chip(
-                    backgroundColor:
-                        _stateController?.tag == TagsBooks.tags[index]
-                            ? Colors.white
-                            : null,
+                    backgroundColor: _controller?.tag == TagsBooks.tags[index]
+                        ? Colors.white
+                        : null,
                     elevation: 0.5,
                     labelPadding:
                         const EdgeInsets.symmetric(horizontal: 20, vertical: 4),
                     label: Text(
                       TagsBooks.tags[index].label(context),
                       style: TextStyle(
-                          color: _stateController?.tag == TagsBooks.tags[index]
+                          color: _controller?.tag == TagsBooks.tags[index]
                               ? Colors.black
                               : null),
                     ),

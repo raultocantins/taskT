@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
-import 'package:task_planner/src/features/books/domain/entities/book_entity.dart';
 import 'package:task_planner/src/features/books/presenter/controllers/books_controller.dart';
-import 'package:task_planner/src/features/books/presenter/utils/enums/book_state_enum.dart';
-import 'package:task_planner/src/features/books/presenter/utils/enums/tags_books_enum.dart';
 import 'package:task_planner/src/features/books/presenter/widgets/book_card_custom.dart';
 import 'package:task_planner/src/features/books/presenter/widgets/new_book_bottomsheet.dart';
 import 'package:task_planner/src/features/books/presenter/widgets/tags_books.dart';
@@ -23,41 +20,6 @@ class _BooksScreenState extends State<BooksScreen>
   BooksController? _controller;
   final PageController _pageController = PageController();
 
-  List<BookEntity> listBooks = [
-    BookEntity(
-        title: 'Elon Musk',
-        author: 'Ashlee Vance',
-        star: 2,
-        bookState: BookState.initial,
-        currentPage: 80,
-        finalPage: 200,
-        tagBook: TagBook.all),
-    BookEntity(
-        title: 'Elon Musk',
-        author: 'Ashlee Vance',
-        star: 4,
-        bookState: BookState.paused,
-        currentPage: 0,
-        finalPage: 200,
-        tagBook: TagBook.all),
-    BookEntity(
-        title: 'Elon Musk',
-        author: 'Ashlee Vance',
-        star: 1,
-        bookState: BookState.finished,
-        currentPage: 0,
-        finalPage: 200,
-        tagBook: TagBook.all),
-    BookEntity(
-        title: 'Elon Musk',
-        author: 'Ashlee Vance',
-        star: 5,
-        bookState: BookState.started,
-        currentPage: 0,
-        finalPage: 200,
-        tagBook: TagBook.all)
-  ];
-
   @override
   void initState() {
     _controller = GetIt.I.get<BooksController>();
@@ -68,7 +30,7 @@ class _BooksScreenState extends State<BooksScreen>
     opacityAnimation = CurvedAnimation(
         parent: Tween<double>(begin: 1, end: 0).animate(_animationController),
         curve: Curves.easeInOutExpo);
-
+    _controller?.getBooks();
     super.initState();
   }
 
@@ -126,9 +88,9 @@ class _BooksScreenState extends State<BooksScreen>
                   ),
                   Expanded(
                     child: ListView.builder(
-                      itemCount: listBooks.length,
+                      itemCount: _controller?.books.length,
                       itemBuilder: (context, i) => BookCardCustom(
-                        book: listBooks[i],
+                        book: _controller!.books[i],
                       ),
                     ),
                   )

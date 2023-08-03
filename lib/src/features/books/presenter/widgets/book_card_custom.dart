@@ -2,7 +2,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:task_planner/src/features/books/domain/entities/book_entity.dart';
-import 'package:task_planner/src/features/books/presenter/utils/enums/book_state_enum.dart';
 
 class BookCardCustom extends StatefulWidget {
   final BookEntity book;
@@ -18,34 +17,6 @@ class BookCardCustom extends StatefulWidget {
 
 class _BookCardCustomState extends State<BookCardCustom> {
   final List<int> stars = [0, 1, 2, 3, 4];
-
-  Widget stateIcon() {
-    switch (widget.book.bookState) {
-      case BookState.initial:
-        return const Icon(
-          Icons.book,
-          size: 50,
-        );
-      case BookState.paused:
-        return const Icon(
-          Icons.pause_rounded,
-          size: 50,
-        );
-      case BookState.finished:
-        return const Icon(
-          Icons.check,
-          size: 50,
-        );
-      case BookState.started:
-        return const Icon(
-          Icons.play_lesson,
-          size: 50,
-        );
-
-      default:
-        return Container();
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -74,8 +45,8 @@ class _BookCardCustomState extends State<BookCardCustom> {
                         size: 15,
                       );
                     } else {
-                      return const Icon(Icons.star,
-                          size: 15, color: Colors.grey);
+                      return Icon(Icons.star,
+                          size: 15, color: Colors.grey.withOpacity(0.3));
                     }
                   },
                 ).toList(),
@@ -100,9 +71,14 @@ class _BookCardCustomState extends State<BookCardCustom> {
               ),
             ],
           ),
-          leading: Column(
+          leading: const Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: [stateIcon()],
+            children: [
+              Icon(
+                Icons.book,
+                size: 50,
+              ),
+            ],
           ),
         ),
       ),

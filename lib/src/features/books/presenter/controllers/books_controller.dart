@@ -19,17 +19,23 @@ abstract class _BooksControllerBase with Store {
       this._deleteBookUsecase, this._updateBookUsecase);
 
   @observable
-  bool? isLoading = false;
+  bool isLoading = false;
 
   @observable
   TagBook tag = TagBook.all;
 
   @observable
-  List<BookEntity> _books = [];
+  List<BookEntity> books = [];
+
+  @action
+  void changeBooks(List<BookEntity> value) {
+    books = value;
+  }
 
   @action
   void changeTag(TagBook value) {
     tag = value;
+    getBooks();
   }
 
   @action
@@ -37,9 +43,81 @@ abstract class _BooksControllerBase with Store {
     isLoading = value;
   }
 
+  Future<void> getBooks() async {
+    changeIsLoading(true);
+    var result = await _getBooksUsecase(tag: tag, done: false);
+    result.fold(
+      (l) => null,
+      (r) {
+        changeBooks(r);
+      },
+    );
+    changeIsLoading(false);
+  }
+
+  Future<void> createBook(BookEntity book) async {
+    changeIsLoading(true);
+    var result = await _saveBookUsecase(book);
+    result.fold(
+      (l) => null,
+      (r) {
+        if (tag == TagBook.all) {
+          changeBooks([...books, r]);
+        } else if (book.tagBook == tag) {
+          changeBooks([...books, r]);
+        }
+      },
+    );
+    changeIsLoading(false);
+  }
+
+  Future<void> deleteBook(BookEntity book) async {
+    changeIsLoading(true);
+    var result = await _deleteBookUsecase(book);
+    result.fold(
+      (l) => null,
+      (_) {
+        List<BookEntity> updatedList = books;
+        updatedList.removeWhere((element) => element.id == book.id);
+        changeBooks([...updatedList]);
+      },
+    );
+    changeIsLoading(false);
+  }
+
+  Future<void> updateBook(BookEntity book) async {
+    changeIsLoading(true);
+    var result = await _updateBookUsecase(book);
+    result.fold(
+      (l) => null,
+      (updatedBook) {
+        List<BookEntity> updatedList = books;
+
+        if (tag == TagBook.all) {
+          for (int i = 0; i < updatedList.length; i++) {
+            if (updatedList[i].id == updatedBook.id) {
+              updatedList[i] = updatedBook;
+              break;
+            }
+          }
+          changeBooks([...updatedList]);
+        } else if (updatedBook.tagBook == tag) {
+          for (int i = 0; i < updatedList.length; i++) {
+            if (updatedList[i].id == updatedBook.id) {
+              updatedList[i] = updatedBook;
+              break;
+            }
+          }
+          changeBooks([...updatedList]);
+        }
+      },
+    );
+    changeIsLoading(false);
+  }
+
   void dispose() {
     isLoading = false;
     tag = TagBook.all;
-    _books = [];
+    books = [];
   }
 }

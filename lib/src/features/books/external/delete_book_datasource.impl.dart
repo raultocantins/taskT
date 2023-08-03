@@ -7,7 +7,7 @@ class DeleteBookDatasourceImpl implements DeleteBookDatasource {
   @override
   Future<void> call(BookEntity book) async {
     try {
-      await GetIt.I.get<DataBaseCustom>().deleteTask(book.id);
+      await GetIt.I.get<DataBaseCustom>().deleteBook(book.id);
     } catch (e) {
       throw Exception(e);
     }

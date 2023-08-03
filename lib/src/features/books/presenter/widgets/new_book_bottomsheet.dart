@@ -3,6 +3,7 @@ import 'package:get_it/get_it.dart';
 import 'package:task_planner/generated/l10n.dart';
 import 'package:task_planner/src/features/books/domain/entities/book_entity.dart';
 import 'package:task_planner/src/features/books/presenter/controllers/books_controller.dart';
+import 'package:task_planner/src/features/books/presenter/utils/enums/book_state_enum.dart';
 import 'package:task_planner/src/features/books/presenter/utils/enums/tags_books_enum.dart';
 import 'package:task_planner/src/features/books/presenter/widgets/tags_books.dart';
 
@@ -344,6 +345,41 @@ class _NewBookBottomSheetState extends State<NewBookBottomSheet> {
                           backgroundColor:
                               MaterialStateProperty.all(Colors.white)),
                       onPressed: () {
+                        if (widget.edit ?? false) {
+                          _controller?.updateBook(
+                            BookEntity(
+                              id: widget.book!.id,
+                              title: _titleController!.text,
+                              author: _authorController!.text,
+                              bookState: widget.book!.bookState,
+                              currentPage: int.parse(
+                                _currentPageController!.text,
+                              ),
+                              finalPage: int.parse(
+                                _finalPageController!.text,
+                              ),
+                              star: widget.book!.star,
+                              tagBook: _tag!,
+                            ),
+                          );
+                        } else {
+                          _controller?.createBook(
+                            BookEntity(
+                              title: _titleController!.text,
+                              author: _authorController!.text,
+                              bookState: BookState.initial,
+                              currentPage: int.parse(
+                                _currentPageController!.text,
+                              ),
+                              finalPage: int.parse(
+                                _finalPageController!.text,
+                              ),
+                              star: 0,
+                              tagBook: _tag!,
+                            ),
+                          );
+                        }
+
                         Navigator.of(context).pop();
                       },
                       child: Text(

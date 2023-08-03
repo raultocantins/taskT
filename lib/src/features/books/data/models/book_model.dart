@@ -33,10 +33,10 @@ class BookModel {
         'title': title,
         'author': author,
         'star': star,
-        'currentPage': currentPage,
-        'finalPage': finalPage,
-        'bookState': bookState.fromEnumToString(),
-        'tagBook': tagBook.fromEnumToString(),
+        'currentpage': currentPage,
+        'finalpage': finalPage,
+        'bookstate': bookState.fromEnumToString(),
+        'tagbook': tagBook.fromEnumToString(),
       };
   static BookModel fromObjectDb(Map<String, dynamic> book) {
     return BookModel(
@@ -44,10 +44,10 @@ class BookModel {
       title: book['title'],
       author: book['author'],
       star: book['star'],
-      currentPage: book['currentPage'],
-      finalPage: book['finalPage'],
-      bookState: BookStateExtensions.fromStringToEnum(book['bookState']),
-      tagBook: TagsBookExtensions.fromStringToEnum(book['tag']),
+      currentPage: book['currentpage'],
+      finalPage: book['finalpage'],
+      bookState: BookStateExtensions.fromStringToEnum(book['bookstate']),
+      tagBook: TagsBookExtensions.fromStringToEnum(book['tagbook']),
     );
   }
 
