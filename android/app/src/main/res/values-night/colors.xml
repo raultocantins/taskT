@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="splash_background_dark">#F3F3F3</color> <!-- Cor de fundo escura -->
+    <color name="ic_launcher_background">#F3F3F3</color>
+</resources>

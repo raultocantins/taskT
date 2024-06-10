@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:task_planner/src/features/tasks/domain/entities/task_entity.dart';
 import 'package:task_planner/src/features/tasks/domain/repositories/get_tasks_repository.dart';
-import 'package:task_planner/src/features/tasks/presenter/utils/enums/tags_enum.dart';
+import 'package:task_planner/src/features/tasks/presentation/utils/enums/tags_enum.dart';
 
 abstract class GetTasksUsecase {
   Future<Either<Exception, List<TaskEntity>>> call(

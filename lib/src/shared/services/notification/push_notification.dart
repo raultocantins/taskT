@@ -18,7 +18,7 @@ class PushNotification {
   Future<void> init() async {
     const AndroidInitializationSettings initializationSettingsAndroid =
         AndroidInitializationSettings(
-      '@mipmap/ic_launcher',
+      '@mipmap/launcher_icon',
     );
     final DarwinInitializationSettings initializationSettingsDarwin =
         DarwinInitializationSettings(

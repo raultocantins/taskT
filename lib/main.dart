@@ -1,12 +1,14 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:get_it/get_it.dart';
 import 'package:task_planner/generated/l10n.dart';
+import 'package:task_planner/src/features/books/presenter/screens/book_detail_screen.dart';
 import 'package:task_planner/src/features/books/presenter/screens/books_screen.dart';
-import 'package:task_planner/src/features/home/presenter/screens/home_screen.dart';
-import 'package:task_planner/src/features/signin/presenter/screens/signin_screen.dart';
-import 'package:task_planner/src/features/splashScreen/presenter/screens/splash_screen.dart';
-import 'package:task_planner/src/features/tasks/presenter/screens/tasks_screen.dart';
+import 'package:task_planner/src/features/home/presentation/screens/home_screen.dart';
+import 'package:task_planner/src/features/signin/presentation/screens/signin_screen.dart';
+import 'package:task_planner/src/features/tasks/presentation/screens/tasks_screen.dart';
 import 'package:task_planner/src/shared/services/database/db.dart';
 import 'package:task_planner/src/shared/dependencies/get_it.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
@@ -21,6 +23,8 @@ void main() async {
     sqfliteFfiInit();
   }
   GetItSetup.init();
+  await GetIt.I.get<DataBaseCustom>().ready;
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   runApp(
     const MyApp(),
   );
@@ -42,11 +46,28 @@ class MyApp extends StatelessWidget {
       supportedLocales: S.delegate.supportedLocales,
       debugShowCheckedModeBanner: false,
       title: 'Task planner',
-      darkTheme: ThemeData(
-        brightness: Brightness.dark,
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: const Color(0XFF0067FF),
+          background: const Color(0XFFF3F3F3),
+          primary: const Color(0XFF0067FF),
+          secondary: const Color(0XFFDADADA).withOpacity(0.4),
+        ),
+        useMaterial3: true,
       ),
-      themeMode: ThemeMode.dark,
-      home: const SplashScreen(),
+      home: const SigninScreen(),
+      onGenerateRoute: (settings) {
+        if (settings.name == '/book/detail') {
+          Map<String, dynamic> args =
+              settings.arguments as Map<String, dynamic>;
+          return MaterialPageRoute(
+            builder: (context) => BookDetailScreen(
+              book: args['book'],
+            ),
+          );
+        }
+        return null;
+      },
       routes: {
         '/signin': (context) => const SigninScreen(),
         '/home': (context) => const HomeScreen(),

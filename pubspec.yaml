@@ -42,6 +42,20 @@ dependencies:
   flutter_localizations:
     sdk: flutter
 
+flutter_native_splash:
+  color: "#F3F3F3"
+  image: "assets/app/splash.png"
+  android: true
+  ios: true
+
+flutter_icons:
+  image_path: "assets/app/icon.png"
+  ios: true
+  remove_alpha_ios: true
+  android: "launcher_icon"
+  adaptive_icon_background: "#F3F3F3"
+  adaptive_icon_foreground: "assets/app/icon-android.png"
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -50,6 +64,7 @@ dev_dependencies:
   json_serializable: null
   flutter_lints: ^2.0.2
   lint: null
+  flutter_native_splash: ^2.3.7
   flutter_launcher_icons: ^0.13.1
   
 

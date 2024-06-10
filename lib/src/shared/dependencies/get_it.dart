@@ -27,7 +27,7 @@ import 'package:task_planner/src/features/tasks/domain/usecases/save_task_usecas
 import 'package:task_planner/src/features/tasks/external/delete_task_datasource.impl.dart';
 import 'package:task_planner/src/features/tasks/external/get_tasks_datasource.impl.dart';
 import 'package:task_planner/src/features/tasks/external/save_task_datasource.impl.dart';
-import 'package:task_planner/src/features/tasks/presenter/controllers/tasks_controller.dart';
+import 'package:task_planner/src/features/tasks/presentation/controllers/tasks_controller.dart';
 import 'package:task_planner/src/shared/services/database/db.dart';
 
 class GetItSetup {

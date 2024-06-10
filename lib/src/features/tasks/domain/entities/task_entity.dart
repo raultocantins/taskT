@@ -1,6 +1,6 @@
-import 'package:task_planner/src/features/tasks/presenter/utils/enums/priority_enum.dart';
-import 'package:task_planner/src/features/tasks/presenter/utils/enums/recurrence_enum.dart';
-import 'package:task_planner/src/features/tasks/presenter/utils/enums/tags_enum.dart';
+import 'package:task_planner/src/features/tasks/presentation/utils/enums/priority_enum.dart';
+import 'package:task_planner/src/features/tasks/presentation/utils/enums/recurrence_enum.dart';
+import 'package:task_planner/src/features/tasks/presentation/utils/enums/tags_enum.dart';
 
 class TaskEntity {
   int? id;

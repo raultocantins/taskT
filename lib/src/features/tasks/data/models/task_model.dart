@@ -1,9 +1,9 @@
 // ignore: depend_on_referenced_packages
 import 'package:json_annotation/json_annotation.dart';
 import 'package:task_planner/src/features/tasks/domain/entities/task_entity.dart';
-import 'package:task_planner/src/features/tasks/presenter/utils/enums/priority_enum.dart';
-import 'package:task_planner/src/features/tasks/presenter/utils/enums/recurrence_enum.dart';
-import 'package:task_planner/src/features/tasks/presenter/utils/enums/tags_enum.dart';
+import 'package:task_planner/src/features/tasks/presentation/utils/enums/priority_enum.dart';
+import 'package:task_planner/src/features/tasks/presentation/utils/enums/recurrence_enum.dart';
+import 'package:task_planner/src/features/tasks/presentation/utils/enums/tags_enum.dart';
 part 'task_model.g.dart';
 
 @JsonSerializable(explicitToJson: true, anyMap: true)
