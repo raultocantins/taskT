@@ -12,19 +12,16 @@ import 'package:task_planner/src/features/tasks/presentation/screens/tasks_scree
 import 'package:task_planner/src/shared/services/database/db.dart';
 import 'package:task_planner/src/shared/dependencies/get_it.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
-import 'package:task_planner/src/shared/lifecycle/app_life_cycle.dart';
 
 late DataBaseCustom dataBaseCustom;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  final appStateObserver = AppStateObserver();
-  WidgetsBinding.instance.addObserver(appStateObserver);
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+  GetItSetup.init();
   if (!kIsWeb) {
     sqfliteFfiInit();
   }
-  GetItSetup.init();
   await GetIt.I.get<DataBaseCustom>().ready;
-  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   runApp(
     const MyApp(),
   );

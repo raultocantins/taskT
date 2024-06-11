@@ -90,7 +90,7 @@ class _CardCustomWidgetState extends State<CardCustomWidget> {
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 5),
                           child: Text(
-                            getTimeDate(widget.task.hours),
+                            getTimeDate(widget.task.date),
                             style: const TextStyle(
                                 color: Colors.grey, fontSize: 13),
                           ),
@@ -127,8 +127,8 @@ class _CardCustomWidgetState extends State<CardCustomWidget> {
                                 : const SizedBox(),
                             Text(
                               expanded
-                                  ? widget.task.description
-                                  : shortText(widget.task.description), //
+                                  ? widget.task.description ?? ''
+                                  : shortText(widget.task.description ?? ''), //
                               style: TextStyle(
                                   fontSize: 13,
                                   decoration: widget.task.finished
@@ -157,7 +157,8 @@ class _CardCustomWidgetState extends State<CardCustomWidget> {
                                           side: const BorderSide(),
                                           value: widget.task.finished,
                                           onChanged: (value) {
-                                            widget.update(TaskEntity(
+                                            widget.update(
+                                              TaskEntity(
                                                 id: widget.task.id,
                                                 title: widget.task.title,
                                                 description:
@@ -165,11 +166,10 @@ class _CardCustomWidgetState extends State<CardCustomWidget> {
                                                 priority: widget.task.priority,
                                                 finished: value ??
                                                     widget.task.finished,
-                                                tag: widget.task.tag,
-                                                recurrence:
-                                                    widget.task.recurrence,
+                                                tagId: widget.task.tagId,
                                                 date: widget.task.date,
-                                                hours: widget.task.hours));
+                                              ),
+                                            );
                                           },
                                         ),
                                       );
@@ -182,11 +182,14 @@ class _CardCustomWidgetState extends State<CardCustomWidget> {
                                         onPressed: () {
                                           showModalBottomSheet(
                                             isScrollControlled: true,
-                                            barrierColor: Colors.transparent,
                                             isDismissible: true,
                                             enableDrag: true,
-                                            useSafeArea: false,
+                                            useSafeArea: true,
                                             context: context,
+                                            backgroundColor: Theme.of(context)
+                                                .colorScheme
+                                                .background,
+                                            elevation: 0,
                                             builder: (context) {
                                               return Padding(
                                                 padding: EdgeInsets.only(

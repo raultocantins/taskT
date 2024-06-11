@@ -1,29 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
-import 'package:task_planner/src/features/tasks/presentation/controllers/tasks_controller.dart';
-import 'package:task_planner/src/features/tasks/presentation/utils/enums/tags_enum.dart';
+import 'package:task_planner/src/shared/controllers/tags_controller.dart';
+import 'package:task_planner/src/shared/domain/entities/tag_entity.dart';
 
 class TagsCustom extends StatefulWidget {
-  static final List<Tag> tags = [
-    Tag.all,
-    Tag.work,
-    Tag.personal,
-    Tag.birthday,
-    Tag.wishlist,
-  ];
-  const TagsCustom({super.key});
+  final int? tagId;
+  final TagType tagType;
+  final void Function(int? id) onTap;
+  const TagsCustom({
+    super.key,
+    required this.tagType,
+    required this.onTap,
+    this.tagId,
+  });
 
   @override
   State<TagsCustom> createState() => _TagsCustomState();
 }
 
 class _TagsCustomState extends State<TagsCustom> {
-  TasksController? _stateController;
+  TagsController? _controller;
 
   @override
   void initState() {
-    _stateController = GetIt.I.get<TasksController>();
+    _controller = GetIt.I.get<TagsController>();
+    _controller?.getTask();
     super.initState();
   }
 
@@ -34,12 +36,12 @@ class _TagsCustomState extends State<TagsCustom> {
       width: double.infinity,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
-        itemCount: TagsCustom.tags.length,
+        itemCount: _controller?.tags?.length,
         itemBuilder: (context, index) {
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 5),
             child: GestureDetector(
-              onTap: () => _stateController?.changeTag(TagsCustom.tags[index]),
+              onTap: () => widget.onTap(_controller?.tags?[index].id),
               child: Observer(
                 builder: (context) {
                   return Chip(
@@ -47,14 +49,14 @@ class _TagsCustomState extends State<TagsCustom> {
                     visualDensity: VisualDensity.compact,
                     side: BorderSide.none,
                     backgroundColor:
-                        _stateController?.tag == TagsCustom.tags[index]
+                        widget.tagId == _controller?.tags?[index].id
                             ? Theme.of(context).colorScheme.primary
                             : Theme.of(context).colorScheme.secondary,
                     elevation: 0,
                     label: Text(
-                      TagsCustom.tags[index].label(context),
+                      _controller?.tags?[index].label ?? '',
                       style: TextStyle(
-                        color: _stateController?.tag == TagsCustom.tags[index]
+                        color: widget.tagId == _controller?.tags?[index].id
                             ? Colors.white
                             : Colors.black,
                       ),

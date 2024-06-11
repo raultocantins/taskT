@@ -41,6 +41,7 @@ dependencies:
   collection: ^1.17.1
   flutter_localizations:
     sdk: flutter
+  json_annotation: ^4.9.0
 
 flutter_native_splash:
   color: "#F3F3F3"

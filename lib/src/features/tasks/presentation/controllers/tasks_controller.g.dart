@@ -41,19 +41,19 @@ mixin _$TasksController on _TasksControllerBase, Store {
     });
   }
 
-  late final _$tagAtom =
-      Atom(name: '_TasksControllerBase.tag', context: context);
+  late final _$tagIdAtom =
+      Atom(name: '_TasksControllerBase.tagId', context: context);
 
   @override
-  Tag get tag {
-    _$tagAtom.reportRead();
-    return super.tag;
+  int? get tagId {
+    _$tagIdAtom.reportRead();
+    return super.tagId;
   }
 
   @override
-  set tag(Tag value) {
-    _$tagAtom.reportWrite(value, super.tag, () {
-      super.tag = value;
+  set tagId(int? value) {
+    _$tagIdAtom.reportWrite(value, super.tagId, () {
+      super.tagId = value;
     });
   }
 
@@ -104,7 +104,7 @@ mixin _$TasksController on _TasksControllerBase, Store {
   }
 
   @override
-  void changeTag(Tag value) {
+  void changeTag(int? value) {
     final _$actionInfo = _$_TasksControllerBaseActionController.startAction(
         name: '_TasksControllerBase.changeTag');
     try {
@@ -151,7 +151,7 @@ mixin _$TasksController on _TasksControllerBase, Store {
   String toString() {
     return '''
 isLoading: ${isLoading},
-tag: ${tag},
+tagId: ${tagId},
 done: ${done}
     ''';
   }

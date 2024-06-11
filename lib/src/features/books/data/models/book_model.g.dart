@@ -7,13 +7,13 @@ part of 'book_model.dart';
 // **************************************************************************
 
 BookModel _$BookModelFromJson(Map json) => BookModel(
-      id: json['id'] as int?,
+      id: (json['id'] as num?)?.toInt(),
       title: json['title'] as String,
       author: json['author'] as String,
-      star: json['star'] as int,
+      star: (json['star'] as num).toInt(),
       bookState: $enumDecode(_$BookStateEnumMap, json['bookState']),
-      currentPage: json['currentPage'] as int,
-      finalPage: json['finalPage'] as int,
+      currentPage: (json['currentPage'] as num).toInt(),
+      finalPage: (json['finalPage'] as num).toInt(),
       tagBook: $enumDecode(_$TagBookEnumMap, json['tagBook']),
     );
 

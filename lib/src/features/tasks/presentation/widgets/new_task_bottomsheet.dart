@@ -4,9 +4,8 @@ import 'package:task_planner/generated/l10n.dart';
 import 'package:task_planner/src/features/tasks/domain/entities/task_entity.dart';
 import 'package:task_planner/src/features/tasks/presentation/controllers/tasks_controller.dart';
 import 'package:task_planner/src/features/tasks/presentation/utils/enums/priority_enum.dart';
-import 'package:task_planner/src/features/tasks/presentation/utils/enums/recurrence_enum.dart';
-import 'package:task_planner/src/features/tasks/presentation/widgets/tags_custom_widget.dart';
-import 'package:task_planner/src/features/tasks/presentation/utils/enums/tags_enum.dart';
+import 'package:task_planner/src/shared/widgets/tags_custom_widget.dart';
+import 'package:task_planner/src/shared/domain/entities/tag_entity.dart';
 import 'package:task_planner/src/shared/utils/extensions/date_extension.dart';
 import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart'
     as picker;
@@ -25,8 +24,7 @@ class _NewTaskBottomSheetState extends State<NewTaskBottomSheet> {
   TextEditingController? _titleController;
   TextEditingController? _descriptionController;
   Priority? _priority;
-  Tag? _tag;
-  Recurrence? _recurrence;
+  int? _tagId;
   DateTime? _dateSelected;
   FocusNode focusNodeTitle = FocusNode();
   FocusNode focusNodeDescription = FocusNode();
@@ -44,15 +42,12 @@ class _NewTaskBottomSheetState extends State<NewTaskBottomSheet> {
       _descriptionController =
           TextEditingController(text: widget.task?.description);
       _priority = widget.task?.priority;
-      _tag = widget.task?.tag;
-      _recurrence = widget.task?.recurrence;
+      _tagId = widget.task?.tagId;
       _dateSelected = widget.task?.date;
     } else {
       _titleController = TextEditingController(text: '');
       _descriptionController = TextEditingController(text: '');
       _priority = Priority.none;
-      _tag = Tag.all;
-      _recurrence = Recurrence.none;
       _dateSelected = DateTime.now();
     }
   }
@@ -63,22 +58,10 @@ class _NewTaskBottomSheetState extends State<NewTaskBottomSheet> {
     });
   }
 
-  void updateTag(Tag tag) {
+  void updateTag(int? tagId) {
     setState(() {
-      _tag = tag;
+      _tagId = tagId;
     });
-  }
-
-  void updateRecurrence(Recurrence recurrence) {
-    setState(() {
-      _recurrence = recurrence;
-    });
-  }
-
-  List<Tag> filterTags(List<Tag> originalList, Tag tagToRemove) {
-    List<Tag> updatedList = List.from(originalList);
-    updatedList.removeWhere((Tag item) => item == tagToRemove);
-    return updatedList;
   }
 
   @override
@@ -128,56 +111,11 @@ class _NewTaskBottomSheetState extends State<NewTaskBottomSheet> {
                     S.of(context).tag,
                     style: const TextStyle(fontSize: 15),
                   ),
-                  SizedBox(
-                    height: 50,
-                    width: double.infinity,
-                    child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: filterTags(TagsCustom.tags, Tag.all).length,
-                      itemBuilder: (context, index) {
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 5),
-                          child: GestureDetector(
-                            onTap: () {
-                              _tag ==
-                                      filterTags(
-                                          TagsCustom.tags, Tag.all)[index]
-                                  ? updateTag(Tag.all)
-                                  : updateTag(
-                                      filterTags(
-                                          TagsCustom.tags, Tag.all)[index],
-                                    );
-                            },
-                            child: Builder(
-                              builder: (context) {
-                                return Chip(
-                                  labelPadding: const EdgeInsets.all(0),
-                                  visualDensity: VisualDensity.compact,
-                                  side: BorderSide.none,
-                                  backgroundColor: _tag ==
-                                          filterTags(
-                                              TagsCustom.tags, Tag.all)[index]
-                                      ? Theme.of(context).colorScheme.primary
-                                      : Theme.of(context).colorScheme.secondary,
-                                  elevation: 0,
-                                  label: Text(
-                                    filterTags(TagsCustom.tags, Tag.all)[index]
-                                        .label(context),
-                                    style: TextStyle(
-                                        color: _tag ==
-                                                filterTags(TagsCustom.tags,
-                                                    Tag.all)[index]
-                                            ? Colors.white
-                                            : Colors.black),
-                                  ),
-                                );
-                              },
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                  ),
+                  TagsCustom(
+                    onTap: (id) => updateTag(id),
+                    tagId: _tagId,
+                    tagType: TagType.task,
+                  )
                 ],
               ),
               const Divider(
@@ -402,24 +340,21 @@ class _NewTaskBottomSheetState extends State<NewTaskBottomSheet> {
                               title: _titleController!.text,
                               description: _descriptionController!.text,
                               priority: _priority!,
-                              tag: _tag!,
-                              recurrence: _recurrence!,
+                              tagId: _tagId,
                               finished: false,
                               date: _dateSelected!,
-                              hours: _dateSelected!,
                             ),
                           );
                         } else {
                           _controller?.createTask(
                             TaskEntity(
-                                title: _titleController!.text,
-                                description: _descriptionController!.text,
-                                priority: _priority!,
-                                tag: _tag!,
-                                recurrence: _recurrence!,
-                                finished: false,
-                                date: _dateSelected!,
-                                hours: _dateSelected!),
+                              title: _titleController!.text,
+                              description: _descriptionController!.text,
+                              priority: _priority!,
+                              tagId: _tagId,
+                              finished: false,
+                              date: _dateSelected!,
+                            ),
                           );
                         }
 

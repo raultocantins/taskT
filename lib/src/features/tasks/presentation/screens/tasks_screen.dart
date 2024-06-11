@@ -5,8 +5,9 @@ import 'package:get_it/get_it.dart';
 import 'package:task_planner/generated/l10n.dart';
 import 'package:task_planner/src/features/tasks/domain/entities/task_entity.dart';
 import 'package:task_planner/src/features/tasks/presentation/controllers/tasks_controller.dart';
+import 'package:task_planner/src/shared/domain/entities/tag_entity.dart';
 import 'package:task_planner/src/shared/widgets/date_bottomsheet.dart';
-import 'package:task_planner/src/features/tasks/presentation/widgets/tags_custom_widget.dart';
+import 'package:task_planner/src/shared/widgets/tags_custom_widget.dart';
 import 'package:task_planner/src/shared/utils/extensions/date_extension.dart';
 import '../widgets/card_custom_widget.dart';
 import '../widgets/new_task_bottomsheet.dart';
@@ -64,7 +65,6 @@ class _TasksScreenState extends State<TasksScreen>
           appBar: AppBar(
             elevation: 0,
             backgroundColor: Theme.of(context).colorScheme.background,
-            // iconTheme: const IconThemeData(color: Colors.white),
           ),
           body: SafeArea(
             child: Column(
@@ -117,9 +117,12 @@ class _TasksScreenState extends State<TasksScreen>
                     ),
                   ),
                 ),
-                const Padding(
-                  padding: EdgeInsets.only(left: 12),
-                  child: TagsCustom(),
+                Padding(
+                  padding: const EdgeInsets.only(left: 12),
+                  child: TagsCustom(
+                    onTap: (id) => _controller?.changeTag(id),
+                    tagType: TagType.task,
+                  ),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -336,7 +339,7 @@ class _TasksScreenState extends State<TasksScreen>
             onPressed: () {
               showModalBottomSheet(
                 isScrollControlled: true,
-                isDismissible: false,
+                isDismissible: true,
                 enableDrag: true,
                 useSafeArea: true,
                 context: context,

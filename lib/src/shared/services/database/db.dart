@@ -1,14 +1,9 @@
 // ignore: depend_on_referenced_packages
 // ignore_for_file: lines_longer_than_80_chars
-
-import 'package:task_planner/src/features/books/data/models/book_model.dart';
-import 'package:task_planner/src/features/books/domain/entities/book_entity.dart';
-import 'package:task_planner/src/features/books/presenter/utils/enums/tags_books_enum.dart';
 import 'package:tekartik_app_flutter_sqflite/sqflite.dart';
 import 'package:synchronized/synchronized.dart';
 import 'package:task_planner/src/features/tasks/data/models/task_model.dart';
 import 'package:task_planner/src/features/tasks/domain/entities/task_entity.dart';
-import 'package:task_planner/src/features/tasks/presentation/utils/enums/tags_enum.dart';
 import './db_constant.dart';
 
 class DataBaseCustom {
@@ -41,19 +36,16 @@ class DataBaseCustom {
   Future<String> fixPath(String path) async => path;
 
   Future _createDb(Database db) async {
+    await db.execute('DROP TABLE If EXISTS $tagstable');
     await db.execute('DROP TABLE If EXISTS $tasktable');
-    await db.execute('DROP TABLE If EXISTS $booktable');
     await db.execute(
-      'CREATE TABLE $tasktable($taskcolumnId INTEGER PRIMARY KEY, $taskcolumnTitle TEXT, $taskcolumnDate TEXT, $taskcolumnHours TEXT, $taskcolumnDescription TEXT, $taskcolumnFinished INTEGER,  $taskcolumnTag TEXT, $taskcolumnRecurrence TEXT, $taskcolumnPriority TEXT, $taskcolumnUpdated INTEGER)',
+      'CREATE TABLE $tagstable($tagscolumnId INTEGER PRIMARY KEY, $tagscolumnLabel TEXT, $tagscolumnType TEXT)',
     );
     await db.execute(
-      'CREATE TABLE $booktable($bookcolumnId INTEGER PRIMARY KEY, $bookcolumnTitle TEXT, $bookcolumnAuthor TEXT, $bookcolumnStar INTEGER, $bookcolumnCurrentPage INTEGER, $bookcolumnFinalPage INTEGER, $bookcolumnBookState TEXT, $bookcolumnTagBook TEXT, $bookcolumnUpdated INTEGER)',
+      'CREATE TABLE $tasktable($taskcolumnId INTEGER PRIMARY KEY, $taskcolumnTitle TEXT, $taskcolumnDate INTEGER, $taskcolumnDescription TEXT, $taskcolumnFinished INTEGER,  $taskcolumnTagId INTEGER, $taskcolumnPriority TEXT, $taskcolumnUpdated INTEGER)',
     );
     await db.execute(
       'CREATE INDEX TasksUpdated ON $tasktable ($taskcolumnUpdated)',
-    );
-    await db.execute(
-      'CREATE INDEX BooksUpdated ON $booktable ($bookcolumnUpdated)',
     );
   }
 
@@ -63,28 +55,12 @@ class DataBaseCustom {
     return TaskModel(
       id: newId,
       date: taskEntity.date,
-      hours: taskEntity.hours,
       description: taskEntity.description,
       finished: taskEntity.finished,
       priority: taskEntity.priority,
-      tag: taskEntity.tag,
-      recurrence: taskEntity.recurrence,
+      tagId: taskEntity.tagId,
       title: taskEntity.title,
     );
-  }
-
-  Future<BookModel> saveBook(BookEntity bookEntity) async {
-    int newId =
-        await db!.insert(booktable, BookModel.toModel(bookEntity).toMap());
-    return BookModel(
-        id: newId,
-        author: bookEntity.author,
-        bookState: bookEntity.bookState,
-        currentPage: bookEntity.currentPage,
-        finalPage: bookEntity.finalPage,
-        star: bookEntity.star,
-        tagBook: bookEntity.tagBook,
-        title: bookEntity.title);
   }
 
   Future<TaskModel> updateTask(TaskEntity taskEntity) async {
@@ -97,16 +73,6 @@ class DataBaseCustom {
     return TaskModel.toModel(taskEntity);
   }
 
-  Future<BookModel> updateBook(BookEntity bookEntity) async {
-    await db!.update(
-      booktable,
-      BookModel.toModel(bookEntity).toMap(),
-      where: '$bookcolumnId = ?',
-      whereArgs: <Object?>[bookEntity.id],
-    );
-    return BookModel.toModel(bookEntity);
-  }
-
   Future<void> deleteTask(int? id) async {
     await db!.delete(
       tasktable,
@@ -115,166 +81,32 @@ class DataBaseCustom {
     );
   }
 
-  Future<void> deleteBook(int? id) async {
-    await db!.delete(
-      booktable,
-      where: '$bookcolumnId = ?',
-      whereArgs: <Object?>[id],
-    );
-  }
-
   Future<List<TaskModel>> getTasks(
-      {DateTime? date, Tag? tag, bool? done}) async {
-    List<Map<String, Object?>> list;
-    if (tag == Tag.all && date == null) {
-      list = await db!.query(
-        tasktable,
-        columns: [
-          taskcolumnDate,
-          taskcolumnHours,
-          taskcolumnTag,
-          taskcolumnRecurrence,
-          taskcolumnDescription,
-          taskcolumnFinished,
-          taskcolumnId,
-          taskcolumnPriority,
-          taskcolumnTag,
-          taskcolumnTitle,
-          taskcolumnUpdated
-        ],
-        orderBy: '$taskcolumnUpdated DESC',
-        where: '$taskcolumnFinished = ?',
-        whereArgs: <Object?>[(done ?? false) ? 1 : 0],
-      );
-    } else {
-      if (date == null) {
-        list = await db!.query(
-          tasktable,
-          columns: [
-            taskcolumnDate,
-            taskcolumnHours,
-            taskcolumnTag,
-            taskcolumnRecurrence,
-            taskcolumnDescription,
-            taskcolumnFinished,
-            taskcolumnId,
-            taskcolumnPriority,
-            taskcolumnTag,
-            taskcolumnTitle,
-            taskcolumnUpdated
-          ],
-          orderBy: '$taskcolumnUpdated DESC',
-          where: '$taskcolumnTag = ? AND $taskcolumnFinished = ?',
-          whereArgs: <Object?>[
-            tag?.fromEnumToString(),
-            (done ?? false) ? 1 : 0
-          ],
-        );
-      } else {
-        if (tag == Tag.all) {
-          list = await db!.query(
-            tasktable,
-            columns: [
-              taskcolumnDate,
-              taskcolumnHours,
-              taskcolumnTag,
-              taskcolumnRecurrence,
-              taskcolumnDescription,
-              taskcolumnFinished,
-              taskcolumnId,
-              taskcolumnPriority,
-              taskcolumnTag,
-              taskcolumnTitle,
-              taskcolumnUpdated
-            ],
-            orderBy: '$taskcolumnUpdated DESC',
-            where:
-                '$taskcolumnDate BETWEEN ? AND ? AND $taskcolumnFinished = ?',
-            whereArgs: <Object?>[
-              DateTime(date.year, date.month, date.day).toIso8601String(),
-              DateTime(date.year, date.month, date.day, 23, 59, 59)
-                  .toIso8601String(),
-              (done ?? false) ? 1 : 0
-            ],
-          );
-        } else {
-          list = await db!.query(
-            tasktable,
-            columns: [
-              taskcolumnDate,
-              taskcolumnHours,
-              taskcolumnTag,
-              taskcolumnRecurrence,
-              taskcolumnDescription,
-              taskcolumnFinished,
-              taskcolumnId,
-              taskcolumnPriority,
-              taskcolumnTag,
-              taskcolumnTitle,
-              taskcolumnUpdated
-            ],
-            orderBy: '$taskcolumnUpdated DESC',
-            where:
-                '$taskcolumnDate BETWEEN ? AND ? AND $taskcolumnTag = ? AND $taskcolumnFinished = ?',
-            whereArgs: <Object?>[
-              DateTime(date.year, date.month, date.day).toIso8601String(),
-              DateTime(date.year, date.month, date.day, 23, 59, 59)
-                  .toIso8601String(),
-              tag?.fromEnumToString(),
-              (done ?? false) ? 1 : 0
-            ],
-          );
-        }
-      }
+      {DateTime? date, int? tagId, bool? done}) async {
+    List<Map<String, Object?>>? list;
+    String query = 'SELECT * FROM $tasktable WHERE 1=1';
+
+    if (date != null) {
+      int startOfDay =
+          DateTime(date.year, date.month, date.day).millisecondsSinceEpoch;
+      int endOfDay = DateTime(date.year, date.month, date.day, 23, 59, 59)
+          .millisecondsSinceEpoch;
+      query += ' AND $taskcolumnDate BETWEEN $startOfDay AND $endOfDay';
+    }
+    if (tagId != null) {
+      query += ' AND $taskcolumnTagId = $tagId';
+    }
+    if (done != null) {
+      query += ' AND $taskcolumnFinished = ${done ? 1 : 0}';
     }
 
+    list = await db?.rawQuery(query);
     return list
-        .map(
-          (e) => TaskModel.fromObjectDb(e),
-        )
-        .toList();
-  }
-
-  Future<List<BookModel>> getBooks({TagBook? tag, bool? done}) async {
-    List<Map<String, Object?>> list;
-    if (tag != null && tag != TagBook.all) {
-      list = await db!.query(
-        booktable,
-        columns: [
-          bookcolumnTitle,
-          bookcolumnAuthor,
-          bookcolumnStar,
-          bookcolumnCurrentPage,
-          bookcolumnFinalPage,
-          bookcolumnBookState,
-          bookcolumnTagBook,
-          bookcolumnUpdated,
-        ],
-        orderBy: '$bookcolumnUpdated DESC',
-        where: '$bookcolumnTagBook = ? ',
-        whereArgs: <Object?>[tag.fromEnumToString()],
-      );
-    } else {
-      list = await db!.query(
-        booktable,
-        columns: [
-          bookcolumnTitle,
-          bookcolumnAuthor,
-          bookcolumnStar,
-          bookcolumnCurrentPage,
-          bookcolumnFinalPage,
-          bookcolumnBookState,
-          bookcolumnTagBook,
-          bookcolumnUpdated,
-        ],
-        orderBy: '$bookcolumnUpdated DESC',
-      );
-    }
-    return list
-        .map(
-          (e) => BookModel.fromObjectDb(e),
-        )
-        .toList();
+            ?.map(
+              (e) => TaskModel.fromObjectDb(e),
+            )
+            .toList() ??
+        [];
   }
 
   Future close() async {

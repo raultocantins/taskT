@@ -12,10 +12,10 @@ extension PriorityExtensions on Priority {
         return Colors.amber;
 
       case Priority.low:
-        return Colors.blue;
+        return const Color(0XFF0067FF);
 
       default:
-        return Colors.blue;
+        return const Color(0XFF0067FF);
     }
   }
 

@@ -7,7 +7,6 @@ import 'package:task_planner/src/features/tasks/domain/usecases/delete_task_usec
 import 'package:task_planner/src/features/tasks/domain/usecases/get_tasks_usecase.dart';
 import 'package:task_planner/src/features/tasks/domain/usecases/save_task_usecase.dart';
 import 'package:task_planner/src/features/tasks/domain/usecases/update_task_usecase.dart';
-import 'package:task_planner/src/features/tasks/presentation/utils/enums/tags_enum.dart';
 import 'package:task_planner/src/shared/services/notification/push_notification.dart';
 import 'package:task_planner/src/shared/utils/extensions/date_extension.dart';
 import 'package:collection/collection.dart';
@@ -31,7 +30,7 @@ abstract class _TasksControllerBase with Store {
   bool? isLoading = false;
 
   @observable
-  Tag tag = Tag.all;
+  int? tagId;
 
   @observable
   bool done = false;
@@ -63,9 +62,8 @@ abstract class _TasksControllerBase with Store {
   }
 
   @action
-  void changeTag(Tag value) {
-    tag = value;
-    changeDate(null);
+  void changeTag(int? value) {
+    tagId = value;
     getTask();
   }
 
@@ -89,7 +87,7 @@ abstract class _TasksControllerBase with Store {
   Future<void> getTask() async {
     changeIsLoading(true);
     var result =
-        await _getTasksUsecase(date: _dateSelected, tag: tag, done: done);
+        await _getTasksUsecase(date: _dateSelected, tagId: tagId, done: done);
     result.fold(
       (l) => null,
       (r) {
@@ -106,14 +104,14 @@ abstract class _TasksControllerBase with Store {
       (l) => null,
       (r) {
         scheduleNotification(r);
-        if (tag == Tag.all && _dateSelected == null) {
+        if (tagId == null && _dateSelected == null) {
           changeTasks([..._tasks, r]);
-        } else if (_dateSelected == null && task.tag == tag) {
+        } else if (_dateSelected == null && task.tagId == tagId) {
           changeTasks([..._tasks, r]);
         }
         if (_dateSelected != null &&
             r.date.day == _dateSelected?.day &&
-            r.tag == tag) {
+            r.tagId == tagId) {
           changeTasks([..._tasks, r]);
         }
       },
@@ -148,7 +146,7 @@ abstract class _TasksControllerBase with Store {
           updatedList.removeWhere((element) => element.id == task.id);
           changeTasks([...updatedList]);
         } else {
-          if (tag == Tag.all) {
+          if (tagId == null) {
             for (int i = 0; i < updatedList.length; i++) {
               if (updatedList[i].id == updatedTask.id) {
                 updatedList[i] = updatedTask;
@@ -156,7 +154,7 @@ abstract class _TasksControllerBase with Store {
               }
             }
             changeTasks([...updatedList]);
-          } else if (updatedTask.tag == tag) {
+          } else if (updatedTask.tagId == tagId) {
             for (int i = 0; i < updatedList.length; i++) {
               if (updatedList[i].id == updatedTask.id) {
                 updatedList[i] = updatedTask;
@@ -176,11 +174,12 @@ abstract class _TasksControllerBase with Store {
 
   Future<void> scheduleNotification(TaskEntity task) async {
     GetIt.I.get<PushNotification>().showScheduledLocalNotification(
-        id: task.id!,
-        body: task.description,
-        payload: task.priority.name,
-        title: task.title,
-        date: task.date);
+          id: task.id!,
+          body: task.description ?? '',
+          payload: task.priority.name,
+          title: task.title,
+          date: task.date,
+        );
   }
 
   Future<void> cancelNotification(TaskEntity task) async {
@@ -190,7 +189,7 @@ abstract class _TasksControllerBase with Store {
   void dispose() {
     _dateSelected = null;
     isLoading = false;
-    tag = Tag.all;
+    tagId = null;
     done = false;
     _tasks = [];
   }

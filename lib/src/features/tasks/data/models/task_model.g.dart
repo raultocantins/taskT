@@ -7,27 +7,23 @@ part of 'task_model.dart';
 // **************************************************************************
 
 TaskModel _$TaskModelFromJson(Map json) => TaskModel(
-      id: json['id'] as int?,
-      date: DateTime.parse(json['date'] as String),
-      hours: DateTime.parse(json['hours'] as String),
-      description: json['description'] as String,
-      finished: json['finished'] as bool,
-      priority: $enumDecode(_$PriorityEnumMap, json['priority']),
-      tag: $enumDecode(_$TagEnumMap, json['tag']),
-      recurrence: $enumDecode(_$RecurrenceEnumMap, json['recurrence']),
+      id: (json['id'] as num?)?.toInt(),
       title: json['title'] as String,
+      description: json['description'] as String?,
+      priority: $enumDecode(_$PriorityEnumMap, json['priority']),
+      finished: json['finished'] as bool,
+      tagId: (json['tagId'] as num?)?.toInt(),
+      date: DateTime.parse(json['date'] as String),
     );
 
 Map<String, dynamic> _$TaskModelToJson(TaskModel instance) => <String, dynamic>{
       'id': instance.id,
-      'date': instance.date.toIso8601String(),
-      'hours': instance.hours.toIso8601String(),
-      'description': instance.description,
-      'finished': instance.finished,
-      'priority': _$PriorityEnumMap[instance.priority]!,
-      'tag': _$TagEnumMap[instance.tag]!,
-      'recurrence': _$RecurrenceEnumMap[instance.recurrence]!,
       'title': instance.title,
+      'description': instance.description,
+      'priority': _$PriorityEnumMap[instance.priority]!,
+      'date': instance.date.toIso8601String(),
+      'finished': instance.finished,
+      'tagId': instance.tagId,
     };
 
 const _$PriorityEnumMap = {
@@ -35,19 +31,4 @@ const _$PriorityEnumMap = {
   Priority.low: 'low',
   Priority.medium: 'medium',
   Priority.high: 'high',
-};
-
-const _$TagEnumMap = {
-  Tag.all: 'all',
-  Tag.work: 'work',
-  Tag.personal: 'personal',
-  Tag.wishlist: 'wishlist',
-  Tag.birthday: 'birthday',
-};
-
-const _$RecurrenceEnumMap = {
-  Recurrence.daily: 'daily',
-  Recurrence.weekly: 'weekly',
-  Recurrence.monthly: 'monthly',
-  Recurrence.none: 'none',
 };
