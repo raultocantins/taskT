@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 import 'package:task_planner/src/shared/controllers/tags_controller.dart';
-import 'package:task_planner/src/shared/domain/entities/tag_entity.dart';
+import 'package:task_planner/src/shared/utils/enums/tagtype_enum.dart';
 
 class TagsCustom extends StatefulWidget {
   final int? tagId;
@@ -25,49 +25,93 @@ class _TagsCustomState extends State<TagsCustom> {
   @override
   void initState() {
     _controller = GetIt.I.get<TagsController>();
-    _controller?.getTask();
+    _controller?.getTags(widget.tagType);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 50,
-      width: double.infinity,
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        itemCount: _controller?.tags?.length,
-        itemBuilder: (context, index) {
-          return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 5),
-            child: GestureDetector(
-              onTap: () => widget.onTap(_controller?.tags?[index].id),
-              child: Observer(
-                builder: (context) {
-                  return Chip(
-                    labelPadding: const EdgeInsets.all(0),
-                    visualDensity: VisualDensity.compact,
-                    side: BorderSide.none,
-                    backgroundColor:
-                        widget.tagId == _controller?.tags?[index].id
-                            ? Theme.of(context).colorScheme.primary
-                            : Theme.of(context).colorScheme.secondary,
-                    elevation: 0,
-                    label: Text(
-                      _controller?.tags?[index].label ?? '',
-                      style: TextStyle(
-                        color: widget.tagId == _controller?.tags?[index].id
-                            ? Colors.white
-                            : Colors.black,
+    return Observer(builder: (context) {
+      return SizedBox(
+        height: 50,
+        width: double.infinity,
+        child: SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            children: [
+              ...List.generate(
+                _controller?.tags?.length ?? 0,
+                (index) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 5),
+                    child: GestureDetector(
+                      onTap: () => widget.tagId == _controller?.tags?[index].id
+                          ? widget.onTap(null)
+                          : widget.onTap(_controller?.tags?[index].id),
+                      child: Observer(
+                        builder: (context) {
+                          return Chip(
+                            labelPadding: const EdgeInsets.all(0),
+                            visualDensity: VisualDensity.compact,
+                            side: BorderSide.none,
+                            backgroundColor:
+                                widget.tagId == _controller?.tags?[index].id
+                                    ? Theme.of(context).colorScheme.primary
+                                    : Theme.of(context).colorScheme.secondary,
+                            elevation: 0,
+                            deleteIcon: Icon(
+                              Icons.delete,
+                              size: 14,
+                              color:
+                                  widget.tagId == _controller?.tags?[index].id
+                                      ? Colors.white
+                                      : null,
+                            ),
+                            onDeleted: () {},
+                            label: Text(
+                              _controller?.tags?[index].label ?? '',
+                              style: TextStyle(
+                                color:
+                                    widget.tagId == _controller?.tags?[index].id
+                                        ? Colors.white
+                                        : Colors.black,
+                              ),
+                            ),
+                          );
+                        },
                       ),
                     ),
                   );
                 },
               ),
-            ),
-          );
-        },
-      ),
-    );
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 5),
+                child: Chip(
+                  labelPadding: const EdgeInsets.all(0),
+                  visualDensity: VisualDensity.compact,
+                  side: BorderSide.none,
+                  backgroundColor: Theme.of(context).colorScheme.secondary,
+                  elevation: 0,
+                  label: Row(
+                    children: [
+                      Icon(
+                        Icons.add,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                      Text(
+                        'Adicionar Tag',
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    });
   }
 }

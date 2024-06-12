@@ -1,14 +1,11 @@
-import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mobx/mobx.dart';
-import 'package:task_planner/generated/l10n.dart';
 import 'package:task_planner/src/features/tasks/domain/entities/task_entity.dart';
 import 'package:task_planner/src/features/tasks/domain/usecases/delete_task_usecase.dart';
 import 'package:task_planner/src/features/tasks/domain/usecases/get_tasks_usecase.dart';
 import 'package:task_planner/src/features/tasks/domain/usecases/save_task_usecase.dart';
 import 'package:task_planner/src/features/tasks/domain/usecases/update_task_usecase.dart';
 import 'package:task_planner/src/shared/services/notification/push_notification.dart';
-import 'package:task_planner/src/shared/utils/extensions/date_extension.dart';
 import 'package:collection/collection.dart';
 part 'tasks_controller.g.dart';
 
@@ -37,10 +34,6 @@ abstract class _TasksControllerBase with Store {
 
   @observable
   List<TaskEntity> _tasks = [];
-
-  String dateFormated(BuildContext context) => _dateSelected != null
-      ? _dateSelected?.formatDate() ?? ''
-      : S.of(context).alltasks;
 
   Map<DateTime, List<TaskEntity>> get groupByDay {
     _tasks.sort((a, b) => b.date.compareTo(a.date));

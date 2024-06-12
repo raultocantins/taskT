@@ -1,6 +1,6 @@
 //DATABASE
 const String dbName = 'tasks.db';
-const int kVersion2 = 2;
+const int kVersion = 1;
 
 //TASKS FEATURE
 const String tasktable = 'tasks';

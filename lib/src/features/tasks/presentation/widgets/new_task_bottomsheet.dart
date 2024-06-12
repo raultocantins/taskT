@@ -4,8 +4,8 @@ import 'package:task_planner/generated/l10n.dart';
 import 'package:task_planner/src/features/tasks/domain/entities/task_entity.dart';
 import 'package:task_planner/src/features/tasks/presentation/controllers/tasks_controller.dart';
 import 'package:task_planner/src/features/tasks/presentation/utils/enums/priority_enum.dart';
+import 'package:task_planner/src/shared/utils/enums/tagtype_enum.dart';
 import 'package:task_planner/src/shared/widgets/tags_custom_widget.dart';
-import 'package:task_planner/src/shared/domain/entities/tag_entity.dart';
 import 'package:task_planner/src/shared/utils/extensions/date_extension.dart';
 import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart'
     as picker;

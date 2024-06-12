@@ -1,5 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:task_planner/src/shared/domain/entities/tag_entity.dart';
+import 'package:task_planner/src/shared/utils/enums/tagtype_enum.dart';
 
 part 'tag_model.g.dart';
 
@@ -21,7 +22,13 @@ class TagModel {
         'type': type.name,
       };
   static TagModel fromObjectDb(Map<String, dynamic> task) {
-    return TagModel(task['id'], task['label'], type: task['type']);
+    return TagModel(
+      task['_id'],
+      task['label'],
+      type: TagTypeExtensions.fromStringToEnum(
+        task['type'],
+      ),
+    );
   }
 
   static TagEntity toEntity(TagModel model) {

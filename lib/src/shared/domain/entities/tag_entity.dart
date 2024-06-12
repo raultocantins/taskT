@@ -1,3 +1,5 @@
+import 'package:task_planner/src/shared/utils/enums/tagtype_enum.dart';
+
 class TagEntity {
   int id;
   String label;
@@ -5,5 +7,3 @@ class TagEntity {
 
   TagEntity(this.id, this.label, {required this.type});
 }
-
-enum TagType { task, book }

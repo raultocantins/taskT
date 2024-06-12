@@ -3,12 +3,13 @@ import 'package:task_planner/src/shared/data/datasourcers/get_tags_datasource.da
 import 'package:task_planner/src/shared/domain/repositories/get_tags_repository.dart';
 import 'package:task_planner/src/shared/data/models/tag_model.dart';
 import 'package:task_planner/src/shared/domain/entities/tag_entity.dart';
+import 'package:task_planner/src/shared/utils/enums/tagtype_enum.dart';
 
 class GetTagsRepositoryImpl implements GetTagsRepository {
   final GetTagsDatasource _getTagsDatasource;
   const GetTagsRepositoryImpl(this._getTagsDatasource);
   @override
-  Future<Either<Exception, List<TagEntity>>> call(TagType? type) async {
+  Future<Either<Exception, List<TagEntity>>> call(TagType type) async {
     try {
       List<TagModel> result = await _getTagsDatasource(type);
       return Right(result.map((e) => TagModel.toEntity(e)).toList());

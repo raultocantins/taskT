@@ -1,5 +1,7 @@
 // ignore: depend_on_referenced_packages
 // ignore_for_file: lines_longer_than_80_chars
+import 'package:task_planner/src/shared/data/models/tag_model.dart';
+import 'package:task_planner/src/shared/utils/enums/tagtype_enum.dart';
 import 'package:tekartik_app_flutter_sqflite/sqflite.dart';
 import 'package:synchronized/synchronized.dart';
 import 'package:task_planner/src/features/tasks/data/models/task_model.dart';
@@ -16,13 +18,14 @@ class DataBaseCustom {
     db = await dbFactory.openDatabase(
       path,
       options: OpenDatabaseOptions(
-        version: kVersion2,
+        version: kVersion,
         onCreate: (db, version) async {
           await _createDb(db);
         },
         onUpgrade: (db, oldVersion, newVersion) async {
-          if (oldVersion < kVersion2) {
-            await _createDb(db);
+          if (oldVersion < kVersion) {
+            // await _createDb(db); Criar um novo método para upgrade
+            // ao usar o mesmo método _createDb ele removerá os dados do usuário
           }
         },
       ),
@@ -36,16 +39,32 @@ class DataBaseCustom {
   Future<String> fixPath(String path) async => path;
 
   Future _createDb(Database db) async {
+    //Verifica se existe as tabelas, e apaga caso exista
     await db.execute('DROP TABLE If EXISTS $tagstable');
     await db.execute('DROP TABLE If EXISTS $tasktable');
+    //Criação das tabelas
     await db.execute(
       'CREATE TABLE $tagstable($tagscolumnId INTEGER PRIMARY KEY, $tagscolumnLabel TEXT, $tagscolumnType TEXT)',
     );
     await db.execute(
       'CREATE TABLE $tasktable($taskcolumnId INTEGER PRIMARY KEY, $taskcolumnTitle TEXT, $taskcolumnDate INTEGER, $taskcolumnDescription TEXT, $taskcolumnFinished INTEGER,  $taskcolumnTagId INTEGER, $taskcolumnPriority TEXT, $taskcolumnUpdated INTEGER)',
     );
+    // Adiciona um index na tabela tasks
     await db.execute(
       'CREATE INDEX TasksUpdated ON $tasktable ($taskcolumnUpdated)',
+    );
+    // Insere três itens na tabela tags recém-criada
+    await db.rawInsert(
+      'INSERT INTO $tagstable($tagscolumnId, $tagscolumnLabel, $tagscolumnType) VALUES(?, ?, ?)',
+      [1, 'Trabalho', 'task'],
+    );
+    await db.rawInsert(
+      'INSERT INTO $tagstable($tagscolumnId, $tagscolumnLabel, $tagscolumnType) VALUES(?, ?, ?)',
+      [2, 'Pessoal', 'task'],
+    );
+    await db.rawInsert(
+      'INSERT INTO $tagstable($tagscolumnId, $tagscolumnLabel, $tagscolumnType) VALUES(?, ?, ?)',
+      [3, 'Casa', 'task'],
     );
   }
 
@@ -104,6 +123,17 @@ class DataBaseCustom {
     return list
             ?.map(
               (e) => TaskModel.fromObjectDb(e),
+            )
+            .toList() ??
+        [];
+  }
+
+  Future<List<TagModel>> getTags(TagType type) async {
+    String sql = 'SELECT * FROM $tagstable WHERE $tagscolumnType = ?';
+    final list = await db?.rawQuery(sql, ['task']);
+    return list
+            ?.map(
+              (e) => TagModel.fromObjectDb(e),
             )
             .toList() ??
         [];

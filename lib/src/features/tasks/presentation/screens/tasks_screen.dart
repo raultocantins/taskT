@@ -5,7 +5,7 @@ import 'package:get_it/get_it.dart';
 import 'package:task_planner/generated/l10n.dart';
 import 'package:task_planner/src/features/tasks/domain/entities/task_entity.dart';
 import 'package:task_planner/src/features/tasks/presentation/controllers/tasks_controller.dart';
-import 'package:task_planner/src/shared/domain/entities/tag_entity.dart';
+import 'package:task_planner/src/shared/utils/enums/tagtype_enum.dart';
 import 'package:task_planner/src/shared/widgets/date_bottomsheet.dart';
 import 'package:task_planner/src/shared/widgets/tags_custom_widget.dart';
 import 'package:task_planner/src/shared/utils/extensions/date_extension.dart';
@@ -107,12 +107,11 @@ class _TasksScreenState extends State<TasksScreen>
                     ],
                   ),
                 ),
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
+                const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 10, horizontal: 12),
                   child: Text(
-                    _controller?.dateFormated(context) ?? '',
-                    style: const TextStyle(
+                    'Tarefas pendentes e concluídas.',
+                    style: TextStyle(
                       fontSize: 14,
                     ),
                   ),
@@ -121,6 +120,7 @@ class _TasksScreenState extends State<TasksScreen>
                   padding: const EdgeInsets.only(left: 12),
                   child: TagsCustom(
                     onTap: (id) => _controller?.changeTag(id),
+                    tagId: _controller?.tagId,
                     tagType: TagType.task,
                   ),
                 ),
