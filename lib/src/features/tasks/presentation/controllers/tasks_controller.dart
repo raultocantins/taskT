@@ -129,6 +129,12 @@ abstract class _TasksControllerBase with Store {
     changeIsLoading(false);
   }
 
+  Future<void> removeWithTag(int id) async {
+    List<TaskEntity> updatedList = _tasks;
+    updatedList.removeWhere((element) => element.tagId == id);
+    changeTasks([...updatedList]);
+  }
+
   Future<void> updateTask(TaskEntity task) async {
     changeIsLoading(true);
     var result = await _updateTaskUsecase(task);

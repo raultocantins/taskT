@@ -1,5 +1,6 @@
 import 'package:mobx/mobx.dart';
 import 'package:task_planner/src/shared/domain/entities/tag_entity.dart';
+import 'package:task_planner/src/shared/domain/usecases/delete_tag_usecase.dart';
 import 'package:task_planner/src/shared/domain/usecases/get_tags_usecase.dart';
 import 'package:task_planner/src/shared/utils/enums/tagtype_enum.dart';
 part 'tags_controller.g.dart';
@@ -9,8 +10,10 @@ class TagsController = _TagsControllerBase with _$TagsController;
 
 abstract class _TagsControllerBase with Store {
   final GetTagsUsecase _getTagsUsecase;
+  final DeleteTagUsecase _deleteTagUsecase;
   _TagsControllerBase(
     this._getTagsUsecase,
+    this._deleteTagUsecase,
   );
 
   @observable
@@ -20,7 +23,7 @@ abstract class _TagsControllerBase with Store {
   List<TagEntity>? tags = [];
 
   @action
-  void changeTags(List<TagEntity> value) {
+  void changeTags(List<TagEntity>? value) {
     tags = value;
   }
 
@@ -39,5 +42,18 @@ abstract class _TagsControllerBase with Store {
       },
     );
     changeIsLoading(false);
+  }
+
+  Future<bool> deleteTag(int id) async {
+    var result = await _deleteTagUsecase(id);
+    return result.fold(
+      (l) => false,
+      (_) {
+        List<TagEntity> updatedList = tags ?? [];
+        updatedList.removeWhere((element) => element.id == id);
+        changeTags([...updatedList]);
+        return true;
+      },
+    );
   }
 }

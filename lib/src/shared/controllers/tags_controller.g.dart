@@ -45,7 +45,7 @@ mixin _$TagsController on _TagsControllerBase, Store {
       ActionController(name: '_TagsControllerBase', context: context);
 
   @override
-  void changeTags(List<TagEntity> value) {
+  void changeTags(List<TagEntity>? value) {
     final _$actionInfo = _$_TagsControllerBaseActionController.startAction(
         name: '_TagsControllerBase.changeTags');
     try {

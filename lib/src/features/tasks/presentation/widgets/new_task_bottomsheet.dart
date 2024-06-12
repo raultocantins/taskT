@@ -66,318 +66,315 @@ class _NewTaskBottomSheetState extends State<NewTaskBottomSheet> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Listener(
-        behavior: HitTestBehavior.translucent,
-        onPointerDown: (_) {
-          focusNodeDescription.unfocus();
-          focusNodeTitle.unfocus();
-        },
-        child: Padding(
-          padding: const EdgeInsets.all(24.0),
-          child: Column(
-            children: [
-              SizedBox(
-                height: 80,
-                width: double.infinity,
-                child: TextSelectionTheme(
-                  data: const TextSelectionThemeData(),
-                  child: TextField(
-                    controller: _titleController,
-                    focusNode: focusNodeTitle,
-                    autofocus: true,
-                    maxLength: 70,
-                    style: const TextStyle(fontSize: 16),
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide.none,
-                      ),
-                      alignLabelWithHint: true,
-                      filled: true,
-                      fillColor: Theme.of(context).colorScheme.secondary,
-                      hintText: S.of(context).whattodo,
-                      hintStyle: const TextStyle(
-                        fontSize: 16,
+    return Padding(
+      padding:
+          EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+      child: SingleChildScrollView(
+        child: Listener(
+          behavior: HitTestBehavior.translucent,
+          onPointerDown: (_) {
+            focusNodeDescription.unfocus();
+            focusNodeTitle.unfocus();
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(24.0),
+            child: Column(
+              children: [
+                SizedBox(
+                  height: 80,
+                  width: double.infinity,
+                  child: TextSelectionTheme(
+                    data: const TextSelectionThemeData(),
+                    child: TextField(
+                      controller: _titleController,
+                      focusNode: focusNodeTitle,
+                      autofocus: true,
+                      maxLength: 70,
+                      style: const TextStyle(fontSize: 16),
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: BorderSide.none,
+                        ),
+                        alignLabelWithHint: true,
+                        filled: true,
+                        fillColor: Theme.of(context).colorScheme.secondary,
+                        hintText: S.of(context).whattodo,
+                        hintStyle: const TextStyle(
+                          fontSize: 16,
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    S.of(context).tag,
-                    style: const TextStyle(fontSize: 16),
-                  ),
-                  TagsCustom(
-                    onTap: (id) => updateTag(id),
-                    tagId: _tagId,
-                    tagType: TagType.task,
-                  )
-                ],
-              ),
-              const Divider(
-                height: 4,
-              ),
-              const SizedBox(
-                height: 14,
-              ),
-              Row(
-                children: [
-                  Text(
-                    S.of(context).priority,
-                    style: const TextStyle(fontSize: 16),
-                  ),
-                ],
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      children: [
-                        Row(
-                          children: [
-                            Checkbox(
-                              shape: const OvalBorder(),
-                              value: _priority == Priority.high,
-                              onChanged: (bool? value) {
-                                if (value ?? false) {
-                                  updatePriority(Priority.high);
-                                } else {
-                                  updatePriority(Priority.none);
-                                }
-                              },
-                            ),
-                            Text(
-                              S.of(context).high,
-                              style: const TextStyle(fontSize: 12),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            Checkbox(
-                              shape: const OvalBorder(),
-                              value: _priority == Priority.medium,
-                              onChanged: (bool? value) {
-                                if (value ?? false) {
-                                  updatePriority(Priority.medium);
-                                } else {
-                                  updatePriority(Priority.none);
-                                }
-                              },
-                            ),
-                            Text(
-                              S.of(context).medium,
-                              style: const TextStyle(fontSize: 12),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            Checkbox(
-                              shape: const OvalBorder(),
-                              value: _priority == Priority.low,
-                              onChanged: (bool? value) {
-                                if (value ?? false) {
-                                  updatePriority(Priority.low);
-                                } else {
-                                  updatePriority(Priority.none);
-                                }
-                              },
-                            ),
-                            Text(
-                              S.of(context).low,
-                              style: const TextStyle(fontSize: 12),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            Checkbox(
-                              shape: const OvalBorder(),
-                              value: _priority == Priority.none,
-                              onChanged: (bool? value) {
-                                if (value ?? false) {
-                                  updatePriority(Priority.none);
-                                } else {
-                                  updatePriority(Priority.none);
-                                }
-                              },
-                            ),
-                            Text(
-                              S.of(context).none,
-                              style: const TextStyle(fontSize: 12),
-                            ),
-                          ],
-                        ),
-                      ],
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      S.of(context).tag,
+                      style: const TextStyle(fontSize: 16),
                     ),
-                  ),
-                ],
-              ),
-              const Divider(
-                height: 4,
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(
-                    height: 14,
-                  ),
-                  Text(
-                    S.of(context).date,
-                    style: const TextStyle(fontSize: 16),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      picker.DatePicker.showDateTimePicker(
-                        context,
-                        onChanged: (date) {},
-                        onConfirm: (date) {
-                          setState(
-                            () {
-                              _dateSelected = date;
-                            },
-                          );
-                        },
-                        currentTime: _dateSelected,
-                        locale: picker.LocaleType.pt,
-                      );
-                    },
-                    child: SizedBox(
+                    TagsCustom(
+                      onTap: (id) => updateTag(id),
+                      tagId: _tagId,
+                      tagType: TagType.task,
+                      tagRemoved: (_) => {},
+                    )
+                  ],
+                ),
+                const SizedBox(
+                  height: 14,
+                ),
+                Row(
+                  children: [
+                    Text(
+                      S.of(context).priority,
+                      style: const TextStyle(fontSize: 16),
+                    ),
+                  ],
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
                       child: Row(
                         children: [
-                          const IconButton(
-                            onPressed: null,
-                            icon: Icon(
-                              Icons.calendar_month,
-                            ),
+                          Row(
+                            children: [
+                              Checkbox(
+                                shape: const OvalBorder(),
+                                value: _priority == Priority.high,
+                                onChanged: (bool? value) {
+                                  if (value ?? false) {
+                                    updatePriority(Priority.high);
+                                  } else {
+                                    updatePriority(Priority.none);
+                                  }
+                                },
+                              ),
+                              Text(
+                                S.of(context).high,
+                                style: const TextStyle(fontSize: 12),
+                              ),
+                            ],
                           ),
-                          Text(
-                            (_dateSelected ?? DateTime.now())
-                                .formatDateDefault(context),
-                            style: const TextStyle(fontSize: 16),
+                          Row(
+                            children: [
+                              Checkbox(
+                                shape: const OvalBorder(),
+                                value: _priority == Priority.medium,
+                                onChanged: (bool? value) {
+                                  if (value ?? false) {
+                                    updatePriority(Priority.medium);
+                                  } else {
+                                    updatePriority(Priority.none);
+                                  }
+                                },
+                              ),
+                              Text(
+                                S.of(context).medium,
+                                style: const TextStyle(fontSize: 12),
+                              ),
+                            ],
                           ),
-                          const Expanded(
-                            child: SizedBox(),
+                          Row(
+                            children: [
+                              Checkbox(
+                                shape: const OvalBorder(),
+                                value: _priority == Priority.low,
+                                onChanged: (bool? value) {
+                                  if (value ?? false) {
+                                    updatePriority(Priority.low);
+                                  } else {
+                                    updatePriority(Priority.none);
+                                  }
+                                },
+                              ),
+                              Text(
+                                S.of(context).low,
+                                style: const TextStyle(fontSize: 12),
+                              ),
+                            ],
                           ),
-                          const IconButton(
-                            onPressed: null,
-                            icon: Icon(
-                              Icons.access_time_filled_outlined,
-                            ),
-                          ),
-                          Text(
-                            (_dateSelected ?? DateTime.now())
-                                .formatDateToHours(),
-                            style: const TextStyle(fontSize: 16),
+                          Row(
+                            children: [
+                              Checkbox(
+                                shape: const OvalBorder(),
+                                value: _priority == Priority.none,
+                                onChanged: (bool? value) {
+                                  if (value ?? false) {
+                                    updatePriority(Priority.none);
+                                  } else {
+                                    updatePriority(Priority.none);
+                                  }
+                                },
+                              ),
+                              Text(
+                                S.of(context).none,
+                                style: const TextStyle(fontSize: 12),
+                              ),
+                            ],
                           ),
                         ],
                       ),
                     ),
-                  ),
-                  const Divider(
-                    height: 4,
-                  ),
-                ],
-              ),
-              const SizedBox(
-                height: 14,
-              ),
-              SizedBox(
-                height: 150,
-                width: double.infinity,
-                child: TextSelectionTheme(
-                  data: const TextSelectionThemeData(),
-                  child: TextField(
-                    controller: _descriptionController,
-                    maxLength: 300,
-                    keyboardType: TextInputType.multiline,
-                    maxLines: 4,
-                    style: const TextStyle(fontSize: 16),
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide: BorderSide.none),
-                      alignLabelWithHint: true,
-                      hintText: S.of(context).description,
-                      hintStyle: const TextStyle(
-                        fontSize: 16,
-                      ),
-                      filled: true,
-                      fillColor: Theme.of(context).colorScheme.secondary,
+                  ],
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(
+                      height: 14,
                     ),
-                    focusNode: focusNodeDescription,
+                    Text(
+                      S.of(context).date,
+                      style: const TextStyle(fontSize: 16),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        picker.DatePicker.showDateTimePicker(
+                          context,
+                          onChanged: (date) {},
+                          onConfirm: (date) {
+                            setState(
+                              () {
+                                _dateSelected = date;
+                              },
+                            );
+                          },
+                          currentTime: _dateSelected,
+                          locale: picker.LocaleType.pt,
+                        );
+                      },
+                      child: SizedBox(
+                        child: Row(
+                          children: [
+                            const IconButton(
+                              onPressed: null,
+                              icon: Icon(
+                                Icons.calendar_month,
+                              ),
+                            ),
+                            Text(
+                              (_dateSelected ?? DateTime.now())
+                                  .formatDateDefault(context),
+                              style: const TextStyle(fontSize: 16),
+                            ),
+                            const Expanded(
+                              child: SizedBox(),
+                            ),
+                            const IconButton(
+                              onPressed: null,
+                              icon: Icon(
+                                Icons.access_time_filled_outlined,
+                              ),
+                            ),
+                            Text(
+                              (_dateSelected ?? DateTime.now())
+                                  .formatDateToHours(),
+                              style: const TextStyle(fontSize: 16),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 14,
+                ),
+                SizedBox(
+                  height: 130,
+                  width: double.infinity,
+                  child: TextSelectionTheme(
+                    data: const TextSelectionThemeData(),
+                    child: TextField(
+                      controller: _descriptionController,
+                      maxLength: 300,
+                      keyboardType: TextInputType.text,
+                      maxLines: 4,
+                      style: const TextStyle(fontSize: 16),
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide.none),
+                        alignLabelWithHint: true,
+                        hintText: S.of(context).description,
+                        hintStyle: const TextStyle(
+                          fontSize: 16,
+                        ),
+                        filled: true,
+                        fillColor: Theme.of(context).colorScheme.secondary,
+                      ),
+                      focusNode: focusNodeDescription,
+                    ),
                   ),
                 ),
-              ),
-              const SizedBox(
-                height: 24,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  TextButton(
-                    onPressed: () => Navigator.of(context).pop(),
-                    child: Text(
-                      S.of(context).back,
-                      style: const TextStyle(fontSize: 14),
+                const SizedBox(
+                  height: 24,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    TextButton(
+                      onPressed: () => Navigator.of(context).pop(),
+                      child: Text(
+                        S.of(context).back,
+                        style: const TextStyle(fontSize: 14),
+                      ),
                     ),
-                  ),
-                  const SizedBox(
-                    width: 30,
-                  ),
-                  ElevatedButton(
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStatePropertyAll(
-                          Theme.of(context).colorScheme.primary),
+                    const SizedBox(
+                      width: 30,
                     ),
-                    onPressed: () {
-                      if (_titleController?.text.isEmpty ?? false) {
-                        focusNodeTitle.requestFocus();
-                      } else {
-                        if (widget.edit ?? false) {
-                          _controller?.updateTask(
-                            TaskEntity(
-                              id: widget.task!.id,
-                              title: _titleController!.text,
-                              description: _descriptionController!.text,
-                              priority: _priority!,
-                              tagId: _tagId,
-                              finished: false,
-                              date: _dateSelected!,
-                            ),
-                          );
+                    ElevatedButton(
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStatePropertyAll(
+                            Theme.of(context).colorScheme.primary),
+                      ),
+                      onPressed: () {
+                        if (_titleController?.text.isEmpty ?? false) {
+                          focusNodeTitle.requestFocus();
                         } else {
-                          _controller?.createTask(
-                            TaskEntity(
-                              title: _titleController!.text,
-                              description: _descriptionController!.text,
-                              priority: _priority!,
-                              tagId: _tagId,
-                              finished: false,
-                              date: _dateSelected!,
-                            ),
-                          );
-                        }
+                          if (widget.edit ?? false) {
+                            _controller?.updateTask(
+                              TaskEntity(
+                                id: widget.task!.id,
+                                title: _titleController!.text,
+                                description: _descriptionController!.text,
+                                priority: _priority!,
+                                tagId: _tagId,
+                                finished: false,
+                                date: _dateSelected!,
+                              ),
+                            );
+                          } else {
+                            _controller?.createTask(
+                              TaskEntity(
+                                title: _titleController!.text,
+                                description: _descriptionController!.text,
+                                priority: _priority!,
+                                tagId: _tagId,
+                                finished: false,
+                                date: _dateSelected!,
+                              ),
+                            );
+                          }
 
-                        Navigator.of(context).pop();
-                      }
-                    },
-                    child: Text(
-                      S.of(context).save,
-                      style: const TextStyle(fontSize: 14, color: Colors.white),
-                    ),
-                  )
-                ],
-              ),
-            ],
+                          Navigator.of(context).pop();
+                        }
+                      },
+                      child: Text(
+                        S.of(context).save,
+                        style:
+                            const TextStyle(fontSize: 14, color: Colors.white),
+                      ),
+                    )
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),

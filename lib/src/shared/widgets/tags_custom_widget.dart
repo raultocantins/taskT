@@ -8,10 +8,12 @@ class TagsCustom extends StatefulWidget {
   final int? tagId;
   final TagType tagType;
   final void Function(int? id) onTap;
+  final void Function(int id) tagRemoved;
   const TagsCustom({
     super.key,
     required this.tagType,
     required this.onTap,
+    required this.tagRemoved,
     this.tagId,
   });
 
@@ -67,7 +69,7 @@ class _TagsCustomState extends State<TagsCustom> {
                                       ? Colors.white
                                       : null,
                             ),
-                            onDeleted: () {},
+                            onDeleted: () => _showAlertDialog(context, index),
                             label: Text(
                               _controller?.tags?[index].label ?? '',
                               style: TextStyle(
@@ -123,5 +125,58 @@ class _TagsCustomState extends State<TagsCustom> {
         ),
       );
     });
+  }
+
+  void _showAlertDialog(BuildContext context, int index) {
+    Widget cancelButton = TextButton(
+      child: const Text('Cancelar'),
+      onPressed: () {
+        Navigator.of(context).pop();
+      },
+    );
+
+    Widget continueButton = ElevatedButton(
+      style: ButtonStyle(
+        backgroundColor:
+            MaterialStatePropertyAll(Theme.of(context).colorScheme.primary),
+      ),
+      child: const Text(
+        'Confirmar',
+        style: TextStyle(color: Colors.white),
+      ),
+      onPressed: () {
+        final id = _controller!.tags![index].id;
+        _controller
+            ?.deleteTag(_controller!.tags![index].id)
+            .then((value) => value ? widget.tagRemoved(id) : null);
+        Navigator.of(context).pop();
+      },
+    );
+
+    AlertDialog alert = AlertDialog(
+      title: const Text(
+        'Remover Tag',
+        style: TextStyle(
+          fontSize: 16,
+        ),
+      ),
+      content: const Text(
+        'Você tem certeza de que deseja remover esta tag?',
+        style: TextStyle(fontSize: 14),
+      ),
+      backgroundColor: Theme.of(context).colorScheme.background,
+      elevation: 0,
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+    );
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
   }
 }

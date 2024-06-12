@@ -43,7 +43,7 @@ class _HomeScreenState extends State<HomeScreen> {
               children: [
                 Text.rich(
                   TextSpan(
-                    text: 'Welcome, ',
+                    text: 'Bem-vindo, ',
                     children: [
                       TextSpan(
                         text: 'Alex.',

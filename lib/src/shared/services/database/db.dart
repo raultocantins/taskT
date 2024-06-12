@@ -18,6 +18,10 @@ class DataBaseCustom {
       path,
       options: OpenDatabaseOptions(
         version: kVersion,
+        onConfigure: (Database db) async {
+          // Habilitar suporte a chaves estrangeiras
+          await db.execute('PRAGMA foreign_keys = ON');
+        },
         onCreate: (db, version) async {
           await _createDb(db);
         },
@@ -38,20 +42,36 @@ class DataBaseCustom {
   Future<String> fixPath(String path) async => path;
 
   Future _createDb(Database db) async {
-    //Verifica se existe as tabelas, e apaga caso exista
-    await db.execute('DROP TABLE If EXISTS $tagstable');
-    await db.execute('DROP TABLE If EXISTS $tasktable');
-    //Criação das tabelas
+    // Verifica se existem as tabelas, e apaga caso existam
+    await db.execute('DROP TABLE IF EXISTS $tasktable');
+    await db.execute('DROP TABLE IF EXISTS $tagstable');
+
+    // Criação das tabelas
     await db.execute(
-      'CREATE TABLE $tagstable($tagscolumnId INTEGER PRIMARY KEY, $tagscolumnLabel TEXT, $tagscolumnType TEXT)',
+      'CREATE TABLE $tagstable('
+      '$tagscolumnId INTEGER PRIMARY KEY, '
+      '$tagscolumnLabel TEXT, '
+      '$tagscolumnType TEXT)',
     );
+
     await db.execute(
-      'CREATE TABLE $tasktable($taskcolumnId INTEGER PRIMARY KEY, $taskcolumnTitle TEXT, $taskcolumnDate INTEGER, $taskcolumnDescription TEXT, $taskcolumnFinished INTEGER,  $taskcolumnTagId INTEGER, $taskcolumnPriority TEXT, $taskcolumnUpdated INTEGER)',
+      'CREATE TABLE $tasktable('
+      '$taskcolumnId INTEGER PRIMARY KEY, '
+      '$taskcolumnTitle TEXT, '
+      '$taskcolumnDate INTEGER, '
+      '$taskcolumnDescription TEXT, '
+      '$taskcolumnFinished INTEGER, '
+      '$taskcolumnTagId INTEGER, '
+      '$taskcolumnPriority TEXT, '
+      '$taskcolumnUpdated INTEGER, '
+      'FOREIGN KEY($taskcolumnTagId) REFERENCES $tagstable($tagscolumnId) ON DELETE CASCADE)',
     );
-    // Adiciona um index na tabela tasks
+
+    // Adiciona um índice na tabela tasks
     await db.execute(
       'CREATE INDEX TasksUpdated ON $tasktable ($taskcolumnUpdated)',
     );
+
     // Insere três itens na tabela tags recém-criada
     await db.rawInsert(
       'INSERT INTO $tagstable($tagscolumnId, $tagscolumnLabel, $tagscolumnType) VALUES(?, ?, ?)',
@@ -95,6 +115,14 @@ class DataBaseCustom {
     await db!.delete(
       tasktable,
       where: '$taskcolumnId = ?',
+      whereArgs: <Object?>[id],
+    );
+  }
+
+  Future<void> deleteTag(int? id) async {
+    await db!.delete(
+      tagstable,
+      where: '$tagscolumnId = ?',
       whereArgs: <Object?>[id],
     );
   }

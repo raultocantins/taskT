@@ -21,8 +21,11 @@ import 'package:task_planner/src/features/tasks/data/repositories/update_task_re
 import 'package:task_planner/src/features/tasks/domain/usecases/update_task_usecase.dart';
 import 'package:task_planner/src/features/tasks/external/update_task_datasource.impl.dart';
 import 'package:task_planner/src/shared/controllers/tags_controller.dart';
+import 'package:task_planner/src/shared/data/repositories/delete_tag_repository.impl.dart';
 import 'package:task_planner/src/shared/data/repositories/get_tags_repository.impl.dart';
+import 'package:task_planner/src/shared/domain/usecases/delete_tag_usecase.dart';
 import 'package:task_planner/src/shared/domain/usecases/get_tags_usecase.dart';
+import 'package:task_planner/src/shared/external/delete_tag_datasource.impl.dart';
 import 'package:task_planner/src/shared/external/get_tags_datasource.impl.dart';
 import 'package:task_planner/src/shared/services/notification/push_notification.dart';
 import 'package:tekartik_app_flutter_sqflite/sqflite.dart';
@@ -67,6 +70,7 @@ class GetItSetup {
     );
     getIt.registerLazySingleton<TagsController>(
       () => TagsController(
+        getIt(),
         getIt(),
       ),
     );
@@ -151,6 +155,14 @@ class GetItSetup {
       () => GetCountTasksPendingUsecaseImpl(
         GetCountTasksPendingRepositoryImpl(
           GetCountTasksPendingDatasourceImpl(),
+        ),
+      ),
+    );
+
+    getIt.registerLazySingleton<DeleteTagUsecase>(
+      () => DeleteTagUsecaseImpl(
+        DeleteTagRepositoryImpl(
+          DeleteTagDatasourceImpl(),
         ),
       ),
     );
