@@ -54,22 +54,25 @@ class MyApp extends StatelessWidget {
       ),
       home: const SigninScreen(),
       onGenerateRoute: (settings) {
-        if (settings.name == '/book/detail') {
-          Map<String, dynamic> args =
-              settings.arguments as Map<String, dynamic>;
-          return MaterialPageRoute(
-            builder: (context) => BookDetailScreen(
+        switch (settings.name) {
+          case '/book/detail':
+            Map<String, dynamic> args =
+                settings.arguments as Map<String, dynamic>;
+            return CustomPageRoute(
+                page: BookDetailScreen(
               book: args['book'],
-            ),
-          );
+            ));
+          case '/signin':
+            return CustomPageRoute(page: const SigninScreen());
+          case '/home':
+            return CustomPageRoute(page: const HomeScreen());
+          case '/tasks':
+            return CustomPageRoute(page: const TasksScreen());
+          case '/books':
+            return CustomPageRoute(page: const BooksScreen());
+          default:
+            return CustomPageRoute(page: Container());
         }
-        return null;
-      },
-      routes: {
-        '/signin': (context) => const SigninScreen(),
-        '/home': (context) => const HomeScreen(),
-        '/tasks': (context) => const TasksScreen(),
-        '/books': (context) => const BooksScreen(),
       },
     );
   }
@@ -77,4 +80,24 @@ class MyApp extends StatelessWidget {
 
 class NavigatorKey {
   static GlobalKey<NavigatorState> navigatorKey = GlobalKey();
+}
+
+class CustomPageRoute extends PageRouteBuilder {
+  final Widget page;
+  CustomPageRoute({required this.page})
+      : super(
+          pageBuilder: (context, animation, secondaryAnimation) => page,
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            final bool isPushing =
+                secondaryAnimation.status == AnimationStatus.reverse;
+            var begin =
+                !isPushing ? const Offset(1.0, 0.0) : const Offset(-1.0, 0.0);
+            var end = Offset.zero;
+            var curve = Curves.easeInOut;
+            var tween =
+                Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+            return SlideTransition(
+                position: animation.drive(tween), child: child);
+          },
+        );
 }
