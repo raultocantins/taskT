@@ -1,5 +1,4 @@
 // ignore: depend_on_referenced_packages
-// ignore_for_file: lines_longer_than_80_chars
 import 'package:task_planner/src/shared/data/models/tag_model.dart';
 import 'package:task_planner/src/shared/utils/enums/tagtype_enum.dart';
 import 'package:tekartik_app_flutter_sqflite/sqflite.dart';
@@ -137,6 +136,17 @@ class DataBaseCustom {
             )
             .toList() ??
         [];
+  }
+
+  Future<int> getCountTasksPending() async {
+    String sql =
+        'SELECT COUNT(*) FROM $tasktable WHERE $taskcolumnFinished = ?';
+    final result = await db?.rawQuery(sql, [0]);
+    int count = 0;
+    if (result != null && result.isNotEmpty) {
+      count = result.first.values.first as int;
+    }
+    return count;
   }
 
   Future close() async {

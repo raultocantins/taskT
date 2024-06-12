@@ -1,5 +1,3 @@
-// ignore_for_file: lines_longer_than_80_chars
-
 import 'package:flutter/material.dart';
 import 'package:task_planner/src/features/books/domain/entities/book_entity.dart';
 

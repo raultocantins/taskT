@@ -29,7 +29,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "birthday": MessageLookupByLibrary.simpleMessage("Aniversário"),
         "date": MessageLookupByLibrary.simpleMessage("Data"),
         "description":
-            MessageLookupByLibrary.simpleMessage("Adicione sua descrição"),
+            MessageLookupByLibrary.simpleMessage("Adicione sua descrição..."),
         "done": MessageLookupByLibrary.simpleMessage("Finalizadas"),
         "high": MessageLookupByLibrary.simpleMessage("Alta"),
         "low": MessageLookupByLibrary.simpleMessage("Baixa"),

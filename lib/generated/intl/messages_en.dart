@@ -28,7 +28,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "birthday": MessageLookupByLibrary.simpleMessage("Birthday"),
         "date": MessageLookupByLibrary.simpleMessage("Date"),
         "description":
-            MessageLookupByLibrary.simpleMessage("Add your description"),
+            MessageLookupByLibrary.simpleMessage("Add your description..."),
         "done": MessageLookupByLibrary.simpleMessage("Done"),
         "high": MessageLookupByLibrary.simpleMessage("High"),
         "low": MessageLookupByLibrary.simpleMessage("Low"),

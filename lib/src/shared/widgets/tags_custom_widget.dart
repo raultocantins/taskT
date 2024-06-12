@@ -51,7 +51,7 @@ class _TagsCustomState extends State<TagsCustom> {
                       child: Observer(
                         builder: (context) {
                           return Chip(
-                            labelPadding: const EdgeInsets.all(0),
+                            labelPadding: const EdgeInsets.only(right: 3),
                             visualDensity: VisualDensity.compact,
                             side: BorderSide.none,
                             backgroundColor:
@@ -60,8 +60,8 @@ class _TagsCustomState extends State<TagsCustom> {
                                     : Theme.of(context).colorScheme.secondary,
                             elevation: 0,
                             deleteIcon: Icon(
-                              Icons.delete,
-                              size: 14,
+                              Icons.remove_circle_outlined,
+                              size: 16,
                               color:
                                   widget.tagId == _controller?.tags?[index].id
                                       ? Colors.white
@@ -86,28 +86,38 @@ class _TagsCustomState extends State<TagsCustom> {
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 5),
-                child: Chip(
-                  labelPadding: const EdgeInsets.all(0),
-                  visualDensity: VisualDensity.compact,
-                  side: BorderSide.none,
-                  backgroundColor: Theme.of(context).colorScheme.secondary,
-                  elevation: 0,
-                  label: Row(
-                    children: [
-                      Icon(
-                        Icons.add,
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
-                      Text(
-                        'Adicionar Tag',
-                        style: TextStyle(
+                child: GestureDetector(
+                  onTap: () => {},
+                  child: Chip(
+                    labelPadding: const EdgeInsets.all(0),
+                    visualDensity: VisualDensity.compact,
+                    side: BorderSide.none,
+                    backgroundColor: Theme.of(context).colorScheme.secondary,
+                    elevation: 0,
+                    label: Row(
+                      children: [
+                        Icon(
+                          Icons.add_circle_outline,
                           color: Theme.of(context).colorScheme.primary,
+                          size: 16,
                         ),
-                      ),
-                    ],
+                        const SizedBox(
+                          width: 3,
+                        ),
+                        Text(
+                          'Adicionar',
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
+              const SizedBox(
+                width: 12,
+              )
             ],
           ),
         ),

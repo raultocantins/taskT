@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 import 'package:task_planner/generated/l10n.dart';
+import 'package:task_planner/src/features/home/presentation/controllers/home_controller.dart';
 import 'package:task_planner/src/features/tasks/domain/entities/task_entity.dart';
 import 'package:task_planner/src/features/tasks/presentation/controllers/tasks_controller.dart';
 import 'package:task_planner/src/shared/utils/enums/tagtype_enum.dart';
@@ -52,6 +53,7 @@ class _TasksScreenState extends State<TasksScreen>
 
   @override
   void dispose() {
+    GetIt.I.get<HomeController>().getCountTasksPending();
     _pageController.dispose();
     _controller?.dispose();
     super.dispose();
@@ -110,7 +112,7 @@ class _TasksScreenState extends State<TasksScreen>
                 const Padding(
                   padding: EdgeInsets.symmetric(vertical: 10, horizontal: 12),
                   child: Text(
-                    'Tarefas pendentes e concluídas.',
+                    'Pendentes e concluídas.',
                     style: TextStyle(
                       fontSize: 14,
                     ),

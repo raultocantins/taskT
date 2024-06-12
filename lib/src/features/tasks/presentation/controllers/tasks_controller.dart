@@ -96,7 +96,9 @@ abstract class _TasksControllerBase with Store {
     result.fold(
       (l) => null,
       (r) {
-        scheduleNotification(r);
+        if (r.date.isAfter(DateTime.now())) {
+          scheduleNotification(r);
+        }
         if (tagId == null && _dateSelected == null) {
           changeTasks([..._tasks, r]);
         } else if (_dateSelected == null && task.tagId == tagId) {
@@ -133,7 +135,10 @@ abstract class _TasksControllerBase with Store {
     result.fold(
       (l) => null,
       (updatedTask) {
-        scheduleNotification(updatedTask);
+        if (!updatedTask.finished && updatedTask.date.isAfter(DateTime.now())) {
+          scheduleNotification(updatedTask);
+        }
+
         List<TaskEntity> updatedList = _tasks;
         if (done && !updatedTask.finished || !done && updatedTask.finished) {
           updatedList.removeWhere((element) => element.id == task.id);

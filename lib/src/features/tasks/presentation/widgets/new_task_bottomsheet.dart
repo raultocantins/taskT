@@ -78,7 +78,7 @@ class _NewTaskBottomSheetState extends State<NewTaskBottomSheet> {
           child: Column(
             children: [
               SizedBox(
-                height: 100,
+                height: 80,
                 width: double.infinity,
                 child: TextSelectionTheme(
                   data: const TextSelectionThemeData(),
@@ -87,7 +87,7 @@ class _NewTaskBottomSheetState extends State<NewTaskBottomSheet> {
                     focusNode: focusNodeTitle,
                     autofocus: true,
                     maxLength: 70,
-                    style: const TextStyle(fontSize: 18),
+                    style: const TextStyle(fontSize: 16),
                     decoration: InputDecoration(
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
@@ -98,7 +98,7 @@ class _NewTaskBottomSheetState extends State<NewTaskBottomSheet> {
                       fillColor: Theme.of(context).colorScheme.secondary,
                       hintText: S.of(context).whattodo,
                       hintStyle: const TextStyle(
-                        fontSize: 18,
+                        fontSize: 16,
                       ),
                     ),
                   ),
@@ -109,7 +109,7 @@ class _NewTaskBottomSheetState extends State<NewTaskBottomSheet> {
                 children: [
                   Text(
                     S.of(context).tag,
-                    style: const TextStyle(fontSize: 15),
+                    style: const TextStyle(fontSize: 16),
                   ),
                   TagsCustom(
                     onTap: (id) => updateTag(id),
@@ -124,12 +124,18 @@ class _NewTaskBottomSheetState extends State<NewTaskBottomSheet> {
               const SizedBox(
                 height: 14,
               ),
+              Row(
+                children: [
+                  Text(
+                    S.of(context).priority,
+                    style: const TextStyle(fontSize: 16),
+                  ),
+                ],
+              ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(S.of(context).priority,
-                      style: const TextStyle(fontSize: 15)),
                   SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: Row(
@@ -226,20 +232,23 @@ class _NewTaskBottomSheetState extends State<NewTaskBottomSheet> {
                   ),
                   Text(
                     S.of(context).date,
-                    style: const TextStyle(fontSize: 15),
+                    style: const TextStyle(fontSize: 16),
                   ),
                   GestureDetector(
                     onTap: () {
-                      picker.DatePicker.showDateTimePicker(context,
-                          onChanged: (date) {}, onConfirm: (date) {
-                        setState(
-                          () {
-                            _dateSelected = date;
-                          },
-                        );
-                      },
-                          currentTime: _dateSelected,
-                          locale: picker.LocaleType.pt);
+                      picker.DatePicker.showDateTimePicker(
+                        context,
+                        onChanged: (date) {},
+                        onConfirm: (date) {
+                          setState(
+                            () {
+                              _dateSelected = date;
+                            },
+                          );
+                        },
+                        currentTime: _dateSelected,
+                        locale: picker.LocaleType.pt,
+                      );
                     },
                     child: SizedBox(
                       child: Row(
@@ -253,7 +262,7 @@ class _NewTaskBottomSheetState extends State<NewTaskBottomSheet> {
                           Text(
                             (_dateSelected ?? DateTime.now())
                                 .formatDateDefault(context),
-                            style: const TextStyle(fontSize: 18),
+                            style: const TextStyle(fontSize: 16),
                           ),
                           const Expanded(
                             child: SizedBox(),
@@ -267,7 +276,7 @@ class _NewTaskBottomSheetState extends State<NewTaskBottomSheet> {
                           Text(
                             (_dateSelected ?? DateTime.now())
                                 .formatDateToHours(),
-                            style: const TextStyle(fontSize: 18),
+                            style: const TextStyle(fontSize: 16),
                           ),
                         ],
                       ),
@@ -291,7 +300,7 @@ class _NewTaskBottomSheetState extends State<NewTaskBottomSheet> {
                     maxLength: 300,
                     keyboardType: TextInputType.multiline,
                     maxLines: 4,
-                    style: const TextStyle(fontSize: 18),
+                    style: const TextStyle(fontSize: 16),
                     decoration: InputDecoration(
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
@@ -299,7 +308,7 @@ class _NewTaskBottomSheetState extends State<NewTaskBottomSheet> {
                       alignLabelWithHint: true,
                       hintText: S.of(context).description,
                       hintStyle: const TextStyle(
-                        fontSize: 18,
+                        fontSize: 16,
                       ),
                       filled: true,
                       fillColor: Theme.of(context).colorScheme.secondary,

@@ -52,7 +52,7 @@ class MyApp extends StatelessWidget {
         ),
         useMaterial3: true,
       ),
-      home: const SigninScreen(),
+      initialRoute: '/home',
       onGenerateRoute: (settings) {
         switch (settings.name) {
           case '/book/detail':
