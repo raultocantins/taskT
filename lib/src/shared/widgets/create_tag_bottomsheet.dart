@@ -4,7 +4,8 @@ import 'package:task_planner/src/shared/controllers/tags_controller.dart';
 import 'package:task_planner/src/shared/utils/enums/tagtype_enum.dart';
 
 class CreateTagBottomSheet extends StatefulWidget {
-  const CreateTagBottomSheet({super.key});
+  final TagType type;
+  const CreateTagBottomSheet({required this.type, super.key});
 
   @override
   State<CreateTagBottomSheet> createState() => _CreateTagBottomSheetState();
@@ -38,7 +39,7 @@ class _CreateTagBottomSheetState extends State<CreateTagBottomSheet> {
               maxLength: 30,
               onSubmitted: (e) {
                 if (e != '') {
-                  _controller?.saveTag(label: e, type: TagType.task);
+                  _controller?.saveTag(label: e, type: widget.type);
                   Navigator.of(context).pop();
                 }
               },

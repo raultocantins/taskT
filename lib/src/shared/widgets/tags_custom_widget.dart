@@ -100,7 +100,9 @@ class _TagsCustomState extends State<TagsCustom> {
                       backgroundColor: Theme.of(context).colorScheme.background,
                       elevation: 0,
                       builder: (context) {
-                        return const CreateTagBottomSheet();
+                        return CreateTagBottomSheet(
+                          type: widget.tagType,
+                        );
                       },
                     )
                   },
