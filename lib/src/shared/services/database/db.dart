@@ -72,7 +72,7 @@ class DataBaseCustom {
       'CREATE INDEX TasksUpdated ON $tasktable ($taskcolumnUpdated)',
     );
 
-    // Insere três itens na tabela tags recém-criada
+    // Insere dois itens na tabela tags recém-criada
     await db.rawInsert(
       'INSERT INTO $tagstable($tagscolumnId, $tagscolumnLabel, $tagscolumnType) VALUES(?, ?, ?)',
       [1, 'Trabalho', 'task'],
@@ -80,10 +80,6 @@ class DataBaseCustom {
     await db.rawInsert(
       'INSERT INTO $tagstable($tagscolumnId, $tagscolumnLabel, $tagscolumnType) VALUES(?, ?, ?)',
       [2, 'Pessoal', 'task'],
-    );
-    await db.rawInsert(
-      'INSERT INTO $tagstable($tagscolumnId, $tagscolumnLabel, $tagscolumnType) VALUES(?, ?, ?)',
-      [3, 'Casa', 'task'],
     );
   }
 
@@ -99,6 +95,17 @@ class DataBaseCustom {
       tagId: taskEntity.tagId,
       title: taskEntity.title,
     );
+  }
+
+  Future<TagModel> saveTag({
+    required String label,
+    required TagType type,
+  }) async {
+    int newId = await db!.insert(tagstable, {
+      'label': label,
+      'type': type.name,
+    });
+    return TagModel(newId, label, type: type);
   }
 
   Future<TaskModel> updateTask(TaskEntity taskEntity) async {

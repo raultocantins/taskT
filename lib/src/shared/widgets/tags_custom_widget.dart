@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 import 'package:task_planner/src/shared/controllers/tags_controller.dart';
 import 'package:task_planner/src/shared/utils/enums/tagtype_enum.dart';
+import 'package:task_planner/src/shared/widgets/create_tag_bottomsheet.dart';
 
 class TagsCustom extends StatefulWidget {
   final int? tagId;
@@ -53,7 +55,6 @@ class _TagsCustomState extends State<TagsCustom> {
                       child: Observer(
                         builder: (context) {
                           return Chip(
-                            labelPadding: const EdgeInsets.only(right: 3),
                             visualDensity: VisualDensity.compact,
                             side: BorderSide.none,
                             backgroundColor:
@@ -89,7 +90,20 @@ class _TagsCustomState extends State<TagsCustom> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 5),
                 child: GestureDetector(
-                  onTap: () => {},
+                  onTap: () => {
+                    showModalBottomSheet(
+                      isScrollControlled: true,
+                      isDismissible: true,
+                      enableDrag: true,
+                      useSafeArea: true,
+                      context: context,
+                      backgroundColor: Theme.of(context).colorScheme.background,
+                      elevation: 0,
+                      builder: (context) {
+                        return const CreateTagBottomSheet();
+                      },
+                    )
+                  },
                   child: Chip(
                     labelPadding: const EdgeInsets.all(0),
                     visualDensity: VisualDensity.compact,
@@ -128,6 +142,7 @@ class _TagsCustomState extends State<TagsCustom> {
   }
 
   void _showAlertDialog(BuildContext context, int index) {
+    HapticFeedback.selectionClick();
     Widget cancelButton = TextButton(
       child: const Text('Cancelar'),
       onPressed: () {

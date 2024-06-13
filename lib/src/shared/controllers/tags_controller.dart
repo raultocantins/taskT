@@ -1,5 +1,6 @@
 import 'package:mobx/mobx.dart';
 import 'package:task_planner/src/shared/domain/entities/tag_entity.dart';
+import 'package:task_planner/src/shared/domain/usecases/create_tag_usecase.dart';
 import 'package:task_planner/src/shared/domain/usecases/delete_tag_usecase.dart';
 import 'package:task_planner/src/shared/domain/usecases/get_tags_usecase.dart';
 import 'package:task_planner/src/shared/utils/enums/tagtype_enum.dart';
@@ -11,10 +12,9 @@ class TagsController = _TagsControllerBase with _$TagsController;
 abstract class _TagsControllerBase with Store {
   final GetTagsUsecase _getTagsUsecase;
   final DeleteTagUsecase _deleteTagUsecase;
+  final CreateTagUsecase _createTagUsecase;
   _TagsControllerBase(
-    this._getTagsUsecase,
-    this._deleteTagUsecase,
-  );
+      this._getTagsUsecase, this._deleteTagUsecase, this._createTagUsecase);
 
   @observable
   bool? isLoading = false;
@@ -53,6 +53,21 @@ abstract class _TagsControllerBase with Store {
         updatedList.removeWhere((element) => element.id == id);
         changeTags([...updatedList]);
         return true;
+      },
+    );
+  }
+
+  Future<void> saveTag({
+    required String label,
+    required TagType type,
+  }) async {
+    var result = await _createTagUsecase(label: label, type: type);
+    result.fold(
+      (l) => false,
+      (r) {
+        List<TagEntity> updatedList = tags ?? [];
+        updatedList.add(r);
+        changeTags([...updatedList]);
       },
     );
   }
