@@ -13,9 +13,12 @@ import 'package:task_planner/src/features/books/external/get_books_datasource.im
 import 'package:task_planner/src/features/books/external/save_book_datasource.impl.dart';
 import 'package:task_planner/src/features/books/external/update_book_datasource.impl.dart';
 import 'package:task_planner/src/features/books/presenter/controllers/books_controller.dart';
+import 'package:task_planner/src/features/home/data/repositories/get_count_books_inprogress_repository.impl.dart';
 import 'package:task_planner/src/features/home/data/repositories/get_count_tasks_pending_repository.impl.dart';
+import 'package:task_planner/src/features/home/domain/usecases/get_count_books_inprogress_usecase.dart';
 import 'package:task_planner/src/features/home/domain/usecases/get_count_task_pending_usecase.dart';
-import 'package:task_planner/src/features/home/external/get_tags_datasource.impl.dart';
+import 'package:task_planner/src/features/home/external/get_count_books_inprogress_datasource.impl.dart';
+import 'package:task_planner/src/features/home/external/get_count_tasks_pending_datasource.impl.dart';
 import 'package:task_planner/src/features/home/presentation/controllers/home_controller.dart';
 import 'package:task_planner/src/features/tasks/data/repositories/update_task_repository.impl.dart';
 import 'package:task_planner/src/features/tasks/domain/usecases/update_task_usecase.dart';
@@ -81,6 +84,7 @@ class GetItSetup {
 
     getIt.registerLazySingleton<HomeController>(
       () => HomeController(
+        getIt(),
         getIt(),
       ),
     );
@@ -175,6 +179,14 @@ class GetItSetup {
       () => CreateTagUsecaseImpl(
         CreateTagRepositoryImpl(
           CreateTagDatasourceImpl(),
+        ),
+      ),
+    );
+
+    getIt.registerLazySingleton<GetCountBooksInprogressUsecase>(
+      () => GetCountBooksInprogressUsecaseImpl(
+        GetCountBooksInprogressRepositoryImpl(
+          GetCountBooksInprogressDatasourceImpl(),
         ),
       ),
     );

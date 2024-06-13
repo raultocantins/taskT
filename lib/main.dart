@@ -4,7 +4,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get_it/get_it.dart';
 import 'package:task_planner/generated/l10n.dart';
-import 'package:task_planner/src/features/books/presenter/screens/book_detail_screen.dart';
 import 'package:task_planner/src/features/books/presenter/screens/books_screen.dart';
 import 'package:task_planner/src/features/home/presentation/screens/home_screen.dart';
 import 'package:task_planner/src/features/signin/presentation/screens/signin_screen.dart';
@@ -55,13 +54,6 @@ class MyApp extends StatelessWidget {
       initialRoute: '/home',
       onGenerateRoute: (settings) {
         switch (settings.name) {
-          case '/book/detail':
-            Map<String, dynamic> args =
-                settings.arguments as Map<String, dynamic>;
-            return CustomPageRoute(
-                page: BookDetailScreen(
-              book: args['book'],
-            ));
           case '/signin':
             return CustomPageRoute(page: const SigninScreen());
           case '/home':

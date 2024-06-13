@@ -13,6 +13,17 @@ const String taskcolumnTagId = 'tagId';
 const String taskcolumnPriority = 'priority';
 const String taskcolumnUpdated = 'updated';
 
+//BOOKS FEATURE
+const String bookstable = 'books';
+const String bookscolumnId = '_id';
+const String bookscolumnTitle = 'title';
+const String bookscolumnAuthor = 'author';
+const String bookscolumnStar = 'star';
+const String bookscolumnCurrentpage = 'currentpage';
+const String bookscolumnFinalpage = 'finalpage';
+const String bookscolumnBookstate = 'bookstate';
+const String bookscolumnTagId = 'tagId';
+
 //TAGS FEATURE
 const String tagstable = 'tags';
 const String tagscolumnId = '_id';

@@ -21,7 +21,7 @@ abstract class _TasksControllerBase with Store {
       this._deleteTaskUsecase, this._updateTaskUsecase);
 
   @observable
-  DateTime? _dateSelected;
+  DateTime? dateSelected;
 
   @observable
   bool? isLoading = false;
@@ -50,7 +50,7 @@ abstract class _TasksControllerBase with Store {
 
   @action
   void changeDate(DateTime? value) {
-    _dateSelected = value;
+    dateSelected = value;
     getTask();
   }
 
@@ -80,7 +80,7 @@ abstract class _TasksControllerBase with Store {
   Future<void> getTask() async {
     changeIsLoading(true);
     var result =
-        await _getTasksUsecase(date: _dateSelected, tagId: tagId, done: done);
+        await _getTasksUsecase(date: dateSelected, tagId: tagId, done: done);
     result.fold(
       (l) => null,
       (r) {
@@ -99,13 +99,13 @@ abstract class _TasksControllerBase with Store {
         if (r.date.isAfter(DateTime.now())) {
           scheduleNotification(r);
         }
-        if (tagId == null && _dateSelected == null) {
+        if (tagId == null && dateSelected == null) {
           changeTasks([..._tasks, r]);
-        } else if (_dateSelected == null && task.tagId == tagId) {
+        } else if (dateSelected == null && task.tagId == tagId) {
           changeTasks([..._tasks, r]);
         }
-        if (_dateSelected != null &&
-            r.date.day == _dateSelected?.day &&
+        if (dateSelected != null &&
+            r.date.day == dateSelected?.day &&
             r.tagId == tagId) {
           changeTasks([..._tasks, r]);
         }
@@ -174,6 +174,9 @@ abstract class _TasksControllerBase with Store {
       },
     );
     changeIsLoading(false);
+    if (task.finished) {
+      cancelNotification(task);
+    }
   }
 
   Future<void> scheduleNotification(TaskEntity task) async {
@@ -191,7 +194,7 @@ abstract class _TasksControllerBase with Store {
   }
 
   void dispose() {
-    _dateSelected = null;
+    dateSelected = null;
     isLoading = false;
     tagId = null;
     done = false;

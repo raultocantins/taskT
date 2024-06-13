@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 import 'package:task_planner/src/features/books/presenter/controllers/books_controller.dart';
-import 'package:task_planner/src/features/books/presenter/widgets/book_card_custom.dart';
+import 'package:task_planner/src/features/books/presenter/widgets/card_custom_book_widget.dart';
 import 'package:task_planner/src/features/books/presenter/widgets/new_book_bottomsheet.dart';
-import 'package:task_planner/src/features/books/presenter/widgets/tags_books.dart';
+import 'package:task_planner/src/features/home/presentation/controllers/home_controller.dart';
+import 'package:task_planner/src/shared/utils/enums/tagtype_enum.dart';
+import 'package:task_planner/src/shared/widgets/tags_custom_widget.dart';
 
 class BooksScreen extends StatefulWidget {
   const BooksScreen({super.key});
@@ -36,6 +38,7 @@ class _BooksScreenState extends State<BooksScreen>
 
   @override
   void dispose() {
+    GetIt.I.get<HomeController>().getCountBooksInprogress();
     _pageController.dispose();
     _controller?.dispose();
     super.dispose();
@@ -48,66 +51,81 @@ class _BooksScreenState extends State<BooksScreen>
         return Scaffold(
           appBar: AppBar(
             elevation: 0,
-            actions: const [],
+            backgroundColor: Theme.of(context).colorScheme.background,
           ),
           body: SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                  child: Row(
                     children: [
                       const Text(
                         'Livros',
-                        style: TextStyle(fontSize: 40),
+                        style: TextStyle(
+                          fontSize: 28,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                       const Expanded(child: SizedBox()),
                       IconButton(
                         onPressed: () {},
                         icon: const Icon(
                           Icons.filter_list_outlined,
-                          color: Colors.grey,
                         ),
                       )
                     ],
                   ),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 10),
-                    child: Text(
-                      'Mostrando todos os seus livros',
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.grey,
-                      ),
+                ),
+                const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 10, horizontal: 12),
+                  child: Text(
+                    'Pendentes e concluídos.',
+                    style: TextStyle(
+                      fontSize: 14,
                     ),
                   ),
-                  const TagsBooks(),
-                  const SizedBox(
-                    height: 14,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 6),
+                  child: TagsCustom(
+                    onTap: (id) => _controller?.changeTag(id),
+                    tagId: _controller?.tagId,
+                    tagType: TagType.book,
+                    tagRemoved: (id) => _controller?.removeWithTag(id),
                   ),
-                  Expanded(
+                ),
+                const SizedBox(
+                  height: 14,
+                ),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 24),
                     child: ListView.builder(
                       itemCount: _controller?.books.length,
-                      itemBuilder: (context, i) => BookCardCustom(
+                      itemBuilder: (context, i) => CardCustomBookWidget(
                         book: _controller!.books[i],
+                        delete: (v) => _controller?.deleteBook(v),
+                        update: (v) => _controller?.updateBook(v),
                       ),
                     ),
-                  )
-                ],
-              ),
+                  ),
+                )
+              ],
             ),
           ),
           floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
           floatingActionButton: FloatingActionButton(
-            backgroundColor: Colors.white,
+            backgroundColor: Theme.of(context).colorScheme.primary,
             onPressed: () {
               showModalBottomSheet(
                 isScrollControlled: true,
-                barrierColor: Colors.transparent,
                 isDismissible: true,
                 enableDrag: true,
-                useSafeArea: false,
+                useSafeArea: true,
+                backgroundColor: Theme.of(context).colorScheme.background,
+                elevation: 0,
                 context: context,
                 builder: (context) {
                   return Padding(
@@ -120,7 +138,7 @@ class _BooksScreenState extends State<BooksScreen>
             },
             child: const Icon(
               Icons.add,
-              color: Colors.black,
+              color: Colors.white,
             ),
           ),
         );

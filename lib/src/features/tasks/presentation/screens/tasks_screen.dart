@@ -79,7 +79,7 @@ class _TasksScreenState extends State<TasksScreen>
                       Text(
                         S.of(context).title,
                         style: const TextStyle(
-                          fontSize: 32,
+                          fontSize: 28,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -99,6 +99,7 @@ class _TasksScreenState extends State<TasksScreen>
                               callback: (newDate) {
                                 _controller?.changeDate(newDate);
                               },
+                              date: _controller?.dateSelected ?? DateTime.now(),
                             ),
                           );
                         },

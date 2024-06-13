@@ -19,6 +19,8 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     _controller = GetIt.I.get<HomeController>();
     _controller?.getCountTasksPending();
+    _controller?.getCountBooksInprogress();
+    _controller?.fakeSync();
     super.initState();
   }
 
@@ -34,6 +36,32 @@ class _HomeScreenState extends State<HomeScreen> {
           elevation: 0,
           backgroundColor: Theme.of(context).colorScheme.background,
           automaticallyImplyLeading: false,
+          actions: [
+            Observer(builder: (context) {
+              return Padding(
+                padding: const EdgeInsets.only(right: 24),
+                child: Row(
+                  children: [
+                    Text(
+                      (_controller?.isLoading ?? false)
+                          ? 'Sincronizando os dados'
+                          : 'Dados atualizados e sincronizados',
+                      style: const TextStyle(fontSize: 12),
+                    ),
+                    IconButton(
+                      onPressed: () {},
+                      icon: Icon(
+                        (_controller?.isLoading ?? false)
+                            ? Icons.sync
+                            : Icons.cloud,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                    )
+                  ],
+                ),
+              );
+            })
+          ],
         ),
         body: SafeArea(
           child: Padding(
@@ -89,10 +117,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ? '${_controller?.countTasksPending} ${(_controller?.countTasksPending ?? 0) > 1 ? 'pendentes' : 'pendente'}'
                                 : 'sem tarefas',
                             route: '/tasks'),
-                        const CardFeature(
+                        CardFeature(
                             icon: Icons.book,
                             title: 'Meus livros',
-                            subtitle: '2 em progresso',
+                            subtitle: (_controller?.countBooksInprogress ?? 0) >
+                                    0
+                                ? '${_controller?.countBooksInprogress} em progresso'
+                                : 'Adicione um livro',
                             route: '/books'),
                       ],
                     );

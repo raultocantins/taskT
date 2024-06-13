@@ -4,7 +4,6 @@ import 'package:task_planner/src/features/books/domain/usecases/delete_book_usec
 import 'package:task_planner/src/features/books/domain/usecases/get_books_usecase.dart';
 import 'package:task_planner/src/features/books/domain/usecases/save_book_usecase.dart';
 import 'package:task_planner/src/features/books/domain/usecases/update_book_usecase.dart';
-import 'package:task_planner/src/features/books/presenter/utils/enums/tags_books_enum.dart';
 part 'books_controller.g.dart';
 
 // ignore: library_private_types_in_public_api
@@ -22,7 +21,7 @@ abstract class _BooksControllerBase with Store {
   bool isLoading = false;
 
   @observable
-  TagBook tag = TagBook.all;
+  int? tagId;
 
   @observable
   List<BookEntity> books = [];
@@ -33,8 +32,8 @@ abstract class _BooksControllerBase with Store {
   }
 
   @action
-  void changeTag(TagBook value) {
-    tag = value;
+  void changeTag(int? value) {
+    tagId = value;
     getBooks();
   }
 
@@ -45,7 +44,7 @@ abstract class _BooksControllerBase with Store {
 
   Future<void> getBooks() async {
     changeIsLoading(true);
-    var result = await _getBooksUsecase(tag: tag, done: false);
+    var result = await _getBooksUsecase(tagId: tagId, done: false);
     result.fold(
       (l) => null,
       (r) {
@@ -61,9 +60,9 @@ abstract class _BooksControllerBase with Store {
     result.fold(
       (l) => null,
       (r) {
-        if (tag == TagBook.all) {
+        if (tagId == null) {
           changeBooks([...books, r]);
-        } else if (book.tagBook == tag) {
+        } else if (book.tagId == tagId) {
           changeBooks([...books, r]);
         }
       },
@@ -93,7 +92,7 @@ abstract class _BooksControllerBase with Store {
       (updatedBook) {
         List<BookEntity> updatedList = books;
 
-        if (tag == TagBook.all) {
+        if (tagId == null) {
           for (int i = 0; i < updatedList.length; i++) {
             if (updatedList[i].id == updatedBook.id) {
               updatedList[i] = updatedBook;
@@ -101,7 +100,7 @@ abstract class _BooksControllerBase with Store {
             }
           }
           changeBooks([...updatedList]);
-        } else if (updatedBook.tagBook == tag) {
+        } else if (updatedBook.tagId == tagId) {
           for (int i = 0; i < updatedList.length; i++) {
             if (updatedList[i].id == updatedBook.id) {
               updatedList[i] = updatedBook;
@@ -115,9 +114,15 @@ abstract class _BooksControllerBase with Store {
     changeIsLoading(false);
   }
 
+  Future<void> removeWithTag(int id) async {
+    List<BookEntity> updatedList = books;
+    updatedList.removeWhere((element) => element.tagId == id);
+    changeBooks([...updatedList]);
+  }
+
   void dispose() {
     isLoading = false;
-    tag = TagBook.all;
+    tagId = null;
     books = [];
   }
 }

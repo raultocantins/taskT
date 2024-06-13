@@ -151,7 +151,7 @@ class _CardCustomWidgetState extends State<CardCustomWidget> {
                                     builder: (BuildContext context,
                                         StateSetter setState) {
                                       return Transform.scale(
-                                        scale: 1.5,
+                                        scale: 1.3,
                                         child: Checkbox(
                                           shape: const OvalBorder(),
                                           side: const BorderSide(),

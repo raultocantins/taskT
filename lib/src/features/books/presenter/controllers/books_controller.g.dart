@@ -25,19 +25,19 @@ mixin _$BooksController on _BooksControllerBase, Store {
     });
   }
 
-  late final _$tagAtom =
-      Atom(name: '_BooksControllerBase.tag', context: context);
+  late final _$tagIdAtom =
+      Atom(name: '_BooksControllerBase.tagId', context: context);
 
   @override
-  TagBook get tag {
-    _$tagAtom.reportRead();
-    return super.tag;
+  int? get tagId {
+    _$tagIdAtom.reportRead();
+    return super.tagId;
   }
 
   @override
-  set tag(TagBook value) {
-    _$tagAtom.reportWrite(value, super.tag, () {
-      super.tag = value;
+  set tagId(int? value) {
+    _$tagIdAtom.reportWrite(value, super.tagId, () {
+      super.tagId = value;
     });
   }
 
@@ -72,7 +72,7 @@ mixin _$BooksController on _BooksControllerBase, Store {
   }
 
   @override
-  void changeTag(TagBook value) {
+  void changeTag(int? value) {
     final _$actionInfo = _$_BooksControllerBaseActionController.startAction(
         name: '_BooksControllerBase.changeTag');
     try {
@@ -97,7 +97,7 @@ mixin _$BooksController on _BooksControllerBase, Store {
   String toString() {
     return '''
 isLoading: ${isLoading},
-tag: ${tag},
+tagId: ${tagId},
 books: ${books}
     ''';
   }

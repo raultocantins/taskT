@@ -1,4 +1,7 @@
 // ignore: depend_on_referenced_packages
+import 'package:task_planner/src/features/books/data/models/book_model.dart';
+import 'package:task_planner/src/features/books/domain/entities/book_entity.dart';
+import 'package:task_planner/src/features/books/presenter/utils/enums/book_state_enum.dart';
 import 'package:task_planner/src/shared/data/models/tag_model.dart';
 import 'package:task_planner/src/shared/utils/enums/tagtype_enum.dart';
 import 'package:tekartik_app_flutter_sqflite/sqflite.dart';
@@ -67,12 +70,25 @@ class DataBaseCustom {
       'FOREIGN KEY($taskcolumnTagId) REFERENCES $tagstable($tagscolumnId) ON DELETE CASCADE)',
     );
 
+    await db.execute(
+      'CREATE TABLE $bookstable('
+      '$bookscolumnId INTEGER PRIMARY KEY, '
+      '$bookscolumnTitle TEXT, '
+      '$bookscolumnAuthor TEXT, '
+      '$bookscolumnStar INTEGER, '
+      '$bookscolumnCurrentpage INTEGER, '
+      '$bookscolumnFinalpage INTEGER, '
+      '$bookscolumnBookstate TEXT, '
+      '$bookscolumnTagId INTEGER, '
+      'FOREIGN KEY($bookscolumnTagId) REFERENCES $tagstable($tagscolumnId) ON DELETE CASCADE)',
+    );
+
     // Adiciona um índice na tabela tasks
     await db.execute(
       'CREATE INDEX TasksUpdated ON $tasktable ($taskcolumnUpdated)',
     );
 
-    // Insere dois itens na tabela tags recém-criada
+    // Insere itens na tabela tags recém-criada
     await db.rawInsert(
       'INSERT INTO $tagstable($tagscolumnId, $tagscolumnLabel, $tagscolumnType) VALUES(?, ?, ?)',
       [1, 'Trabalho', 'task'],
@@ -80,6 +96,14 @@ class DataBaseCustom {
     await db.rawInsert(
       'INSERT INTO $tagstable($tagscolumnId, $tagscolumnLabel, $tagscolumnType) VALUES(?, ?, ?)',
       [2, 'Pessoal', 'task'],
+    );
+    await db.rawInsert(
+      'INSERT INTO $tagstable($tagscolumnId, $tagscolumnLabel, $tagscolumnType) VALUES(?, ?, ?)',
+      [3, 'Ficção', 'book'],
+    );
+    await db.rawInsert(
+      'INSERT INTO $tagstable($tagscolumnId, $tagscolumnLabel, $tagscolumnType) VALUES(?, ?, ?)',
+      [4, 'Ciência e Tecnologia', 'book'],
     );
   }
 
@@ -94,6 +118,21 @@ class DataBaseCustom {
       priority: taskEntity.priority,
       tagId: taskEntity.tagId,
       title: taskEntity.title,
+    );
+  }
+
+  Future<BookModel> saveBook(BookEntity bookEntity) async {
+    int newId =
+        await db!.insert(bookstable, BookModel.toModel(bookEntity).toMap());
+    return BookModel(
+      id: newId,
+      tagId: bookEntity.tagId,
+      title: bookEntity.title,
+      author: bookEntity.author,
+      bookState: bookEntity.bookState,
+      currentPage: bookEntity.currentPage,
+      finalPage: bookEntity.finalPage,
+      star: bookEntity.star,
     );
   }
 
@@ -118,10 +157,28 @@ class DataBaseCustom {
     return TaskModel.toModel(taskEntity);
   }
 
+  Future<BookModel> updateBook(BookEntity bookEntity) async {
+    await db!.update(
+      bookstable,
+      BookModel.toModel(bookEntity).toMap(),
+      where: '$bookscolumnId = ?',
+      whereArgs: <Object?>[bookEntity.id],
+    );
+    return BookModel.toModel(bookEntity);
+  }
+
   Future<void> deleteTask(int? id) async {
     await db!.delete(
       tasktable,
       where: '$taskcolumnId = ?',
+      whereArgs: <Object?>[id],
+    );
+  }
+
+  Future<void> deleteBook(int? id) async {
+    await db!.delete(
+      bookstable,
+      where: '$bookscolumnId = ?',
       whereArgs: <Object?>[id],
     );
   }
@@ -162,9 +219,25 @@ class DataBaseCustom {
         [];
   }
 
+  Future<List<BookModel>> getBooks({int? tagId}) async {
+    List<Map<String, Object?>>? list;
+    String query = 'SELECT * FROM $bookstable WHERE 1=1';
+    if (tagId != null) {
+      query += ' AND $bookscolumnTagId = $tagId';
+    }
+
+    list = await db?.rawQuery(query);
+    return list
+            ?.map(
+              (e) => BookModel.fromObjectDb(e),
+            )
+            .toList() ??
+        [];
+  }
+
   Future<List<TagModel>> getTags(TagType type) async {
     String sql = 'SELECT * FROM $tagstable WHERE $tagscolumnType = ?';
-    final list = await db?.rawQuery(sql, ['task']);
+    final list = await db?.rawQuery(sql, [type.name]);
     return list
             ?.map(
               (e) => TagModel.fromObjectDb(e),
@@ -177,6 +250,17 @@ class DataBaseCustom {
     String sql =
         'SELECT COUNT(*) FROM $tasktable WHERE $taskcolumnFinished = ?';
     final result = await db?.rawQuery(sql, [0]);
+    int count = 0;
+    if (result != null && result.isNotEmpty) {
+      count = result.first.values.first as int;
+    }
+    return count;
+  }
+
+  Future<int> getCountBooksInProgress() async {
+    String sql =
+        'SELECT COUNT(*) FROM $bookstable WHERE $bookscolumnBookstate = ?';
+    final result = await db?.rawQuery(sql, [BookState.started.name]);
     int count = 0;
     if (result != null && result.isNotEmpty) {
       count = result.first.values.first as int;

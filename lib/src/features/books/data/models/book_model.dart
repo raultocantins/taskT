@@ -2,7 +2,6 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:task_planner/src/features/books/domain/entities/book_entity.dart';
 import 'package:task_planner/src/features/books/presenter/utils/enums/book_state_enum.dart';
-import 'package:task_planner/src/features/books/presenter/utils/enums/tags_books_enum.dart';
 
 part 'book_model.g.dart';
 
@@ -15,16 +14,17 @@ class BookModel {
   final int currentPage;
   final int finalPage;
   final BookState bookState;
-  final TagBook tagBook;
-  BookModel(
-      {this.id,
-      required this.title,
-      required this.author,
-      required this.star,
-      required this.bookState,
-      required this.currentPage,
-      required this.finalPage,
-      required this.tagBook});
+  final int? tagId;
+  BookModel({
+    this.id,
+    required this.title,
+    required this.author,
+    required this.star,
+    required this.bookState,
+    required this.currentPage,
+    required this.finalPage,
+    this.tagId,
+  });
   factory BookModel.fromJson(dynamic json) => _$BookModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$BookModelToJson(this);
@@ -36,7 +36,7 @@ class BookModel {
         'currentpage': currentPage,
         'finalpage': finalPage,
         'bookstate': bookState.fromEnumToString(),
-        'tagbook': tagBook.fromEnumToString(),
+        'tagId': tagId,
       };
   static BookModel fromObjectDb(Map<String, dynamic> book) {
     return BookModel(
@@ -47,31 +47,33 @@ class BookModel {
       currentPage: book['currentpage'],
       finalPage: book['finalpage'],
       bookState: BookStateExtensions.fromStringToEnum(book['bookstate']),
-      tagBook: TagsBookExtensions.fromStringToEnum(book['tagbook']),
+      tagId: book['tagId'],
     );
   }
 
   static BookEntity toEntity(BookModel model) {
     return BookEntity(
-        id: model.id,
-        author: model.author,
-        bookState: model.bookState,
-        currentPage: model.currentPage,
-        finalPage: model.finalPage,
-        star: model.star,
-        tagBook: model.tagBook,
-        title: model.title);
+      id: model.id,
+      author: model.author,
+      bookState: model.bookState,
+      currentPage: model.currentPage,
+      finalPage: model.finalPage,
+      star: model.star,
+      tagId: model.tagId,
+      title: model.title,
+    );
   }
 
   static BookModel toModel(BookEntity entity) {
     return BookModel(
-        id: entity.id,
-        author: entity.author,
-        bookState: entity.bookState,
-        currentPage: entity.currentPage,
-        finalPage: entity.finalPage,
-        star: entity.star,
-        tagBook: entity.tagBook,
-        title: entity.title);
+      id: entity.id,
+      author: entity.author,
+      bookState: entity.bookState,
+      currentPage: entity.currentPage,
+      finalPage: entity.finalPage,
+      star: entity.star,
+      tagId: entity.tagId,
+      title: entity.title,
+    );
   }
 }

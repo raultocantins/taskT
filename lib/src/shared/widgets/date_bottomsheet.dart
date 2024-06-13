@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class DateBottomSheet extends StatefulWidget {
-  final Function(DateTime) callback;
+  final Function(DateTime?) callback;
+  final DateTime date;
   const DateBottomSheet({
     required this.callback,
+    required this.date,
     super.key,
   });
 
@@ -13,8 +15,6 @@ class DateBottomSheet extends StatefulWidget {
 }
 
 class _DateBottomSheetState extends State<DateBottomSheet> {
-  DateTime date = DateTime.now();
-
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -31,9 +31,15 @@ class _DateBottomSheetState extends State<DateBottomSheet> {
             ),
           ),
           onDaySelected: (selectedDay, focusedDay) {
-            DateTime now = DateTime.now();
-            widget.callback(DateTime(selectedDay.year, selectedDay.month,
-                selectedDay.day, now.hour, now.minute));
+            if (widget.date.year == selectedDay.year &&
+                widget.date.month == selectedDay.month &&
+                widget.date.day == selectedDay.day) {
+              widget.callback(null);
+            } else {
+              widget.callback(DateTime(
+                  selectedDay.year, selectedDay.month, selectedDay.day));
+            }
+
             Navigator.of(context).pop();
           },
           calendarStyle: CalendarStyle(
@@ -41,8 +47,8 @@ class _DateBottomSheetState extends State<DateBottomSheet> {
                 color: Theme.of(context).colorScheme.primary,
                 shape: BoxShape.circle),
           ),
-          focusedDay: date,
-          currentDay: date,
+          focusedDay: widget.date,
+          currentDay: widget.date,
           firstDay: DateTime.now().subtract(const Duration(days: 6000)),
           lastDay: DateTime.now().add(const Duration(days: 6000)),
         ),

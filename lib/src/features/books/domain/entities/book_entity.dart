@@ -1,5 +1,4 @@
 import 'package:task_planner/src/features/books/presenter/utils/enums/book_state_enum.dart';
-import 'package:task_planner/src/features/books/presenter/utils/enums/tags_books_enum.dart';
 
 class BookEntity {
   int? id;
@@ -9,7 +8,7 @@ class BookEntity {
   final int currentPage;
   final int finalPage;
   final BookState bookState;
-  final TagBook tagBook;
+  final int? tagId;
 
   BookEntity(
       {this.id,
@@ -19,5 +18,5 @@ class BookEntity {
       required this.bookState,
       required this.currentPage,
       required this.finalPage,
-      required this.tagBook});
+      this.tagId});
 }

@@ -92,6 +92,8 @@ class _NewTaskBottomSheetState extends State<NewTaskBottomSheet> {
                       maxLength: 70,
                       style: const TextStyle(fontSize: 16),
                       decoration: InputDecoration(
+                        contentPadding:
+                            const EdgeInsets.symmetric(horizontal: 12),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                           borderSide: BorderSide.none,
@@ -313,7 +315,7 @@ class _NewTaskBottomSheetState extends State<NewTaskBottomSheet> {
                   ),
                 ),
                 const SizedBox(
-                  height: 24,
+                  height: 48,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
