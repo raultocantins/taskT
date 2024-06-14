@@ -280,9 +280,6 @@ class DataBaseCustom {
 
   Future<Database?> get ready async => db ??= await lock.synchronized(
         () async {
-          await Future.delayed(
-            const Duration(milliseconds: 1500),
-          );
           if (db == null) {
             await open();
           }
