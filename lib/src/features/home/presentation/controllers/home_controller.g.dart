@@ -25,6 +25,22 @@ mixin _$HomeController on _HomeControllerBase, Store {
     });
   }
 
+  late final _$isLoadingTasksAtom =
+      Atom(name: '_HomeControllerBase.isLoadingTasks', context: context);
+
+  @override
+  bool get isLoadingTasks {
+    _$isLoadingTasksAtom.reportRead();
+    return super.isLoadingTasks;
+  }
+
+  @override
+  set isLoadingTasks(bool value) {
+    _$isLoadingTasksAtom.reportWrite(value, super.isLoadingTasks, () {
+      super.isLoadingTasks = value;
+    });
+  }
+
   late final _$countTasksPendingAtom =
       Atom(name: '_HomeControllerBase.countTasksPending', context: context);
 
@@ -58,6 +74,22 @@ mixin _$HomeController on _HomeControllerBase, Store {
     });
   }
 
+  late final _$tasksAtom =
+      Atom(name: '_HomeControllerBase.tasks', context: context);
+
+  @override
+  List<TaskEntity> get tasks {
+    _$tasksAtom.reportRead();
+    return super.tasks;
+  }
+
+  @override
+  set tasks(List<TaskEntity> value) {
+    _$tasksAtom.reportWrite(value, super.tasks, () {
+      super.tasks = value;
+    });
+  }
+
   late final _$_HomeControllerBaseActionController =
       ActionController(name: '_HomeControllerBase', context: context);
 
@@ -67,6 +99,17 @@ mixin _$HomeController on _HomeControllerBase, Store {
         name: '_HomeControllerBase.changeIsloading');
     try {
       return super.changeIsloading(value);
+    } finally {
+      _$_HomeControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void changeIsloadingTasks(bool value) {
+    final _$actionInfo = _$_HomeControllerBaseActionController.startAction(
+        name: '_HomeControllerBase.changeIsloadingTasks');
+    try {
+      return super.changeIsloadingTasks(value);
     } finally {
       _$_HomeControllerBaseActionController.endAction(_$actionInfo);
     }
@@ -95,11 +138,24 @@ mixin _$HomeController on _HomeControllerBase, Store {
   }
 
   @override
+  void changeTasks(List<TaskEntity> value) {
+    final _$actionInfo = _$_HomeControllerBaseActionController.startAction(
+        name: '_HomeControllerBase.changeTasks');
+    try {
+      return super.changeTasks(value);
+    } finally {
+      _$_HomeControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 isLoading: ${isLoading},
+isLoadingTasks: ${isLoadingTasks},
 countTasksPending: ${countTasksPending},
-countBooksInprogress: ${countBooksInprogress}
+countBooksInprogress: ${countBooksInprogress},
+tasks: ${tasks}
     ''';
   }
 }

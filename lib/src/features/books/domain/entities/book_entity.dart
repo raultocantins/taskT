@@ -9,7 +9,8 @@ class BookEntity {
   final int finalPage;
   final BookState bookState;
   final int? tagId;
-
+  final bool finished;
+  final DateTime? endDate;
   BookEntity(
       {this.id,
       required this.title,
@@ -18,5 +19,7 @@ class BookEntity {
       required this.bookState,
       required this.currentPage,
       required this.finalPage,
+      required this.finished,
+      this.endDate,
       this.tagId});
 }

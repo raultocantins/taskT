@@ -4,6 +4,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 import 'package:task_planner/src/features/home/presentation/controllers/home_controller.dart';
 import 'package:task_planner/src/features/home/presentation/widgets/card_feature_custom.dart';
+import 'package:task_planner/src/features/home/presentation/widgets/tasks_chart_widget.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -26,11 +27,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        SystemNavigator.pop();
-        return false;
-      },
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (_) => SystemNavigator.pop(),
       child: Scaffold(
         appBar: AppBar(
           elevation: 0,
@@ -63,76 +62,91 @@ class _HomeScreenState extends State<HomeScreen> {
             })
           ],
         ),
-        body: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text.rich(
-                  TextSpan(
-                    text: 'Bem-vindo, ',
-                    children: [
+        body: Observer(builder: (context) {
+          return SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text.rich(
                       TextSpan(
-                        text: 'Alex.',
-                        style: TextStyle(
-                            color: Theme.of(context).colorScheme.primary),
+                        text: 'Bem-vindo, ',
+                        children: [
+                          TextSpan(
+                            text: 'Alex.',
+                            style: TextStyle(
+                                color: Theme.of(context).colorScheme.primary),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                  style: const TextStyle(
-                    fontSize: 28,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Observer(builder: (
-                  context,
-                ) {
-                  return Text(
-                    (_controller?.countTasksPending ?? 0) > 0
-                        ? 'Você possui ${_controller?.countTasksPending} ${(_controller?.countTasksPending ?? 0) > 1 ? 'tarefas pendentes' : 'tarefa pendente'}!.'
-                        : 'Você não possui nenhuma tarefa pendente.',
-                    style: const TextStyle(
-                      fontSize: 14,
+                      style: const TextStyle(
+                        fontSize: 28,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  );
-                }),
-                const SizedBox(
-                  height: 24.0,
+                    Observer(builder: (
+                      context,
+                    ) {
+                      return Text(
+                        (_controller?.countTasksPending ?? 0) > 0
+                            ? 'Você possui ${_controller?.countTasksPending} ${(_controller?.countTasksPending ?? 0) > 1 ? 'tarefas pendentes' : 'tarefa pendente'}!.'
+                            : 'Você não possui nenhuma tarefa pendente.',
+                        style: const TextStyle(
+                          fontSize: 14,
+                        ),
+                      );
+                    }),
+                    const SizedBox(
+                      height: 24.0,
+                    ),
+                    SizedBox(
+                      height: 120,
+                      width: double.infinity,
+                      child: ListView(
+                        scrollDirection: Axis.horizontal,
+                        children: [
+                          CardFeature(
+                              icon: Icons.task,
+                              title: 'Minhas tarefas',
+                              subtitle: (_controller?.countTasksPending ?? 0) >
+                                      0
+                                  ? '${_controller?.countTasksPending} ${(_controller?.countTasksPending ?? 0) > 1 ? 'pendentes' : 'pendente'}'
+                                  : 'sem tarefas',
+                              route: '/tasks'),
+                          CardFeature(
+                              icon: Icons.book,
+                              title: 'Meus livros',
+                              subtitle: (_controller?.countBooksInprogress ??
+                                          0) >
+                                      0
+                                  ? '${_controller?.countBooksInprogress} em progresso'
+                                  : 'Adicione um livro',
+                              route: '/books'),
+                          const CardFeature(
+                            icon: Icons.timer,
+                            title: 'Pomodoro',
+                            subtitle: 'Em breve',
+                            route: '/',
+                            disable: true,
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 24,
+                    ),
+                    const TasksChart(),
+                    const SizedBox(
+                      height: 24,
+                    ),
+                  ],
                 ),
-                Expanded(
-                  child: Observer(builder: (context) {
-                    return GridView(
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2,
-                              mainAxisSpacing: 10,
-                              crossAxisSpacing: 5,
-                              childAspectRatio: 1.5),
-                      children: [
-                        CardFeature(
-                            icon: Icons.task,
-                            title: 'Minhas tarefas',
-                            subtitle: (_controller?.countTasksPending ?? 0) > 0
-                                ? '${_controller?.countTasksPending} ${(_controller?.countTasksPending ?? 0) > 1 ? 'pendentes' : 'pendente'}'
-                                : 'sem tarefas',
-                            route: '/tasks'),
-                        CardFeature(
-                            icon: Icons.book,
-                            title: 'Meus livros',
-                            subtitle: (_controller?.countBooksInprogress ?? 0) >
-                                    0
-                                ? '${_controller?.countBooksInprogress} em progresso'
-                                : 'Adicione um livro',
-                            route: '/books'),
-                      ],
-                    );
-                  }),
-                )
-              ],
+              ),
             ),
-          ),
-        ),
+          );
+        }),
       ),
     );
   }

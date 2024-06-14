@@ -1,6 +1,8 @@
 import 'package:mobx/mobx.dart';
 import 'package:task_planner/src/features/home/domain/usecases/get_count_books_inprogress_usecase.dart';
 import 'package:task_planner/src/features/home/domain/usecases/get_count_task_pending_usecase.dart';
+import 'package:task_planner/src/features/tasks/domain/entities/task_entity.dart';
+import 'package:task_planner/src/features/tasks/domain/usecases/get_tasks_usecase.dart';
 part 'home_controller.g.dart';
 
 // ignore: library_private_types_in_public_api
@@ -9,13 +11,18 @@ class HomeController = _HomeControllerBase with _$HomeController;
 abstract class _HomeControllerBase with Store {
   final GetCountTasksPendingUsecase _getCountTasksPendingUsecase;
   final GetCountBooksInprogressUsecase _getCountBooksInprogressUsecase;
+  final GetTasksUsecase _getTasksUsecase;
   _HomeControllerBase(
     this._getCountTasksPendingUsecase,
     this._getCountBooksInprogressUsecase,
+    this._getTasksUsecase,
   );
 
   @observable
   bool isLoading = false;
+
+  @observable
+  bool isLoadingTasks = false;
 
   @observable
   int countTasksPending = 0;
@@ -23,9 +30,17 @@ abstract class _HomeControllerBase with Store {
   @observable
   int countBooksInprogress = 0;
 
+  @observable
+  List<TaskEntity> tasks = [];
+
   @action
   void changeIsloading(bool value) {
     isLoading = value;
+  }
+
+  @action
+  void changeIsloadingTasks(bool value) {
+    isLoadingTasks = value;
   }
 
   @action
@@ -36,6 +51,11 @@ abstract class _HomeControllerBase with Store {
   @action
   void changeCountBooksInprogress(int value) {
     countBooksInprogress = value;
+  }
+
+  @action
+  void changeTasks(List<TaskEntity> value) {
+    tasks = value;
   }
 
   Future<void> getCountTasksPending() async {
@@ -56,6 +76,18 @@ abstract class _HomeControllerBase with Store {
         changeCountBooksInprogress(r);
       },
     );
+  }
+
+  Future<void> getTasks() async {
+    changeIsloadingTasks(true);
+    var result = await _getTasksUsecase();
+    result.fold(
+      (l) => null,
+      (r) {
+        changeTasks(r);
+      },
+    );
+    changeIsloadingTasks(false);
   }
 
   Future<void> fakeSync() async {

@@ -128,7 +128,7 @@ class _NewBookBottomSheetState extends State<NewBookBottomSheet> {
                       alignLabelWithHint: true,
                       filled: true,
                       fillColor: Theme.of(context).colorScheme.secondary,
-                      hintText: 'Nome do autor do livro',
+                      hintText: 'Nome do autor',
                       hintStyle: const TextStyle(
                         fontSize: 16,
                       ),
@@ -290,6 +290,8 @@ class _NewBookBottomSheetState extends State<NewBookBottomSheet> {
                             bookState: isFinished
                                 ? BookState.finished
                                 : widget.book!.bookState,
+                            finished: isFinished,
+                            endDate: isFinished ? DateTime.now() : null,
                             currentPage: int.parse(
                               _currentPageController!.text,
                             ),
@@ -308,6 +310,7 @@ class _NewBookBottomSheetState extends State<NewBookBottomSheet> {
                             bookState: isFinished
                                 ? BookState.finished
                                 : BookState.started,
+                            finished: false,
                             currentPage: int.parse(
                               _currentPageController!.text,
                             ),

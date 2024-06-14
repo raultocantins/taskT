@@ -5,13 +5,15 @@ class CardFeature extends StatefulWidget {
   final String subtitle;
   final IconData icon;
   final String route;
+  final bool disable;
 
   const CardFeature(
       {super.key,
       required this.title,
       required this.subtitle,
       required this.icon,
-      required this.route});
+      required this.route,
+      this.disable = false});
 
   @override
   State<CardFeature> createState() => _CardFeatureState();
@@ -20,43 +22,48 @@ class CardFeature extends StatefulWidget {
 class _CardFeatureState extends State<CardFeature> {
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () => Navigator.of(context).pushNamed(widget.route),
-      child: Card(
-        elevation: 0,
-        color: Theme.of(context).colorScheme.secondary,
-        child: Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    widget.title,
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
+    return SizedBox(
+      width: 160,
+      child: GestureDetector(
+        onTap: widget.disable
+            ? () => {}
+            : () => Navigator.of(context).pushNamed(widget.route),
+        child: Card(
+          elevation: 0,
+          color: Theme.of(context).colorScheme.secondary,
+          child: Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      widget.title,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ),
-                  const SizedBox(
-                    height: 5,
-                  ),
-                  Text(
-                    widget.subtitle,
-                    style: const TextStyle(
-                      fontSize: 14,
+                    const SizedBox(
+                      height: 5,
                     ),
-                  ),
-                  const Expanded(child: SizedBox()),
-                  Icon(
-                    widget.icon,
-                    size: 24,
-                  )
-                ],
-              ),
-            ],
+                    Text(
+                      widget.subtitle,
+                      style: const TextStyle(
+                        fontSize: 14,
+                      ),
+                    ),
+                    const Expanded(child: SizedBox()),
+                    Icon(
+                      widget.icon,
+                      size: 24,
+                    )
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),

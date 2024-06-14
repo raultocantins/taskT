@@ -54,6 +54,7 @@ class _TasksScreenState extends State<TasksScreen>
   @override
   void dispose() {
     GetIt.I.get<HomeController>().getCountTasksPending();
+    GetIt.I.get<HomeController>().getTasks();
     _pageController.dispose();
     _controller?.dispose();
     super.dispose();

@@ -79,6 +79,8 @@ class DataBaseCustom {
       '$bookscolumnCurrentpage INTEGER, '
       '$bookscolumnFinalpage INTEGER, '
       '$bookscolumnBookstate TEXT, '
+      '$bookscolumnFinished INTEGER, '
+      '$bookscolumnEndDate INTEGER, '
       '$bookscolumnTagId INTEGER, '
       'FOREIGN KEY($bookscolumnTagId) REFERENCES $tagstable($tagscolumnId) ON DELETE CASCADE)',
     );
@@ -133,6 +135,8 @@ class DataBaseCustom {
       currentPage: bookEntity.currentPage,
       finalPage: bookEntity.finalPage,
       star: bookEntity.star,
+      finished: bookEntity.finished,
+      endDate: bookEntity.endDate,
     );
   }
 
@@ -225,7 +229,7 @@ class DataBaseCustom {
     if (tagId != null) {
       query += ' AND $bookscolumnTagId = $tagId';
     }
-
+    query += ' ORDER BY $bookscolumnFinished ASC';
     list = await db?.rawQuery(query);
     return list
             ?.map(

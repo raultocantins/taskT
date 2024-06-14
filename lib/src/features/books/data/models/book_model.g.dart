@@ -14,6 +14,10 @@ BookModel _$BookModelFromJson(Map json) => BookModel(
       bookState: $enumDecode(_$BookStateEnumMap, json['bookState']),
       currentPage: (json['currentPage'] as num).toInt(),
       finalPage: (json['finalPage'] as num).toInt(),
+      finished: json['finished'] as bool,
+      endDate: json['endDate'] == null
+          ? null
+          : DateTime.parse(json['endDate'] as String),
       tagId: (json['tagId'] as num?)?.toInt(),
     );
 
@@ -26,6 +30,8 @@ Map<String, dynamic> _$BookModelToJson(BookModel instance) => <String, dynamic>{
       'finalPage': instance.finalPage,
       'bookState': _$BookStateEnumMap[instance.bookState]!,
       'tagId': instance.tagId,
+      'finished': instance.finished,
+      'endDate': instance.endDate?.toIso8601String(),
     };
 
 const _$BookStateEnumMap = {

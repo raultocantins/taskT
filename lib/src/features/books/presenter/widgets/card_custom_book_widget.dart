@@ -88,7 +88,7 @@ class _CardCustomBookWidgetState extends State<CardCustomBookWidget> {
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          (widget.book.currentPage == widget.book.finalPage)
+                          widget.book.finished
                               ? Container()
                               : SizedBox(
                                   child: StatefulBuilder(
@@ -113,6 +113,8 @@ class _CardCustomBookWidgetState extends State<CardCustomBookWidget> {
                                                     widget.book.finalPage,
                                                 star: widget.book.star,
                                                 tagId: widget.book.tagId,
+                                                finished: true,
+                                                endDate: DateTime.now(),
                                               ),
                                             );
                                             setState(() {
@@ -124,33 +126,36 @@ class _CardCustomBookWidgetState extends State<CardCustomBookWidget> {
                                     },
                                   ),
                                 ),
-                          IconButton(
-                            onPressed: () {
-                              showModalBottomSheet(
-                                isScrollControlled: true,
-                                isDismissible: true,
-                                enableDrag: true,
-                                useSafeArea: true,
-                                context: context,
-                                backgroundColor:
-                                    Theme.of(context).colorScheme.background,
-                                elevation: 0,
-                                builder: (context) {
-                                  return Padding(
-                                    padding: EdgeInsets.only(
-                                        bottom: MediaQuery.of(context)
-                                            .viewInsets
-                                            .bottom),
-                                    child: NewBookBottomSheet(
-                                      edit: true,
-                                      book: widget.book,
-                                    ),
-                                  );
-                                },
-                              );
-                            },
-                            icon: const Icon(Icons.edit),
-                          ),
+                          widget.book.finished
+                              ? Container()
+                              : IconButton(
+                                  onPressed: () {
+                                    showModalBottomSheet(
+                                      isScrollControlled: true,
+                                      isDismissible: true,
+                                      enableDrag: true,
+                                      useSafeArea: true,
+                                      context: context,
+                                      backgroundColor: Theme.of(context)
+                                          .colorScheme
+                                          .background,
+                                      elevation: 0,
+                                      builder: (context) {
+                                        return Padding(
+                                          padding: EdgeInsets.only(
+                                              bottom: MediaQuery.of(context)
+                                                  .viewInsets
+                                                  .bottom),
+                                          child: NewBookBottomSheet(
+                                            edit: true,
+                                            book: widget.book,
+                                          ),
+                                        );
+                                      },
+                                    );
+                                  },
+                                  icon: const Icon(Icons.edit),
+                                ),
                           IconButton(
                             onPressed: () {
                               widget.delete(widget.book);

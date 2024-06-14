@@ -23,6 +23,8 @@ const String bookscolumnCurrentpage = 'currentpage';
 const String bookscolumnFinalpage = 'finalpage';
 const String bookscolumnBookstate = 'bookstate';
 const String bookscolumnTagId = 'tagId';
+const String bookscolumnFinished = 'finished';
+const String bookscolumnEndDate = 'endDate';
 
 //TAGS FEATURE
 const String tagstable = 'tags';

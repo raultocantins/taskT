@@ -86,6 +86,7 @@ class GetItSetup {
       () => HomeController(
         getIt(),
         getIt(),
+        getIt(),
       ),
     );
   }

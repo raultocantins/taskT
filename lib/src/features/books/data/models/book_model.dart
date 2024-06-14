@@ -15,6 +15,8 @@ class BookModel {
   final int finalPage;
   final BookState bookState;
   final int? tagId;
+  final bool finished;
+  final DateTime? endDate;
   BookModel({
     this.id,
     required this.title,
@@ -23,6 +25,8 @@ class BookModel {
     required this.bookState,
     required this.currentPage,
     required this.finalPage,
+    required this.finished,
+    this.endDate,
     this.tagId,
   });
   factory BookModel.fromJson(dynamic json) => _$BookModelFromJson(json);
@@ -37,6 +41,8 @@ class BookModel {
         'finalpage': finalPage,
         'bookstate': bookState.fromEnumToString(),
         'tagId': tagId,
+        'finished': finished ? 1 : 0,
+        'endDate': endDate?.millisecondsSinceEpoch,
       };
   static BookModel fromObjectDb(Map<String, dynamic> book) {
     return BookModel(
@@ -48,6 +54,10 @@ class BookModel {
       finalPage: book['finalpage'],
       bookState: BookStateExtensions.fromStringToEnum(book['bookstate']),
       tagId: book['tagId'],
+      finished: book['finished'] == 1 ? true : false,
+      endDate: book['endDate'] != null
+          ? DateTime.fromMillisecondsSinceEpoch(book['endDate'])
+          : null,
     );
   }
 
@@ -61,6 +71,8 @@ class BookModel {
       star: model.star,
       tagId: model.tagId,
       title: model.title,
+      finished: model.finished,
+      endDate: model.endDate,
     );
   }
 
@@ -74,6 +86,8 @@ class BookModel {
       star: entity.star,
       tagId: entity.tagId,
       title: entity.title,
+      finished: entity.finished,
+      endDate: entity.endDate,
     );
   }
 }

@@ -43,7 +43,7 @@ class _CardCustomWidgetState extends State<CardCustomWidget> {
       },
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 150),
-        height: expanded ? 300 : 120,
+        height: expanded ? 300 : 100,
         width: double.infinity,
         child: Card(
           elevation: 0,
@@ -97,14 +97,12 @@ class _CardCustomWidgetState extends State<CardCustomWidget> {
                         )
                       ],
                     ),
-                    const SizedBox(
-                      height: 15,
-                    ),
                     AnimatedContainer(
                       duration: const Duration(milliseconds: 150),
-                      height: expanded ? 170 : 40,
+                      height: expanded ? 170 : 20,
                       width: double.infinity,
                       child: SingleChildScrollView(
+                        physics: const NeverScrollableScrollPhysics(),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
