@@ -250,73 +250,67 @@ class _TasksScreenState extends State<TasksScreen>
                             },
                           ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 12),
-                          child: SizedBox(
-                            child: Observer(
-                              builder: (context) {
-                                return _controller?.groupByDay.isEmpty ?? false
-                                    ? (_controller?.isLoading ?? false)
-                                        ? Container()
-                                        : Container()
-                                    : ListView.builder(
-                                        itemCount:
-                                            _controller?.groupByDay.length ?? 0,
-                                        itemBuilder:
-                                            (BuildContext context, int index) {
-                                          DateTime? day = _controller
-                                              ?.groupByDay.keys
-                                              .elementAt(index);
-                                          List<TaskEntity>? items = _controller
-                                              ?.groupByDay.values
-                                              .elementAt(index);
+                        SizedBox(
+                          child: Observer(
+                            builder: (context) {
+                              return _controller?.groupByDay.isEmpty ?? false
+                                  ? (_controller?.isLoading ?? false)
+                                      ? Container()
+                                      : Container()
+                                  : ListView.builder(
+                                      itemCount:
+                                          _controller?.groupByDay.length ?? 0,
+                                      itemBuilder:
+                                          (BuildContext context, int index) {
+                                        DateTime? day = _controller
+                                            ?.groupByDay.keys
+                                            .elementAt(index);
+                                        List<TaskEntity>? items = _controller
+                                            ?.groupByDay.values
+                                            .elementAt(index);
 
-                                          return Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              SizedBox(
-                                                width: double.infinity,
-                                                height: 20,
-                                                child: Align(
-                                                  alignment:
-                                                      Alignment.centerLeft,
-                                                  child: Text(
-                                                    day!.formatDateDefault(
-                                                        context),
-                                                    style: const TextStyle(
-                                                      color: Colors.grey,
-                                                    ),
+                                        return Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            SizedBox(
+                                              width: double.infinity,
+                                              height: 20,
+                                              child: Align(
+                                                alignment: Alignment.centerLeft,
+                                                child: Text(
+                                                  day!.formatDateDefault(
+                                                      context),
+                                                  style: const TextStyle(
+                                                    color: Colors.grey,
                                                   ),
                                                 ),
                                               ),
-                                              ListView.builder(
-                                                shrinkWrap: true,
-                                                physics:
-                                                    const NeverScrollableScrollPhysics(),
-                                                itemCount: items?.length ?? 0,
-                                                itemBuilder:
-                                                    (BuildContext context,
-                                                        int i) {
-                                                  TaskEntity item = items![i];
+                                            ),
+                                            ListView.builder(
+                                              shrinkWrap: true,
+                                              physics:
+                                                  const NeverScrollableScrollPhysics(),
+                                              itemCount: items?.length ?? 0,
+                                              itemBuilder:
+                                                  (BuildContext context,
+                                                      int i) {
+                                                TaskEntity item = items![i];
 
-                                                  return CardCustomWidget(
-                                                    task: item,
-                                                    delete: (task) =>
-                                                        _controller
-                                                            ?.deleteTask(task),
-                                                    update: (task) =>
-                                                        _controller
-                                                            ?.updateTask(task),
-                                                  );
-                                                },
-                                              ),
-                                            ],
-                                          );
-                                        },
-                                      );
-                              },
-                            ),
+                                                return CardCustomWidget(
+                                                  task: item,
+                                                  delete: (task) => _controller
+                                                      ?.deleteTask(task),
+                                                  update: (task) => _controller
+                                                      ?.updateTask(task),
+                                                );
+                                              },
+                                            ),
+                                          ],
+                                        );
+                                      },
+                                    );
+                            },
                           ),
                         ),
                       ],
