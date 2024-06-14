@@ -67,6 +67,7 @@ class _TasksScreenState extends State<TasksScreen>
           appBar: AppBar(
             elevation: 0,
             backgroundColor: Theme.of(context).colorScheme.background,
+            forceMaterialTransparency: true,
           ),
           body: SafeArea(
             child: Column(
@@ -180,78 +181,73 @@ class _TasksScreenState extends State<TasksScreen>
                 ),
                 Expanded(
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    padding:
+                        const EdgeInsets.only(left: 24, right: 24, bottom: 24),
                     child: PageView(
                       controller: _pageController,
                       physics: const NeverScrollableScrollPhysics(),
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 12),
-                          child: SizedBox(
-                            child: Observer(
-                              builder: (context) {
-                                return _controller?.groupByDay.isEmpty ?? false
-                                    ? (_controller?.isLoading ?? false)
-                                        ? Container()
-                                        : Container()
-                                    : ListView.builder(
-                                        itemCount:
-                                            _controller?.groupByDay.length ?? 0,
-                                        itemBuilder:
-                                            (BuildContext context, int index) {
-                                          DateTime? day = _controller
-                                              ?.groupByDay.keys
-                                              .elementAt(index);
-                                          List<TaskEntity>? items = _controller
-                                              ?.groupByDay.values
-                                              .elementAt(index);
+                        SizedBox(
+                          child: Observer(
+                            builder: (context) {
+                              return _controller?.groupByDay.isEmpty ?? false
+                                  ? (_controller?.isLoading ?? false)
+                                      ? Container()
+                                      : Container()
+                                  : ListView.builder(
+                                      itemCount:
+                                          _controller?.groupByDay.length ?? 0,
+                                      itemBuilder:
+                                          (BuildContext context, int index) {
+                                        DateTime? day = _controller
+                                            ?.groupByDay.keys
+                                            .elementAt(index);
+                                        List<TaskEntity>? items = _controller
+                                            ?.groupByDay.values
+                                            .elementAt(index);
 
-                                          return Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              SizedBox(
-                                                width: double.infinity,
-                                                height: 20,
-                                                child: Align(
-                                                  alignment:
-                                                      Alignment.centerLeft,
-                                                  child: Text(
-                                                    day!.formatDateDefault(
-                                                        context),
-                                                    style: const TextStyle(
-                                                      color: Colors.grey,
-                                                    ),
+                                        return Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            SizedBox(
+                                              width: double.infinity,
+                                              height: 20,
+                                              child: Align(
+                                                alignment: Alignment.centerLeft,
+                                                child: Text(
+                                                  day!.formatDateDefault(
+                                                      context),
+                                                  style: const TextStyle(
+                                                    color: Colors.grey,
                                                   ),
                                                 ),
                                               ),
-                                              ListView.builder(
-                                                shrinkWrap: true,
-                                                physics:
-                                                    const NeverScrollableScrollPhysics(),
-                                                itemCount: items?.length ?? 0,
-                                                itemBuilder:
-                                                    (BuildContext context,
-                                                        int i) {
-                                                  TaskEntity item = items![i];
+                                            ),
+                                            ListView.builder(
+                                              shrinkWrap: true,
+                                              physics:
+                                                  const NeverScrollableScrollPhysics(),
+                                              itemCount: items?.length ?? 0,
+                                              itemBuilder:
+                                                  (BuildContext context,
+                                                      int i) {
+                                                TaskEntity item = items![i];
 
-                                                  return CardCustomWidget(
-                                                    task: item,
-                                                    delete: (task) =>
-                                                        _controller
-                                                            ?.deleteTask(task),
-                                                    update: (task) =>
-                                                        _controller
-                                                            ?.updateTask(task),
-                                                  );
-                                                },
-                                              ),
-                                            ],
-                                          );
-                                        },
-                                      );
-                              },
-                            ),
+                                                return CardCustomWidget(
+                                                  task: item,
+                                                  delete: (task) => _controller
+                                                      ?.deleteTask(task),
+                                                  update: (task) => _controller
+                                                      ?.updateTask(task),
+                                                );
+                                              },
+                                            ),
+                                          ],
+                                        );
+                                      },
+                                    );
+                            },
                           ),
                         ),
                         Padding(
@@ -343,7 +339,11 @@ class _TasksScreenState extends State<TasksScreen>
                 backgroundColor: Theme.of(context).colorScheme.background,
                 elevation: 0,
                 builder: (context) {
-                  return const NewTaskBottomSheet();
+                  return Padding(
+                    padding: EdgeInsets.only(
+                        bottom: MediaQuery.of(context).viewInsets.bottom),
+                    child: const NewTaskBottomSheet(),
+                  );
                 },
               );
             },

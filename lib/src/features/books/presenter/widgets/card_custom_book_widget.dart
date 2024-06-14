@@ -63,16 +63,6 @@ class _CardCustomBookWidgetState extends State<CardCustomBookWidget> {
                             children: [
                               Row(
                                 children: [
-                                  Hero(
-                                    tag: widget.book,
-                                    child: const Icon(
-                                      Icons.book,
-                                      size: 24,
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    width: 12,
-                                  ),
                                   Expanded(
                                     child: Text(
                                       widget.book.title,

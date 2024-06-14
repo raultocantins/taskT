@@ -14,6 +14,10 @@ class BookCardCustom extends StatefulWidget {
 }
 
 class _BookCardCustomState extends State<BookCardCustom> {
+  String shortTitle(String text) {
+    return text.length > 25 ? '${text.substring(0, 25)}...' : text;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -24,7 +28,7 @@ class _BookCardCustomState extends State<BookCardCustom> {
       ),
       child: ListTile(
         title: Text(
-          widget.book.title,
+          shortTitle(widget.book.title),
           style: const TextStyle(
             fontSize: 16,
           ),
@@ -42,6 +46,7 @@ class _BookCardCustomState extends State<BookCardCustom> {
                   child: SizedBox(
                     child: LinearProgressIndicator(
                       value: widget.book.currentPage / widget.book.finalPage,
+                      minHeight: 2,
                     ),
                   ),
                 ),
@@ -49,24 +54,19 @@ class _BookCardCustomState extends State<BookCardCustom> {
                   width: 10,
                 ),
                 Text(
-                    '${(widget.book.currentPage / widget.book.finalPage * 100).toInt()}%'),
+                  '${(widget.book.currentPage / widget.book.finalPage * 100).toInt()}%',
+                  style: const TextStyle(
+                      fontSize: 10, fontWeight: FontWeight.bold),
+                ),
               ],
             ),
           ],
         ),
-        leading: Column(
+        leading: const Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Hero(
-              tag: widget.book,
-              child: const Icon(
-                Icons.book,
-                size: 36,
-                color: Colors.black,
-              ),
-            ),
-          ],
+          children: [Icon(Icons.book)],
         ),
+        visualDensity: VisualDensity.compact,
       ),
     );
   }

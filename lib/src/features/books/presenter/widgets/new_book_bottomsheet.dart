@@ -275,13 +275,13 @@ class _NewBookBottomSheetState extends State<NewBookBottomSheet> {
                           Theme.of(context).colorScheme.primary),
                     ),
                     onPressed: () {
+                      final isFinished = int.parse(
+                            _currentPageController!.text,
+                          ) ==
+                          int.parse(
+                            _finalPageController!.text,
+                          );
                       if (widget.edit ?? false) {
-                        final isFinished = int.parse(
-                              _currentPageController!.text,
-                            ) ==
-                            int.parse(
-                              _finalPageController!.text,
-                            );
                         _controller?.updateBook(
                           BookEntity(
                             id: widget.book!.id,
@@ -289,9 +289,7 @@ class _NewBookBottomSheetState extends State<NewBookBottomSheet> {
                             author: _authorController!.text,
                             bookState: isFinished
                                 ? BookState.finished
-                                : widget.book!.bookState == BookState.finished
-                                    ? BookState.started
-                                    : widget.book!.bookState,
+                                : widget.book!.bookState,
                             currentPage: int.parse(
                               _currentPageController!.text,
                             ),
@@ -307,7 +305,9 @@ class _NewBookBottomSheetState extends State<NewBookBottomSheet> {
                           BookEntity(
                             title: _titleController!.text,
                             author: _authorController!.text,
-                            bookState: BookState.started,
+                            bookState: isFinished
+                                ? BookState.finished
+                                : BookState.started,
                             currentPage: int.parse(
                               _currentPageController!.text,
                             ),

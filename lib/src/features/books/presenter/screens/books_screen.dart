@@ -52,6 +52,7 @@ class _BooksScreenState extends State<BooksScreen>
           appBar: AppBar(
             elevation: 0,
             backgroundColor: Theme.of(context).colorScheme.background,
+            forceMaterialTransparency: true,
           ),
           body: SafeArea(
             child: Column(
@@ -101,7 +102,8 @@ class _BooksScreenState extends State<BooksScreen>
                 ),
                 Expanded(
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 24),
+                    padding:
+                        const EdgeInsets.only(left: 24, right: 24, bottom: 24),
                     child: ListView.builder(
                       itemCount: _controller?.books.length,
                       itemBuilder: (context, i) => CardCustomBookWidget(
@@ -124,9 +126,9 @@ class _BooksScreenState extends State<BooksScreen>
                 isDismissible: true,
                 enableDrag: true,
                 useSafeArea: true,
+                context: context,
                 backgroundColor: Theme.of(context).colorScheme.background,
                 elevation: 0,
-                context: context,
                 builder: (context) {
                   return Padding(
                     padding: EdgeInsets.only(
