@@ -16,6 +16,27 @@ class DataBaseCustom {
   DataBaseCustom(this.dbFactory);
   final lock = Lock(reentrant: true);
 
+  //SETUP ################################
+
+  Future close() async {
+    await db!.close();
+  }
+
+  Future deleteDb() async {
+    await dbFactory.deleteDatabase(
+      await fixPath(dbName),
+    );
+  }
+
+  Future<Database?> get ready async => db ??= await lock.synchronized(
+        () async {
+          if (db == null) {
+            await open();
+          }
+          return db;
+        },
+      );
+
   Future openPath(String path) async {
     db = await dbFactory.openDatabase(
       path,
@@ -109,6 +130,8 @@ class DataBaseCustom {
     );
   }
 
+  //TASK ################################
+
   Future<TaskModel> saveTask(TaskEntity taskEntity) async {
     int newId =
         await db!.insert(tasktable, TaskModel.toModel(taskEntity).toMap());
@@ -123,34 +146,6 @@ class DataBaseCustom {
     );
   }
 
-  Future<BookModel> saveBook(BookEntity bookEntity) async {
-    int newId =
-        await db!.insert(bookstable, BookModel.toModel(bookEntity).toMap());
-    return BookModel(
-      id: newId,
-      tagId: bookEntity.tagId,
-      title: bookEntity.title,
-      author: bookEntity.author,
-      bookState: bookEntity.bookState,
-      currentPage: bookEntity.currentPage,
-      finalPage: bookEntity.finalPage,
-      star: bookEntity.star,
-      finished: bookEntity.finished,
-      endDate: bookEntity.endDate,
-    );
-  }
-
-  Future<TagModel> saveTag({
-    required String label,
-    required TagType type,
-  }) async {
-    int newId = await db!.insert(tagstable, {
-      'label': label,
-      'type': type.name,
-    });
-    return TagModel(newId, label, type: type);
-  }
-
   Future<TaskModel> updateTask(TaskEntity taskEntity) async {
     await db!.update(
       tasktable,
@@ -161,36 +156,10 @@ class DataBaseCustom {
     return TaskModel.toModel(taskEntity);
   }
 
-  Future<BookModel> updateBook(BookEntity bookEntity) async {
-    await db!.update(
-      bookstable,
-      BookModel.toModel(bookEntity).toMap(),
-      where: '$bookscolumnId = ?',
-      whereArgs: <Object?>[bookEntity.id],
-    );
-    return BookModel.toModel(bookEntity);
-  }
-
   Future<void> deleteTask(int? id) async {
     await db!.delete(
       tasktable,
       where: '$taskcolumnId = ?',
-      whereArgs: <Object?>[id],
-    );
-  }
-
-  Future<void> deleteBook(int? id) async {
-    await db!.delete(
-      bookstable,
-      where: '$bookscolumnId = ?',
-      whereArgs: <Object?>[id],
-    );
-  }
-
-  Future<void> deleteTag(int? id) async {
-    await db!.delete(
-      tagstable,
-      where: '$tagscolumnId = ?',
       whereArgs: <Object?>[id],
     );
   }
@@ -223,6 +192,54 @@ class DataBaseCustom {
         [];
   }
 
+  Future<int> getCountTasksPending() async {
+    String sql =
+        'SELECT COUNT(*) FROM $tasktable WHERE $taskcolumnFinished = ?';
+    final result = await db?.rawQuery(sql, [0]);
+    int count = 0;
+    if (result != null && result.isNotEmpty) {
+      count = result.first.values.first as int;
+    }
+    return count;
+  }
+
+  //BOOKS ################################
+
+  Future<BookModel> saveBook(BookEntity bookEntity) async {
+    int newId =
+        await db!.insert(bookstable, BookModel.toModel(bookEntity).toMap());
+    return BookModel(
+      id: newId,
+      tagId: bookEntity.tagId,
+      title: bookEntity.title,
+      author: bookEntity.author,
+      bookState: bookEntity.bookState,
+      currentPage: bookEntity.currentPage,
+      finalPage: bookEntity.finalPage,
+      star: bookEntity.star,
+      finished: bookEntity.finished,
+      endDate: bookEntity.endDate,
+    );
+  }
+
+  Future<BookModel> updateBook(BookEntity bookEntity) async {
+    await db!.update(
+      bookstable,
+      BookModel.toModel(bookEntity).toMap(),
+      where: '$bookscolumnId = ?',
+      whereArgs: <Object?>[bookEntity.id],
+    );
+    return BookModel.toModel(bookEntity);
+  }
+
+  Future<void> deleteBook(int? id) async {
+    await db!.delete(
+      bookstable,
+      where: '$bookscolumnId = ?',
+      whereArgs: <Object?>[id],
+    );
+  }
+
   Future<List<BookModel>> getBooks({int? tagId}) async {
     List<Map<String, Object?>>? list;
     String query = 'SELECT * FROM $bookstable WHERE 1=1';
@@ -239,28 +256,6 @@ class DataBaseCustom {
         [];
   }
 
-  Future<List<TagModel>> getTags(TagType type) async {
-    String sql = 'SELECT * FROM $tagstable WHERE $tagscolumnType = ?';
-    final list = await db?.rawQuery(sql, [type.name]);
-    return list
-            ?.map(
-              (e) => TagModel.fromObjectDb(e),
-            )
-            .toList() ??
-        [];
-  }
-
-  Future<int> getCountTasksPending() async {
-    String sql =
-        'SELECT COUNT(*) FROM $tasktable WHERE $taskcolumnFinished = ?';
-    final result = await db?.rawQuery(sql, [0]);
-    int count = 0;
-    if (result != null && result.isNotEmpty) {
-      count = result.first.values.first as int;
-    }
-    return count;
-  }
-
   Future<int> getCountBooksInProgress() async {
     String sql =
         'SELECT COUNT(*) FROM $bookstable WHERE $bookscolumnBookstate = ?';
@@ -272,22 +267,35 @@ class DataBaseCustom {
     return count;
   }
 
-  Future close() async {
-    await db!.close();
+//TAGS ################################
+
+  Future<TagModel> saveTag({
+    required String label,
+    required TagType type,
+  }) async {
+    int newId = await db!.insert(tagstable, {
+      'label': label,
+      'type': type.name,
+    });
+    return TagModel(newId, label, type: type);
   }
 
-  Future deleteDb() async {
-    await dbFactory.deleteDatabase(
-      await fixPath(dbName),
+  Future<void> deleteTag(int? id) async {
+    await db!.delete(
+      tagstable,
+      where: '$tagscolumnId = ?',
+      whereArgs: <Object?>[id],
     );
   }
 
-  Future<Database?> get ready async => db ??= await lock.synchronized(
-        () async {
-          if (db == null) {
-            await open();
-          }
-          return db;
-        },
-      );
+  Future<List<TagModel>> getTags(TagType type) async {
+    String sql = 'SELECT * FROM $tagstable WHERE $tagscolumnType = ?';
+    final list = await db?.rawQuery(sql, [type.name]);
+    return list
+            ?.map(
+              (e) => TagModel.fromObjectDb(e),
+            )
+            .toList() ??
+        [];
+  }
 }

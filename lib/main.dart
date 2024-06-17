@@ -6,7 +6,6 @@ import 'package:get_it/get_it.dart';
 import 'package:task_planner/generated/l10n.dart';
 import 'package:task_planner/src/features/books/presenter/screens/books_screen.dart';
 import 'package:task_planner/src/features/home/presentation/screens/home_screen.dart';
-import 'package:task_planner/src/features/signin/presentation/screens/signin_screen.dart';
 import 'package:task_planner/src/features/tasks/presentation/screens/tasks_screen.dart';
 import 'package:task_planner/src/shared/services/database/db.dart';
 import 'package:task_planner/src/shared/dependencies/get_it.dart';
@@ -54,8 +53,6 @@ class MyApp extends StatelessWidget {
       initialRoute: '/home',
       onGenerateRoute: (settings) {
         switch (settings.name) {
-          case '/signin':
-            return CustomPageRoute(page: const SigninScreen());
           case '/home':
             return CustomPageRoute(page: const HomeScreen());
           case '/tasks':
