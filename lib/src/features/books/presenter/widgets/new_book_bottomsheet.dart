@@ -310,7 +310,8 @@ class _NewBookBottomSheetState extends State<NewBookBottomSheet> {
                             bookState: isFinished
                                 ? BookState.finished
                                 : BookState.started,
-                            finished: false,
+                            finished: isFinished,
+                            endDate: isFinished ? DateTime.now() : null,
                             currentPage: int.parse(
                               _currentPageController!.text,
                             ),

@@ -29,7 +29,7 @@ class _TasksChartState extends State<TasksChart> {
         elevation: 0,
         color: Theme.of(context).colorScheme.secondary,
         child: Padding(
-          padding: const EdgeInsets.all(12.0),
+          padding: const EdgeInsets.all(12),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -58,51 +58,30 @@ class _TasksChartState extends State<TasksChart> {
                                     case 1:
                                       return const Text(
                                         'Seg',
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                        ),
                                       );
                                     case 2:
                                       return const Text(
                                         'Ter',
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                        ),
                                       );
                                     case 3:
                                       return const Text(
                                         'Qua',
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                        ),
                                       );
                                     case 4:
                                       return const Text(
                                         'Qui',
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                        ),
                                       );
                                     case 5:
                                       return const Text(
                                         'Sex',
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                        ),
                                       );
                                     case 6:
                                       return const Text(
                                         'Sáb',
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                        ),
                                       );
                                     case 7:
                                       return const Text(
                                         'Dom',
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                        ),
                                       );
                                     default:
                                       return Container();
@@ -110,7 +89,12 @@ class _TasksChartState extends State<TasksChart> {
                                 },
                               ),
                             ),
-                            leftTitles: const AxisTitles(),
+                            leftTitles: const AxisTitles(
+                              sideTitles: SideTitles(
+                                reservedSize: 30,
+                                showTitles: true,
+                              ),
+                            ),
                             topTitles: const AxisTitles(),
                             rightTitles: const AxisTitles(),
                           ),
@@ -120,8 +104,8 @@ class _TasksChartState extends State<TasksChart> {
                               bottom:
                                   BorderSide(color: Colors.black12, width: 2),
                               left: BorderSide(color: Colors.black12, width: 2),
-                              right: BorderSide(color: Colors.transparent),
-                              top: BorderSide(color: Colors.transparent),
+                              right: BorderSide(color: Colors.black12),
+                              top: BorderSide(color: Colors.black12),
                             ),
                           ),
                           barGroups: List.generate(

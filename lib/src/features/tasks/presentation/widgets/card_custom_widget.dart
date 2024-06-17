@@ -21,7 +21,7 @@ class CardCustomWidget extends StatefulWidget {
 
 class _CardCustomWidgetState extends State<CardCustomWidget> {
   String shortTitle(String text) {
-    return text.length > 25 ? '${text.substring(0, 25)}...' : text;
+    return text.length > 25 ? '${text.substring(0, 23)}...' : text;
   }
 
   String shortText(String text) {
@@ -43,7 +43,7 @@ class _CardCustomWidgetState extends State<CardCustomWidget> {
       },
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 150),
-        height: expanded ? 300 : 100,
+        height: expanded ? 300 : 85,
         width: double.infinity,
         child: Card(
           elevation: 0,
@@ -52,11 +52,11 @@ class _CardCustomWidgetState extends State<CardCustomWidget> {
             borderRadius: BorderRadius.circular(20),
           ),
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
             child: SizedBox(
               width: double.infinity,
               child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 6),
+                padding: const EdgeInsets.symmetric(horizontal: 6),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.center,
